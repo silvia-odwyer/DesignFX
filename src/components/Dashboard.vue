@@ -26,11 +26,18 @@
         
               <h3>Design Templates</h3>
               <ul>
+                <li v-on:click="addRectangle('red')">Add Red Rectangle</li>
+                <li v-on:click="addRectangle('green')">Add Green Rectangle</li>
+                <li v-on:click="addText()">Add Text</li>
+
+
                 <li v-for="img in layout_imgs" v-on:click="displayTemplate(img)">
                   <p>{{img.layout_name}}</p>
                   <img :src="img.img_src" height="200" width="300">
                 </li>
               </ul>
+
+              
           </ul>
           </div>
 
@@ -41,7 +48,13 @@
               <section class="content">
                 
                 <canvas id="canvas" width="800" height="700"></canvas>
-
+                <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown">
+                  <v-layer ref="layer">
+                    <v-rect v-for="item in rectangles" :key="item.id" :config="item" />
+                    <v-text v-for="item in text" :key="item.id" :config="item" />
+                    <v-transformer ref="transformer" />
+                  </v-layer>
+                </v-stage>
                  <!-- <form @submit.prevent="addNote" :disabled="! note">
                   <div>
                     <input v-model="note" type="text" class="form-control" placeholder="Write a note..." autofocus>
@@ -91,6 +104,8 @@ import layout3 from "@/assets/summer_collection.png";
 import layout4 from "@/assets/travel.png";
 import layout5 from "@/assets/lemonade.png";
 import layout6 from "@/assets/summer_collection.png";
+const width = window.innerWidth;
+const height = window.innerHeight;
 
 export default {
   name: 'dashboard',
@@ -102,7 +117,15 @@ export default {
       uidCount: 0,
       image: image,
       layout_imgs: [{img_src: layout1, layout_name: "Travel"}, {img_src: layout2, layout_name: "Lemonade"}, 
-      {img_src: layout3,  layout_name: "Summer Collection"}]
+      {img_src: layout3,  layout_name: "Summer Collection"}],
+      stageSize: {
+              width: width,
+              height: height
+            },
+      rectangles: [],
+      text: [],
+      allShapes: [],
+      selectedShapeName: ''
     }
   },
   watch: {
@@ -119,6 +142,87 @@ export default {
     this.drawToCanvas();
   },
   methods: {
+    addRectangle(color) {
+      let name = `rect${this.rectangles.length}`
+      
+      let rect = {
+                x: 10,
+                y: 10,
+                width: 100,
+                height: 100,
+                fill: color,
+                name: name,
+                draggable: true
+              }
+      
+      this.rectangles.push(rect);
+      this.allShapes.push(rect);
+    },
+    addText() {
+      let name = `text_node${this.text.length}`
+      
+      let simpleText = {
+        x: 50,
+        y: 50,
+        text: 'Simple Text',
+        fontSize: 100,
+        fontFamily: 'Calibri',
+        fill: 'white',
+        draggable: 'true',
+        name: name
+      };
+    this.text.push(simpleText);
+
+    this.allShapes.push(simpleText);
+    
+    },
+    handleStageMouseDown(e) {
+      // clicked on stage - cler selection
+      if (e.target === e.target.getStage()) {
+        this.selectedShapeName = '';
+        this.updateTransformer();
+        return;
+      }
+
+      // clicked on transformer - do nothing
+      const clickedOnTransformer =
+        e.target.getParent().className === 'Transformer';
+      if (clickedOnTransformer) {
+        return;
+      }
+
+      // find clicked rect by its name
+      const name = e.target.name();
+      const rect = this.allShapes.find(r => r.name === name);
+      if (rect) {
+        this.selectedShapeName = name;
+      } else {
+        this.selectedShapeName = '';
+      }
+      this.updateTransformer();
+    },
+    updateTransformer() {
+      // here we need to manually attach or detach Transformer node
+      const transformerNode = this.$refs.transformer.getStage();
+      const stage = transformerNode.getStage();
+      const { selectedShapeName } = this;
+
+      const selectedNode = stage.findOne('.' + selectedShapeName);
+      // do nothing if selected node is already attached
+      if (selectedNode === transformerNode.node()) {
+        return;
+      }
+
+      if (selectedNode) {
+        // attach to another node
+        transformerNode.attachTo(selectedNode);
+      } else {
+        // remove transformer
+        transformerNode.detach();
+      }
+      transformerNode.getLayer().batchDraw();
+    },
+  
     addNote () {
       if (!this.note.trim()) {
         return
