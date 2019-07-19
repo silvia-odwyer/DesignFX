@@ -7,6 +7,7 @@
                 <li id="change_img">Change Image</li>
                 <li><a>Docu</a></li>
                 <li><a href="https://github.com/silvia-odwyer/photon">GitHub</a></li>
+                <li v-on:click="save()">Save</li>
               </ul>
           <h1>
             <img :src="user.avatarUrl() ? user.avatarUrl() : '/avatar-placeholder.png'" class="avatar">
@@ -29,9 +30,8 @@
                 <li v-on:click="addRectangle('red')">Add Red Rectangle</li>
                 <li v-on:click="addRectangle('green')">Add Green Rectangle</li>
                 <li v-on:click="addText()">Add Text</li>
-                <li v-on:click="addImage()">Add Image</li>
 
-                <li v-for="img in layout_imgs" v-on:click="displayTemplate(img)">
+                <li v-for="img in layout_imgs" v-on:click="displayLayout(img)">
                   <p>{{img.layout_name}}</p>
                   <img :src="img.img_src" height="200" width="300">
                 </li>
@@ -51,13 +51,21 @@
                 <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown">
                   
                   <v-layer ref="layer2">
-                    <v-image v-for="item in images" :key="item.id" :config="item" />
+                    <v-image :config="image_template" />
 
                   </v-layer>
-                  
+
                   <v-layer ref="layer">
                     <v-rect v-for="item in rectangles" :key="item.id" :config="item" />
                     <v-text v-for="item in text" :key="item.id" :config="item" />
+<!-- 
+                            <v-circle
+                              v-for="item in list"
+                              :key="item.id"
+                              :config="{
+                                x : item.x, y: item.y, radius: 50, fill: 'red',}"></v-circle> -->
+
+
                     <v-transformer ref="transformer" />
                   </v-layer>
 
@@ -134,7 +142,8 @@ export default {
       images: [],
       allShapes: [],
       selectedShapeName: '',
-      image: null
+      image_template: null,
+      list: [],
     }
   },
   watch: {
@@ -148,28 +157,38 @@ export default {
   },
   mounted () {
     this.fetchData();
+    this.loadDesign();
   },
   methods: {
 
-    addImage() {
+    displayLayout(img) {
+      const image = new window.Image();
+      image.src = img.img_src;
+      image.onload = () => {
+        // set image only when it is loaded
+        this.image_template = {image: image, draggable: true, name: img.layout_name};
+      };
+    },
+    addImage(img) {
       let app = this;
-      console.log("add new img")
+      console.log("change layout")
       var imageObj = new Image();
       imageObj.onload = function() {
-        let img = {
-          x: 50,
-          y: 50,
-          image: imageObj,
-          width: layout5.width,
-          height: layout5.height,
-          draggable: true
-        };
 
-        app.allShapes.push(img);
-        app.images.push(img);
+        app.images.push(imageObj);
       }
-      imageObj.src = layout5;
-
+      imageObj.src = img.img_src;
+    },
+    save() {
+      console.log("save");
+      console.log("save list", this.list);
+      console.log("this.list");
+      localStorage.setItem('storage', JSON.stringify(this.rectangles));
+    },
+    loadDesign() {
+      const data = localStorage.getItem('storage') || '[]';
+      this.rectangles = JSON.parse(data);
+      console.log("data", data);
     },
     addRectangle(color) {
       let name = `rect${this.rectangles.length}`
@@ -183,7 +202,6 @@ export default {
                 name: name,
                 draggable: true
               }
-      
       this.rectangles.push(rect);
       this.allShapes.push(rect);
     },
@@ -222,7 +240,7 @@ export default {
 
       // find clicked rect by its name
       const name = e.target.name();
-      const rect = this.allShapes.find(r => r.name === name);
+      const rect = this.images.find(r => r.name === name);
       if (rect) {
         this.selectedShapeName = name;
       } else {
@@ -311,17 +329,17 @@ export default {
           this.notes = notes
         })
 
-      userSession.getFile("image1.PNG") // decryption is enabled by default
-        .then((buffer) => {
-          var canvas = document.getElementById("canvas");
-          var context = canvas.getContext("2d");
-          var imageData2 = context.createImageData(canvas.width, canvas.height);
-          imageData2.data.set(buffer);
-          console.log(imageData2);
+      // userSession.getFile("image1.PNG") // decryption is enabled by default
+      //   .then((buffer) => {
+      //     var canvas = document.getElementById("canvas");
+      //     var context = canvas.getContext("2d");
+      //     var imageData2 = context.createImageData(canvas.width, canvas.height);
+      //     imageData2.data.set(buffer);
+      //     console.log(imageData2);
 
-          context.putImageData(imageData2, 0, 0);
+      //     context.putImageData(imageData2, 0, 0);
 
-        })
+      //   })
     },
 
     signOut () {
