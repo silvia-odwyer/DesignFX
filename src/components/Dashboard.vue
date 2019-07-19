@@ -30,6 +30,7 @@
                 <li v-on:click="addRectangle('red')">Add Red Rectangle</li>
                 <li v-on:click="addRectangle('green')">Add Green Rectangle</li>
                 <li v-on:click="addText()">Add Text</li>
+                <li v-on:click="addImage(layout_imgs[0])">Add Image</li>
 
                 <li v-for="img in layout_imgs" v-on:click="displayLayout(img)">
                   <p>{{img.layout_name}}</p>
@@ -56,8 +57,9 @@
                   </v-layer>
 
                   <v-layer ref="layer">
-                    <v-rect v-for="item in rectangles" :key="item.id" :config="item" />
+                    <v-rect v-for="item in rectangles" :config="item" v-on:dragEnd="writeMessage(item)" />
                     <v-text v-for="item in text" :key="item.id" :config="item" />
+                    <v-image v-for="img in images" :config="img" />
 <!-- 
                             <v-circle
                               v-for="item in list"
@@ -157,10 +159,8 @@ export default {
   },
   mounted () {
     this.fetchData();
-    this.loadDesign();
   },
   methods: {
-
     displayLayout(img) {
       const image = new window.Image();
       image.src = img.img_src;
@@ -175,7 +175,7 @@ export default {
       var imageObj = new Image();
       imageObj.onload = function() {
 
-        app.images.push(imageObj);
+        app.images.push({image: imageObj, draggable: true, name: img.layout_name});
       }
       imageObj.src = img.img_src;
     },
@@ -192,8 +192,8 @@ export default {
     },
     addRectangle(color) {
       let name = `rect${this.rectangles.length}`
-      
-      let rect = {
+
+      let rect = new Konva.Rect({
                 x: 10,
                 y: 10,
                 width: 100,
@@ -201,7 +201,8 @@ export default {
                 fill: color,
                 name: name,
                 draggable: true
-              }
+              });
+
       this.rectangles.push(rect);
       this.allShapes.push(rect);
     },
@@ -280,6 +281,16 @@ export default {
         completed: false
       })
       this.note = ''
+    },
+    writeMessage(e, rect) {
+      console.log("write msg");
+      console.log(rect);
+
+      var stage = this.$refs.stage;
+      console.log("stage", stage);
+      let position = stage.getPointerPosition()
+      
+      console.log(position);
     },
 
     drawToCanvas() {
