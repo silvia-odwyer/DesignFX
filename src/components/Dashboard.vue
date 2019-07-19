@@ -29,7 +29,7 @@
                 <li v-on:click="addRectangle('red')">Add Red Rectangle</li>
                 <li v-on:click="addRectangle('green')">Add Green Rectangle</li>
                 <li v-on:click="addText()">Add Text</li>
-
+                <li v-on:click="addImage()">Add Image</li>
 
                 <li v-for="img in layout_imgs" v-on:click="displayTemplate(img)">
                   <p>{{img.layout_name}}</p>
@@ -47,13 +47,20 @@
             
               <section class="content">
                 
-                <canvas id="canvas" width="800" height="700"></canvas>
+                <!-- <canvas id="canvas" width="800" height="700"></canvas> -->
                 <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown">
+                  
+                  <v-layer ref="layer2">
+                    <v-image v-for="item in images" :key="item.id" :config="item" />
+
+                  </v-layer>
+                  
                   <v-layer ref="layer">
                     <v-rect v-for="item in rectangles" :key="item.id" :config="item" />
                     <v-text v-for="item in text" :key="item.id" :config="item" />
                     <v-transformer ref="transformer" />
                   </v-layer>
+
                 </v-stage>
                  <!-- <form @submit.prevent="addNote" :disabled="! note">
                   <div>
@@ -124,8 +131,10 @@ export default {
             },
       rectangles: [],
       text: [],
+      images: [],
       allShapes: [],
-      selectedShapeName: ''
+      selectedShapeName: '',
+      image: null
     }
   },
   watch: {
@@ -139,9 +148,29 @@ export default {
   },
   mounted () {
     this.fetchData();
-    this.drawToCanvas();
   },
   methods: {
+
+    addImage() {
+      let app = this;
+      console.log("add new img")
+      var imageObj = new Image();
+      imageObj.onload = function() {
+        let img = {
+          x: 50,
+          y: 50,
+          image: imageObj,
+          width: layout5.width,
+          height: layout5.height,
+          draggable: true
+        };
+
+        app.allShapes.push(img);
+        app.images.push(img);
+      }
+      imageObj.src = layout5;
+
+    },
     addRectangle(color) {
       let name = `rect${this.rectangles.length}`
       
@@ -159,7 +188,7 @@ export default {
       this.allShapes.push(rect);
     },
     addText() {
-      let name = `text_node${this.text.length}`
+      let name = `text_node${this.text.length + 1}`
       
       let simpleText = {
         x: 50,
@@ -177,7 +206,7 @@ export default {
     
     },
     handleStageMouseDown(e) {
-      // clicked on stage - cler selection
+      // clicked on stage - clear the current selection
       if (e.target === e.target.getStage()) {
         this.selectedShapeName = '';
         this.updateTransformer();
