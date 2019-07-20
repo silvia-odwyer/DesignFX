@@ -13,14 +13,14 @@
                 <li v-on:click="addRectangle('green')">Add Green Rectangle</li>
                 <li v-on:click="addText()">Add Text</li>
                 <li v-on:click="addImage(layout_imgs[0])">Add Image</li>
-
+                <li v-on:click="save()">Save</li>
+                <li v-on:click="clear()">Clear</li>
                 <li v-for="img in layout_imgs" v-on:click="displayLayout(img)">
                   <p>{{img.layout_name}}</p>
                   <img :src="img.img_src" height="200" width="300">
                 </li>
 
               </ul>
-
               
           </ul>
           </div>
@@ -119,7 +119,6 @@ export default {
       notes: [],
       note: '',
       uidCount: 0,
-      image: image,
       layout_imgs: [{img_src: layout1, layout_name: "Travel"}, {img_src: layout2, layout_name: "Lemonade"}, 
       {img_src: layout3,  layout_name: "Summer Collection"}],
       stageSize: {
@@ -146,6 +145,7 @@ export default {
   },
   mounted () {
     this.fetchData();
+    this.loadDesign();
   },
   methods: {
     displayLayout(img) {
@@ -168,19 +168,51 @@ export default {
     },
     save() {
       console.log("save");
-      console.log("save list", this.list);
-      console.log("this.list");
-      localStorage.setItem('storage', JSON.stringify(this.rectangles));
+
+      // create JSON canvas representation
+      var canvas_to_json = {
+        rectangles: this.rectangles,
+        text: this.text,
+        images: this.images
+      };
+
+      console.log("save list", canvas_to_json);
+      localStorage.setItem('storage', JSON.stringify(canvas_to_json));
     },
     loadDesign() {
-      const data = localStorage.getItem('storage') || '[]';
-      this.rectangles = JSON.parse(data);
-      console.log("data", data);
+      var data = localStorage.getItem('storage') || '[]';
+      data = JSON.parse(data);
+      console.log(data);
+
+      if (data.length != 0) {
+        console.log(data.rectangles);
+        if (data.rectangles != []) {
+          this.rectangles = data.rectangles;
+        }
+        if (data.text != []) {
+          this.text = data.text;
+        }
+        if (data.images != []) {
+          this.images = data.images;
+        }
+
+        console.log("this.rectangles after", this.rectangles);
+        
+      }
+
+    },
+    clear() {
+      this.rectangles = [];
+      this.text = [];
+      this.images = [];
+
+      console.log("cleared");
+      localStorage.setItem('storage', JSON.stringify([]));
     },
     addRectangle(color) {
-      let name = `rect${this.rectangles.length}`
+      let name = `rect${this.rectangles.length + 1}`
 
-      let rect = new Konva.Rect({
+      var rect = {
                 x: 10,
                 y: 10,
                 width: 100,
@@ -188,7 +220,7 @@ export default {
                 fill: color,
                 name: name,
                 draggable: true
-              });
+              };
 
       this.rectangles.push(rect);
       this.allShapes.push(rect);
