@@ -2,25 +2,7 @@
   <div class="dashboard">
     
       <div class="default">
-          <nav class="topnav">
-              <ul>
-                <li id="change_img">Change Image</li>
-                <li><a>Docu</a></li>
-                <li><a href="https://github.com/silvia-odwyer/photon">GitHub</a></li>
-                <li v-on:click="save()">Save</li>
-              </ul>
-          <h1>
-            <img :src="user.avatarUrl() ? user.avatarUrl() : '/avatar-placeholder.png'" class="avatar">
-            <small><span class="sign-out">(<a href="#" @click.prevent="signOut">Sign Out</a>)</span></small>
-          </h1>
-          <h2 class="user-info">
-            <small>
-            {{ user.username ? user.username : user.identityAddress }}
-            </small>
-
-          </h2>
-            
-            </nav>
+          <Header :user="user"></Header>
         <div class="sidebar">
             <h3 class="logo">Photon</h3>
             <ul>
@@ -36,6 +18,7 @@
                   <p>{{img.layout_name}}</p>
                   <img :src="img.img_src" height="200" width="300">
                 </li>
+
               </ul>
 
               
@@ -111,6 +94,7 @@
 <script>
 /* eslint-disable */
 import { userSession } from '../userSession'
+import Header from "@/components/Header.vue"
 var STORAGE_FILE = 'notes.json'
 var IMAGE_STORAGE_FILE = "image.PNG";
 import image from "@/assets/daisies_small.jpg";
@@ -127,6 +111,9 @@ const height = window.innerHeight;
 export default {
   name: 'dashboard',
   props: ['user'],
+  components: {
+    Header
+  },
   data () {
     return {
       notes: [],
@@ -285,9 +272,7 @@ export default {
     writeMessage(e, rect) {
       console.log("write msg");
       console.log(rect);
-
-      var stage = this.$refs.stage;
-      console.log("stage", stage);
+      
       let position = stage.getPointerPosition()
       
       console.log(position);
