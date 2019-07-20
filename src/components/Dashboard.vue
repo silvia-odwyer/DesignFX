@@ -4,7 +4,8 @@
       <div class="default">
           <Header :user="user"></Header>
         <div class="sidebar">
-            <h3 class="logo">Photon</h3>
+          <div class="sidebar_content">
+            <h3 class="logo">gda</h3>
             <ul>
         
               <h3>Design Templates</h3>
@@ -20,11 +21,10 @@
                   <img :src="img.img_src" height="200" width="300">
                 </li>
 
-              </ul>
-              
+              </ul>              
           </ul>
           </div>
-
+          </div>
           
           <div class="main">
             <div class="main_content">
@@ -122,7 +122,7 @@ export default {
       layout_imgs: [{img_src: layout1, layout_name: "Travel"}, {img_src: layout2, layout_name: "Lemonade"}, 
       {img_src: layout3,  layout_name: "Summer Collection"}],
       stageSize: {
-              width: width,
+              width: width / 1.5,
               height: height
             },
       rectangles: [],
@@ -157,12 +157,14 @@ export default {
       };
     },
     addImage(img) {
+      console.log("this.images", this.images);
       let app = this;
-      console.log("change layout")
+      console.log("add image")
       var imageObj = new Image();
       imageObj.onload = function() {
-
-        app.images.push({image: imageObj, draggable: true, name: img.layout_name});
+        let img_obj = {image: imageObj, draggable: true, name: img.layout_name}
+        app.images.push(img_obj);
+        app.allShapes.push(img_obj);
       }
       imageObj.src = img.img_src;
     },
@@ -193,11 +195,11 @@ export default {
           this.text = data.text;
         }
         if (data.images != []) {
-          this.images = data.images;
+          // this.images = data.images;
         }
 
         console.log("this.rectangles after", this.rectangles);
-        
+        this.updateAllShapes();
       }
 
     },
@@ -205,6 +207,8 @@ export default {
       this.rectangles = [];
       this.text = [];
       this.images = [];
+      const transformerNode = this.$refs.transformer.getStage();
+      transformerNode.detach();
 
       console.log("cleared");
       localStorage.setItem('storage', JSON.stringify([]));
@@ -260,7 +264,7 @@ export default {
 
       // find clicked rect by its name
       const name = e.target.name();
-      const rect = this.images.find(r => r.name === name);
+      const rect = this.allShapes.find(r => r.name === name);
       if (rect) {
         this.selectedShapeName = name;
       } else {
@@ -327,6 +331,19 @@ export default {
       }
       imageElem.src = this.image;
      
+    },
+    updateAllShapes() {
+      for (var i = 0; i < this.rectangles.length; i++) {
+        this.allShapes.push(this.rectangles[i]);
+      }
+
+      for (var i = 0; i < this.text.length; i++) {
+        this.allShapes.push(this.text[i]);
+      }
+
+      for (var i = 0; i < this.images.length; i++) {
+        this.allShapes.push(this.images[i]);
+      }
     },
     displayTemplate(img) {
       console.log("display template")
@@ -409,7 +426,6 @@ label {
     }
   }
 }
-    
 
 
 .main-sidebar, .main-navbar, .dark {
@@ -518,12 +534,6 @@ h4 {
   padding-left: 4em;
 }
 
-.benchmarks {
-  color: white;
-  font-size: 2em;
-  grid-area: "main_right";
-}
-
 .main_content {
   display: grid;
   grid-template-columns: 75% 25%;
@@ -545,9 +555,7 @@ li:hover{
   cursor: pointer;
 }
 
-.topnav {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
+.sidebar_content {
+  margin-top: 8vh;
 }
 </style>
