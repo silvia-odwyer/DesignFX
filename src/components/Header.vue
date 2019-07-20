@@ -5,7 +5,7 @@
                 <li id="change_img">Change Image</li>
                 <li><a>Docu</a></li>
                 <li><a href="https://github.com/silvia-odwyer/photon">GitHub</a></li>
-                <li v-on:click="save()">Save</li>
+
             </ul>
           <h1>
             <img :src="user.avatarUrl() ? user.avatarUrl() : '/avatar-placeholder.png'" class="avatar">
@@ -30,23 +30,6 @@ export default {
   props: ['user'],
   data () {
     return {
-      notes: [],
-      note: '',
-      uidCount: 0,
-      image: image,
-      layout_imgs: [{img_src: layout1, layout_name: "Travel"}, {img_src: layout2, layout_name: "Lemonade"}, 
-      {img_src: layout3,  layout_name: "Summer Collection"}],
-      stageSize: {
-              width: width,
-              height: height
-            },
-      rectangles: [],
-      text: [],
-      images: [],
-      allShapes: [],
-      selectedShapeName: '',
-      image_template: null,
-      list: [],
     }
   },
   methods: {
@@ -105,6 +88,7 @@ nav {
   background-color: rgb(29, 29, 29);
   position: fixed; /* Set the navbar to fixed position */
   top: 0; /* Position the navbar at the top of the page */
+  z-index: 2;
   width: 100%; /* Full width */
 }
 

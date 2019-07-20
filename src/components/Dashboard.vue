@@ -305,11 +305,15 @@ export default {
       })
       this.note = ''
     },
-    writeMessage(e, rect) {
+    writeMessage(rect) {
       console.log("write msg");
       console.log(rect);
-      
-      let position = stage.getPointerPosition()
+      const transformerNode = this.$refs.transformer.getStage();
+      const stage = transformerNode.getStage();
+      let position = stage.getPointerPosition();
+
+      rect.x = position.x;
+      rect.y = position.y;
       
       console.log(position);
     },
