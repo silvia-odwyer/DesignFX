@@ -19,13 +19,38 @@ import { userSession } from '../userSession'
 
 export default {
   name: 'elements',
-  props: ['user'],
+  props: ['user', 'rectangles', 'allShapes'],
   data () {
     return {
     }
   },
   methods: {
-    
+    addRectangle(color) {
+      let name = `rect${this.rectangles.length + 1}`
+
+      var rect = {
+                x: 10,
+                y: 10,
+                width: 100,
+                height: 100,
+                fill: color,
+                name: name,
+                draggable: true
+              };
+
+      this.rectangles.push(rect);
+      this.allShapes.push(rect);
+    },
+    clear() {
+      this.rectangles = [];
+      this.text = [];
+      this.images = [];
+      const transformerNode = this.$refs.transformer.getStage();
+      transformerNode.detach();
+
+      console.log("cleared");
+      localStorage.setItem('storage', JSON.stringify([]));
+    },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default
         .then((todosText) => {
@@ -59,5 +84,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-
+ul li {
+    cursor: pointer;
+    color: silver;
+    font-family: "Helvetica Neue", sans-serif;
+    list-style: none;
+}
 </style>

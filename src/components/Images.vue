@@ -24,7 +24,9 @@ export default {
   props: ['user', 'allShapes', 'images'],
   data () {
     return {
-    img: null
+    img: null,
+    layout_imgs: [{img_src: layout1, layout_name: "Travel"}, {img_src: layout2, layout_name: "Lemonade"}, 
+    {img_src: layout3,  layout_name: "Summer Collection"}],
     }
   },
   methods: {
@@ -46,5 +48,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+
+ul li {
+  text-decoration: none;
+  list-style: none;
+  padding-right: 4em;
+  cursor: pointer;
+  color: silver;
+  font-family: "Helvetica Neue", sans-serif;
+}
 
 </style>

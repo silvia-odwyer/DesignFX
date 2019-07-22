@@ -3,7 +3,7 @@
           
     <h3>Text</h3>
     <ul>
-        <li v-on:click="addRectangle('red')">Draw Text</li>
+        <li v-on:click="addText">Draw Text</li>
     </ul>              
     </ul>
 </template>
@@ -12,20 +12,13 @@
 /* eslint-disable */
 import { userSession } from '../userSession'
 import image from "@/assets/daisies_small.jpg";
-import layout1 from "@/assets/travel.png";
-import layout2 from "@/assets/lemonade.png";
-import layout3 from "@/assets/summer_collection.png";
-import layout4 from "@/assets/travel.png";
-import layout5 from "@/assets/lemonade.png";
-import layout6 from "@/assets/summer_collection.png";
+
 
 export default {
   name: 'designs',
   props: ['user', 'text', 'allShapes'],
   data () {
     return {
-    layout_imgs: [{img_src: layout1, layout_name: "Travel"}, {img_src: layout2, layout_name: "Lemonade"}, 
-      {img_src: layout3,  layout_name: "Summer Collection"}],
     img: null
     }
   },
@@ -77,5 +70,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+
+ul li {
+  text-decoration: none;
+  list-style: none;
+  padding-right: 4em;
+  cursor: pointer;
+  color: silver;
+  font-family: "Helvetica Neue", sans-serif;
+}
+
 
 </style>

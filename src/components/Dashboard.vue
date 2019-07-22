@@ -17,18 +17,26 @@
                 <img src="/avatar-placeholder.png" height="30" width="20"/>
                 Elements 
               </li>
-              <li>
+              <li @click="setSidebarItem('images')">
                 <img src="/avatar-placeholder.png" height="30" width="20"/>
                 Images 
               </li>
-
+              <li @click="setSidebarItem('text')">
+                <img src="/avatar-placeholder.png" height="30" width="20"/>
+                Text 
+              </li>
             </ul>
           </div>
 
           <div class="sidebar_right_bar"> 
-            <h3 class="logo">gda</h3>
+
             <!-- Current chosen component is inserted here. Options include Rich Text Editor, project board, to-do, etc., -->
-            <component v-bind:is="sidebarNameToComponent[sidebarItems]"></component>
+            <component v-bind:is="sidebarNameToComponent[sidebarItems]" 
+            :rectangles="rectangles" 
+            :allShapes="allShapes"
+            :text="text" 
+            :images="images" 
+            :image_template="image_template"></component>
 
             <!-- Content -->
             <slot />
@@ -110,6 +118,8 @@ import { userSession } from '../userSession'
 import Header from "@/components/Header.vue"
 import Designs from "@/components/Designs.vue";
 import Elements from "@/components/Elements.vue";
+import Text from "@/components/Text.vue";
+import Images from "@/components/Images.vue";
 
 var STORAGE_FILE = 'notes.json'
 var IMAGE_STORAGE_FILE = "image.PNG";
@@ -148,7 +158,7 @@ export default {
       allShapes: [],
       selectedShapeName: '',
       sidebarItems: "designs",
-      sidebarNameToComponent: {"designs": Designs, "elements": Elements},
+      sidebarNameToComponent: {"designs": Designs, "elements": Elements, "text": Text, "images": Images},
       image_template: null,
       list: [],
     }
@@ -222,50 +232,8 @@ export default {
       }
 
     },
-    clear() {
-      this.rectangles = [];
-      this.text = [];
-      this.images = [];
-      const transformerNode = this.$refs.transformer.getStage();
-      transformerNode.detach();
 
-      console.log("cleared");
-      localStorage.setItem('storage', JSON.stringify([]));
-    },
-    addRectangle(color) {
-      let name = `rect${this.rectangles.length + 1}`
 
-      var rect = {
-                x: 10,
-                y: 10,
-                width: 100,
-                height: 100,
-                fill: color,
-                name: name,
-                draggable: true
-              };
-
-      this.rectangles.push(rect);
-      this.allShapes.push(rect);
-    },
-    addText() {
-      let name = `text_node${this.text.length + 1}`
-      
-      let simpleText = {
-        x: 50,
-        y: 50,
-        text: 'Simple Text',
-        fontSize: 100,
-        fontFamily: 'Calibri',
-        fill: 'white',
-        draggable: 'true',
-        name: name
-      };
-    this.text.push(simpleText);
-
-    this.allShapes.push(simpleText);
-    
-    },
     handleStageMouseDown(e) {
       // clicked on stage - clear the current selection
       if (e.target === e.target.getStage()) {
@@ -600,7 +568,7 @@ li:hover{
 }
 
 .sidebar_left_bar li {
-  margin-bottom: 35vh;
+  margin-bottom: 15vh;
   font-family: "Helvetica Neue", sans-serif;
 }
 

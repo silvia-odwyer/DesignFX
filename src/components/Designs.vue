@@ -3,10 +3,6 @@
           
     <h3>Design Templates</h3>
     <ul>
-        <li v-on:click="addRectangle('red')">Add Red Rectangle</li>
-        <li v-on:click="addRectangle('green')">Add Green Rectangle</li>
-        <li v-on:click="addText()">Add Text</li>
-        <li v-on:click="addImage(layout_imgs[0])">Add Image</li>
         <li v-on:click="save()">Save</li>
         <li v-on:click="clear()">Clear</li>
         <li v-for="img in layout_imgs" v-on:click="displayLayout(img)">
@@ -30,7 +26,7 @@ import layout6 from "@/assets/summer_collection.png";
 
 export default {
   name: 'designs',
-  props: ['user'],
+  props: ['user', 'image_template'],
   data () {
     return {
     layout_imgs: [{img_src: layout1, layout_name: "Travel"}, {img_src: layout2, layout_name: "Lemonade"}, 
@@ -39,6 +35,7 @@ export default {
     }
   },
   methods: {
+      
     displayLayout(img) {
       const image = new window.Image();
       image.src = img.img_src;
@@ -68,5 +65,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-
+ul li {
+    cursor: pointer;
+    color: silver;
+    font-family: "Helvetica Neue", sans-serif;
+    list-style: none;
+}
 </style>

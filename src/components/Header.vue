@@ -1,6 +1,9 @@
 <template>
     <div class="default">
+
         <nav class="topnav">
+          <h3 class="logo">gda</h3>
+
             <ul>
                 <li id="change_img">Change Image</li>
                 <li><a>Docu</a></li>
