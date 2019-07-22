@@ -4,28 +4,41 @@
       <div class="default">
           <Header :user="user"></Header>
         <div class="sidebar">
+          
           <div class="sidebar_content">
-            <h3 class="logo">gda</h3>
-            <ul>
-        
-              <h3>Design Templates</h3>
-              <ul>
-                <li v-on:click="addRectangle('red')">Add Red Rectangle</li>
-                <li v-on:click="addRectangle('green')">Add Green Rectangle</li>
-                <li v-on:click="addText()">Add Text</li>
-                <li v-on:click="addImage(layout_imgs[0])">Add Image</li>
-                <li v-on:click="save()">Save</li>
-                <li v-on:click="clear()">Clear</li>
-                <li v-for="img in layout_imgs" v-on:click="displayLayout(img)">
-                  <p>{{img.layout_name}}</p>
-                  <img :src="img.img_src" height="200" width="300">
-                </li>
+            
+          <div class="sidebar_left_bar">
+            <ul class="">
+              <li @click="setSidebarItem('designs')">
+                <img src="/avatar-placeholder.png" height="30" width="20"/>
+                Designs
+              </li>
+              <li @click="setSidebarItem('elements')">
+                <img src="/avatar-placeholder.png" height="30" width="20"/>
+                Elements 
+              </li>
+              <li>
+                <img src="/avatar-placeholder.png" height="30" width="20"/>
+                Images 
+              </li>
 
-              </ul>              
-          </ul>
+            </ul>
           </div>
+
+          <div class="sidebar_right_bar"> 
+            <h3 class="logo">gda</h3>
+            <!-- Current chosen component is inserted here. Options include Rich Text Editor, project board, to-do, etc., -->
+            <component v-bind:is="sidebarNameToComponent[sidebarItems]"></component>
+
+            <!-- Content -->
+            <slot />
+          </div>
+
           </div>
           
+          </div>
+          
+          </div>
           <div class="main">
             <div class="main_content">
             
@@ -85,7 +98,7 @@
           </div>
           
           </div>
-
+      
       </div>
     </div>
   </div>
@@ -95,16 +108,19 @@
 /* eslint-disable */
 import { userSession } from '../userSession'
 import Header from "@/components/Header.vue"
+import Designs from "@/components/Designs.vue";
+import Elements from "@/components/Elements.vue";
+
 var STORAGE_FILE = 'notes.json'
 var IMAGE_STORAGE_FILE = "image.PNG";
 import image from "@/assets/daisies_small.jpg";
-
 import layout1 from "@/assets/travel.png";
 import layout2 from "@/assets/lemonade.png";
 import layout3 from "@/assets/summer_collection.png";
 import layout4 from "@/assets/travel.png";
 import layout5 from "@/assets/lemonade.png";
 import layout6 from "@/assets/summer_collection.png";
+
 const width = window.innerWidth;
 const height = window.innerHeight;
 
@@ -112,7 +128,8 @@ export default {
   name: 'dashboard',
   props: ['user'],
   components: {
-    Header
+    Header,
+    Designs 
   },
   data () {
     return {
@@ -130,6 +147,8 @@ export default {
       images: [],
       allShapes: [],
       selectedShapeName: '',
+      sidebarItems: "designs",
+      sidebarNameToComponent: {"designs": Designs, "elements": Elements},
       image_template: null,
       list: [],
     }
@@ -349,6 +368,11 @@ export default {
         this.allShapes.push(this.images[i]);
       }
     },
+    setSidebarItem(name) {
+    
+      this.sidebarItems = name;
+    
+    },
     displayTemplate(img) {
       console.log("display template")
       var canvas = document.getElementById("canvas");
@@ -508,7 +532,6 @@ ul li:hover {
 .logo {
   color: white;
   font-size: 1em;
-  margin-left: 1em;
 }
 
 h2, h3, h4, h5 {
@@ -545,6 +568,23 @@ h4 {
   grid-template-areas: "main_left main_right";
 }
 
+.sidebar_content {
+  display: grid;
+  grid-template-columns: 25% 75%;
+  grid-template-rows: auto;
+  grid-template-areas: "sidebar_left sidebar_right";
+}
+
+.sidebar_left_bar {
+  grid-area: sidebar_left;
+  margin-left: 0;
+}
+
+.sidebar_right_bar {
+  grid-area: sidebar_right;
+  margin-left: 0;
+}
+
 #code {
   font-size: 0.5em;
   font-family: 'Courier New', Courier, monospace;
@@ -557,6 +597,15 @@ a {
 
 li:hover{
   cursor: pointer;
+}
+
+.sidebar_left_bar li {
+  margin-bottom: 35vh;
+  font-family: "Helvetica Neue", sans-serif;
+}
+
+.sidebar_left_bar ul {
+  margin-left: 0em;
 }
 
 .sidebar_content {
