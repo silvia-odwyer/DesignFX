@@ -2,13 +2,13 @@
   <div class="dashboard">
     
       <div class="default">
-          <Header :user="user"></Header>
+          <Header :user="user" :transformer="$refs.transformer"></Header>
         <div class="sidebar">
           
           <div class="sidebar_content">
             
           <div class="sidebar_left_bar">
-            <ul class="">
+            <div class="">
               <li @click="setSidebarItem('designs')">
                 <img src="/avatar-placeholder.png" height="30" width="20"/>
                 Designs
@@ -25,7 +25,7 @@
                 <img src="/avatar-placeholder.png" height="30" width="20"/>
                 Text 
               </li>
-            </ul>
+            </div>
           </div>
 
           <div class="sidebar_right_bar"> 
@@ -77,7 +77,6 @@
                   </v-layer>
 
                 </v-stage>
-                <button id="download" v-on:click="exportImage">Download</button>
                  <!-- <form @submit.prevent="addNote" :disabled="! note">
                   <div>
                     <input v-model="note" type="text" class="form-control" placeholder="Write a note..." autofocus>
@@ -175,8 +174,8 @@ export default {
     }
   },
   mounted () {
-    this.fetchData();
-    this.loadDesign();
+    // this.fetchData();
+    // this.loadDesign();
   },
   methods: {
     displayLayout(img) {
@@ -331,33 +330,7 @@ export default {
       this.sidebarItems = name;
     
     },
-    exportImage() {
-      const transformerNode = this.$refs.transformer.getStage();
-      const stage = transformerNode.getStage();
-
-      // Detach current node from the transformer
-      transformerNode.detach();
-      var dataURL = stage.toDataURL();
-      this.downloadURI(dataURL, 'new_image.png');
-
-    },
-    // Download image.
-    downloadURI(uri, name) {
-        // Create a link element
-        var link = document.createElement('a');
-        
-        // Download the link with the given name
-        link.download = name;
-
-        // Set the link's href to the URI of the stage's canvas
-        link.href = uri;
-
-        // Alert the user to the download.
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        // delete link;
-    },
+    
     editText(text_elem) {
       console.log("edit text elem", text_elem);
       text_elem.isVisible = false;
@@ -519,11 +492,6 @@ ul li:hover {
     margin-left: 0;
 }
 
-.logo {
-  color: white;
-  font-size: 1em;
-}
-
 h2, h3, h4, h5 {
   color: white;
   font-family: "Roboto", sans-serif;
@@ -568,11 +536,13 @@ h4 {
 .sidebar_left_bar {
   grid-area: sidebar_left;
   margin-left: 0;
+  background-color: rgb(14, 19, 24);
 }
 
 .sidebar_right_bar {
   grid-area: sidebar_right;
   margin-left: 0;
+  background-color: rgb(41, 48, 57);
 }
 
 #code {
@@ -596,11 +566,20 @@ li:hover{
   padding-right: 1vh;
 }
 
-.sidebar_left_bar ul {
-  margin-left: 0em;
+.sidebar_left_bar li {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.sidebar_left_bar li:hover {
+  color: silver;
 }
 
 .sidebar_content {
-  margin-top: 8vh;
+  padding-top: 6vh;
+  height: 90%;
 }
+
 </style>

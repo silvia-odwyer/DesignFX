@@ -3,12 +3,13 @@
 
         <nav class="topnav">
           <h3 class="logo">gda</h3>
-
             <ul>
                 <li id="change_img">Change Image</li>
                 <li><a>Docu</a></li>
                 <li><a href="https://github.com/silvia-odwyer/photon">GitHub</a></li>
-
+                <li>
+                  <button id="download" v-on:click="exportImage">Download</button>
+                </li>
             </ul>
           <h1>
             <img :src="user.avatarUrl() ? user.avatarUrl() : '/avatar-placeholder.png'" class="avatar">
@@ -16,7 +17,7 @@
           </h1>
           <h2 class="user-info">
             <small>
-            {{ user.username ? user.username : user.identityAddress }}
+            {{ user.username ? user.username.substring(0, user.username.length - 14) : user.identityAddress }}
             </small>
           </h2>
         </nav>
@@ -30,13 +31,39 @@ import { userSession } from '../userSession'
 
 export default {
   name: 'header',
-  props: ['user'],
+  props: ['user', 'transformer'],
   data () {
     return {
     }
   },
   methods: {
-    
+    exportImage() {
+      const transformerNode = this.transformer.getStage();
+      const stage = transformerNode.getStage();
+
+      // Detach current node from the transformer
+      transformerNode.detach();
+      var dataURL = stage.toDataURL();
+      this.downloadURI(dataURL, 'new_image.png');
+
+    },
+    // Download image.
+    downloadURI(uri, name) {
+        // Create a link element
+        var link = document.createElement('a');
+        
+        // Download the link with the given name
+        link.download = name;
+
+        // Set the link's href to the URI of the stage's canvas
+        link.href = uri;
+
+        // Alert the user to the download.
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        // delete link;
+    },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default
         .then((todosText) => {
@@ -126,6 +153,8 @@ ul li:hover {
   color: white;
   font-size: 1em;
   margin-left: 1em;
+  padding: 14px 16px;
+  flex-grow: 1;
 }
 
 h2, h3, h4, h5 {
