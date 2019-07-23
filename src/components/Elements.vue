@@ -5,8 +5,6 @@
     <ul>
         <li v-on:click="addRectangle('red')">Add Red Rectangle</li>
         <li v-on:click="addRectangle('green')">Add Green Rectangle</li>
-        <li v-on:click="addText()">Add Text</li>
-        <li v-on:click="addImage(layout_imgs[0])">Add Image</li>
         <li v-on:click="save()">Save</li>
         <li v-on:click="clear()">Clear</li>
     </ul>              
@@ -19,7 +17,7 @@ import { userSession } from '../userSession'
 
 export default {
   name: 'elements',
-  props: ['user', 'rectangles', 'allShapes'],
+  props: ['user', 'rectangles', 'allShapes', 'images', 'text'],
   data () {
     return {
     }
@@ -45,8 +43,8 @@ export default {
       this.rectangles = [];
       this.text = [];
       this.images = [];
-      const transformerNode = this.$refs.transformer.getStage();
-      transformerNode.detach();
+    //   const transformerNode = this.$refs.transformer.getStage();
+    //   transformerNode.detach();
 
       console.log("cleared");
       localStorage.setItem('storage', JSON.stringify([]));

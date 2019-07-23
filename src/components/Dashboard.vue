@@ -36,7 +36,8 @@
             :allShapes="allShapes"
             :text="text" 
             :images="images" 
-            :image_template="image_template"></component>
+            :image_template="image_template"
+            ></component>
 
             <!-- Content -->
             <slot />
@@ -53,7 +54,7 @@
               <section class="content">
                 
                 <!-- <canvas id="canvas" width="800" height="700"></canvas> -->
-                <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown">
+                <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown" id="stage">
                   
                   <v-layer ref="layer2">
                     <v-image :config="image_template" />
@@ -76,6 +77,7 @@
                   </v-layer>
 
                 </v-stage>
+                <button id="download" v-on:click="exportImage">Download</button>
                  <!-- <form @submit.prevent="addNote" :disabled="! note">
                   <div>
                     <input v-model="note" type="text" class="form-control" placeholder="Write a note..." autofocus>
@@ -184,18 +186,6 @@ export default {
         // set image only when it is loaded
         this.image_template = {image: image, draggable: true, name: img.layout_name};
       };
-    },
-    addImage(img) {
-      console.log("this.images", this.images);
-      let app = this;
-      console.log("add image")
-      var imageObj = new Image();
-      imageObj.onload = function() {
-        let img_obj = {image: imageObj, draggable: true, name: img.layout_name}
-        app.images.push(img_obj);
-        app.allShapes.push(img_obj);
-      }
-      imageObj.src = img.img_src;
     },
     save() {
       console.log("save");
@@ -340,6 +330,33 @@ export default {
     
       this.sidebarItems = name;
     
+    },
+    exportImage() {
+      const transformerNode = this.$refs.transformer.getStage();
+      const stage = transformerNode.getStage();
+
+      // Detach current node from the transformer
+      transformerNode.detach();
+      var dataURL = stage.toDataURL();
+      this.downloadURI(dataURL, 'new_image.png');
+
+    },
+    // Download image.
+    downloadURI(uri, name) {
+        // Create a link element
+        var link = document.createElement('a');
+        
+        // Download the link with the given name
+        link.download = name;
+
+        // Set the link's href to the URI of the stage's canvas
+        link.href = uri;
+
+        // Alert the user to the download.
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        // delete link;
     },
     displayTemplate(img) {
       console.log("display template")
@@ -568,8 +585,10 @@ li:hover{
 }
 
 .sidebar_left_bar li {
-  margin-bottom: 15vh;
+  margin-bottom: 8vh;
   font-family: "Helvetica Neue", sans-serif;
+  padding-top: 3vh;
+  padding-right: 1vh;
 }
 
 .sidebar_left_bar ul {
