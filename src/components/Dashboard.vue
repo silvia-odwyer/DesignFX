@@ -63,7 +63,7 @@
 
                   <v-layer ref="layer">
                     <v-rect v-for="item in rectangles" :config="item" v-on:dragEnd="writeMessage(item)" />
-                    <v-text v-for="item in text" :key="item.id" :config="item" />
+                    <v-text v-for="item in text" :key="item.id" :config="item" v-on:dblclick="editText(item)" v-if="item.isVisible"/>
                     <v-image v-for="img in images" :config="img" />
 <!-- 
                             <v-circle
@@ -357,6 +357,11 @@ export default {
         link.click();
         document.body.removeChild(link);
         // delete link;
+    },
+    editText(text_elem) {
+      console.log("edit text elem", text_elem);
+      text_elem.isVisible = false;
+
     },
     displayTemplate(img) {
       console.log("display template")

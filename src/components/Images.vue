@@ -20,6 +20,11 @@
         </li>
         <img v-for="user_img in user_images" :src="user_img.img_src" v-on:click="addImage(user_img)">
 
+
+        <canvas id="canvas"></canvas>
+
+        <button v-on:click="saveToBlockstack">Save To Blockstack</button>
+
     </ul>              
     </ul>
 </template>
@@ -40,12 +45,15 @@ export default {
   props: ['user', 'allShapes', 'images'],
   data () {
     return {
-    img: null,
-    layout_imgs: [{img_src: layout1, layout_name: "Travel"}, {img_src: layout2, layout_name: "Lemonade"}, 
-    {img_src: layout3,  layout_name: "Summer Collection"}],
-    user_images: [],
-    img_num: 0
+        img: null,
+        layout_imgs: [{img_src: layout1, layout_name: "Travel"}, {img_src: layout2, layout_name: "Lemonade"}, 
+        {img_src: layout3,  layout_name: "Summer Collection"}],
+        user_images: [],
+        img_num: 0
     }
+  },
+  mounted() {
+      this.fetchData();
   },
   methods: {
     addImage(img) {
@@ -76,7 +84,50 @@ export default {
             /// Error message TODO
             console.log("Could not read file. :(")
         }
-    
+    },
+    saveToBlockstack() {
+        console.log("save to blockstack");
+        let canvas = document.createElement("canvas");
+        let context = canvas.getContext("2d");
+
+        for (var i = 0; i < this.user_images.length; i++) {
+            let image = this.user_images[i];
+
+            var imageElem = new Image();
+            imageElem.onload = () => {
+                context.drawImage(imageElem, 0, 0);
+                var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+                var array = imageData.data; // array is a Uint8ClampedArray
+                var buffer = imageData.data.buffer; // buffer is a ArrayBuffer
+                        
+                userSession.putFile("image1.PNG", buffer);
+            }
+            imageElem.src = image.img_src;
+        }
+
+    },
+    fetchData() {
+        userSession.getFile("image1.PNG") // decryption is enabled by default
+         .then((buffer) => {
+             let app = this;
+          var canvas = document.createElement("canvas");
+          var context = canvas.getContext("2d");
+          var imageData2 = context.createImageData(canvas.width, canvas.height);
+          imageData2.data.set(buffer);
+          console.log(imageData2);
+          context.putImageData(imageData2, 0, 0);
+          
+          let uri = canvas.toDataURL();
+          let canvasToImg = new Image();
+
+          canvasToImg.onload = () => {
+            let img_obj = {img_src: uri, layout_name: `img_${app.img_num}`};
+            app.user_images.push(img_obj);
+          }
+          canvasToImg.src = uri;
+
+        })
     }
   }
 }

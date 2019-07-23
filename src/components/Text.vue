@@ -34,7 +34,8 @@ export default {
         fontFamily: 'Calibri',
         fill: 'white',
         draggable: 'true',
-        name: name
+        name: name,
+        isVisible: true
       };
     this.text.push(simpleText);
 
