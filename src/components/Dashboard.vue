@@ -3,13 +3,13 @@
     <div class="default">
       <Header :user="user" :transformer="$refs.transformer"></Header>
 
-      <Sidebar :rectangles="rectangles" :allShapes="allShapes" :text="text" :images="images"></Sidebar>
+      <Sidebar :rectangles="rectangles" :allShapes="allShapes" :text="text" :images="images" :transformer="$refs.transformer" 
+                :image_template="image_template" :ifTextOptions="ifTextOptions"></Sidebar>
           <div class="main">
             <div class="main_content">
             
               <section class="content">
                 
-                <!-- <canvas id="canvas" width="800" height="700"></canvas> -->
                 <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown" id="stage">
                   
                   <v-layer ref="layer2">
@@ -19,7 +19,8 @@
 
                   <v-layer ref="layer">
                     <v-rect v-for="item in rectangles" :config="item" v-on:dragEnd="writeMessage(item)" />
-                    <v-text v-for="item in text" :key="item.id" :config="item" v-on:dblclick="editText(item)" v-if="item.isVisible"/>
+                    <v-text v-for="item in text" :key="item.id" :config="item" v-on:dblclick="editText(item)" 
+                    v-on:click="showTextOptions" v-if="item.isVisible"/>
                     <v-image v-for="img in images" :config="img" />
 <!-- 
                             <v-circle
@@ -27,7 +28,6 @@
                               :key="item.id"
                               :config="{
                                 x : item.x, y: item.y, radius: 50, fill: 'red',}"></v-circle> -->
-
 
                     <v-transformer ref="transformer" />
                   </v-layer>
@@ -48,7 +48,6 @@
 import { userSession } from '../userSession'
 import Header from "@/components/Header.vue"
 import Sidebar from "@/components/Sidebar.vue";
-
 
 var STORAGE_FILE = 'notes.json'
 var IMAGE_STORAGE_FILE = "image.PNG";
@@ -86,7 +85,7 @@ export default {
       images: [],
       allShapes: [],
       selectedShapeName: '',
-
+      ifTextOptions: false,
       image_template: null,
       list: [],
     }
@@ -112,6 +111,10 @@ export default {
         // set image only when it is loaded
         this.image_template = {image: image, draggable: true, name: img.layout_name};
       };
+    },
+    showTextOptions() {
+      console.log("showtextoptions");
+      this.ifTextOptions = true;
     },
     save() {
       console.log("save");
@@ -284,18 +287,6 @@ export default {
           this.uidCount = notes.length
           this.notes = notes
         })
-
-      // userSession.getFile("image1.PNG") // decryption is enabled by default
-      //   .then((buffer) => {
-      //     var canvas = document.getElementById("canvas");
-      //     var context = canvas.getContext("2d");
-      //     var imageData2 = context.createImageData(canvas.width, canvas.height);
-      //     imageData2.data.set(buffer);
-      //     console.log(imageData2);
-
-      //     context.putImageData(imageData2, 0, 0);
-
-      //   })
     },
 
     signOut () {

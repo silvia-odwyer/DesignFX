@@ -33,6 +33,7 @@
             :text="text" 
             :images="images" 
             :image_template="image_template"
+            :ifTextOptions="ifTextOptions"
             ></component>
 
             <!-- Content -->
@@ -54,7 +55,7 @@ import Images from "@/components/Images.vue";
 
 export default {
   name: 'header',
-  props: ['user', 'rectangles', 'allShapes', 'text', 'images'],
+  props: ['user', 'rectangles', 'allShapes', 'text', 'images', 'transformer', 'image_template', 'ifTextOptions'],
   components: {
       Designs, Elements, Text, Images
   },
@@ -79,10 +80,6 @@ export default {
           this.notes = notes
         })
     },
-
-    signOut () {
-      userSession.signUserOut(window.location.href)
-    }
   }
 }
 </script>

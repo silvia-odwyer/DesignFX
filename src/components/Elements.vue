@@ -5,6 +5,7 @@
     <ul>
         <li v-on:click="addRectangle('red')">Add Red Rectangle</li>
         <li v-on:click="addRectangle('green')">Add Green Rectangle</li>
+        <input type="color" />
         <li v-on:click="save()">Save</li>
         <li v-on:click="clear()">Clear</li>
     </ul>              

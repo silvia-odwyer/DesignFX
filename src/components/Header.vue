@@ -4,7 +4,6 @@
         <nav class="topnav">
           <h3 class="logo">gda</h3>
             <ul>
-                <li id="change_img">Change Image</li>
                 <li><a>Docu</a></li>
                 <li><a href="https://github.com/silvia-odwyer/photon">GitHub</a></li>
                 <li>
@@ -74,18 +73,6 @@ export default {
           this.uidCount = notes.length
           this.notes = notes
         })
-
-      // userSession.getFile("image1.PNG") // decryption is enabled by default
-      //   .then((buffer) => {
-      //     var canvas = document.getElementById("canvas");
-      //     var context = canvas.getContext("2d");
-      //     var imageData2 = context.createImageData(canvas.width, canvas.height);
-      //     imageData2.data.set(buffer);
-      //     console.log(imageData2);
-
-      //     context.putImageData(imageData2, 0, 0);
-
-      //   })
     },
 
     signOut () {
@@ -97,22 +84,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-.main-sidebar, .main-navbar, .dark {
-  background-color: rgb(34, 34, 34);
-  color: rgb(105, 105, 105);
-}
-
-.main {
-  margin-left: 40vh;
-  padding: 0px 10px;
-  background-color: rgb(34, 34, 34);
-  height: 100%;
-}
-
-.main_content {
-  padding-top: 14vh;
-}
-
 nav {
   overflow: hidden;
   background-color: rgb(29, 29, 29);

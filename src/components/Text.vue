@@ -5,16 +5,19 @@
     <ul>
         <li v-on:click="addText">Draw Text</li>
 
-        <label>Font</label>
-        <select v-model="font" v-on:change="changeFont">
-          <option v-for="font in availableFonts" v-bind:key="font">{{font}}</option>
-        </select> 
+        <div v-if="ifTextOptions">
+          <label>Font</label>
+          <select v-model="font" v-on:change="changeFont">
+            <option v-for="font in availableFonts" v-bind:key="font">{{font}}</option>
+          </select> 
 
-        <label>Text Content</label>
-        <input value="text" v-model="textContent" v-on:change="changeTextContent"/>
+          <label>Text Content</label>
+          <input value="text" v-model="textContent" v-on:change="changeTextContent"/>
 
-        <label>Font Size</label>
-        <input value="text" v-model="fontSize" v-on:change="changeFontSize"/>
+          <label>Font Size</label>
+          <input value="text" v-model="fontSize" v-on:change="changeFontSize"/>
+        </div>
+
     </ul>              
     </ul>
 </template>
@@ -26,11 +29,12 @@ import image from "@/assets/daisies_small.jpg";
 
 export default {
   name: 'designs',
-  props: ['user', 'text', 'allShapes'],
+  props: ['user', 'text', 'allShapes', 'ifTextOptions'],
   data () {
     return {
     img: null,
     textContent: "Text Value",
+    fontSize: 120,
     font: "Comic Sans", // for the memes ok,
     availableFonts: ["Helvetica", "Times New Roman", "Arial", "Roboto"]
     }
@@ -53,7 +57,7 @@ export default {
     this.text.push(simpleText);
 
     this.allShapes.push(simpleText);
-    
+    console.log("iftextopts", this.ifTextOptions);
     },
     changeFont() {
       console.log("change font");
@@ -64,14 +68,6 @@ export default {
     },
     changeFontSize() {
       this.text[0].fontSize = this.fontSize;
-    },
-    displayLayout(img) {
-      const image = new window.Image();
-      image.src = img.img_src;
-      image.onload = () => {
-        // set image only when it is loaded
-        this.image_template = {image: image, draggable: true, name: img.layout_name};
-      };
     },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default
@@ -84,10 +80,6 @@ export default {
           this.notes = notes
         })
     },
-
-    signOut () {
-      userSession.signUserOut(window.location.href)
-    }
   }
 }
 </script>
