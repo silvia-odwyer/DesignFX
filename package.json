@@ -10,6 +10,7 @@
     "test:unit": "vue-cli-service test:unit --coverage --coverageReporters=lcov"
   },
   "dependencies": {
+    "@caohenghu/vue-colorpicker": "^1.1.1",
     "axios": "^0.18.0",
     "blockstack": "^19.1.0",
     "bootstrap": "^4.3.1",

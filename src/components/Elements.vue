@@ -1,23 +1,21 @@
 <template>
     <ul>
-          
-    <h3>Elements</h3>
-    <ul>
-        <li v-on:click="addRectangle('red')">Add Red Rectangle</li>
-        <li v-on:click="addRectangle('green')">Add Green Rectangle</li>
-        <div :style="{background: colorPickerColor}">
-            <color-picker
-                :color="colorPickerColor"
-                :sucker-hide="false"
-                :sucker-canvas="suckerCanvas"
-                :sucker-area="suckerArea"
-                @changeColor="changeColor"
-                @openSucker="openSucker"
-            />
-        </div>
-        <li v-on:click="save()">Save</li>
-        <li v-on:click="clear()">Clear</li>
-    </ul>              
+      <h3>Elements</h3>
+      <div>
+          <button v-on:click="addRectangle()">Add Rectangle</button>
+          <div :style="{background: colorPickerColor}">
+              <color-picker
+                  :color="colorPickerColor"
+                  :sucker-hide="false"
+                  :sucker-canvas="suckerCanvas"
+                  :sucker-area="suckerArea"
+                  @changeColor="changeColor"
+                  @openSucker="openSucker"
+              />
+          </div>
+          <li v-on:click="save()">Save</li>
+          <li v-on:click="clear()">Clear</li>
+      </div>              
     </ul>
 </template>
 
@@ -89,22 +87,6 @@ export default {
           this.uidCount = notes.length
           this.notes = notes
         })
-
-      // userSession.getFile("image1.PNG") // decryption is enabled by default
-      //   .then((buffer) => {
-      //     var canvas = document.getElementById("canvas");
-      //     var context = canvas.getContext("2d");
-      //     var imageData2 = context.createImageData(canvas.width, canvas.height);
-      //     imageData2.data.set(buffer);
-      //     console.log(imageData2);
-
-      //     context.putImageData(imageData2, 0, 0);
-
-      //   })
-    },
-
-    signOut () {
-      userSession.signUserOut(window.location.href)
     }
   }
 }
@@ -117,5 +99,11 @@ ul li {
     color: silver;
     font-family: "Helvetica Neue", sans-serif;
     list-style: none;
+}
+
+h3 {
+  color: white;
+  font-size: 3vh;
+  font-family: "Helvetica Neue", sans-serif;
 }
 </style>

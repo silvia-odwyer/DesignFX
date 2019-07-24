@@ -1,14 +1,13 @@
 <template>
     <ul>
-          
-    <h3>Design Templates</h3>
-    <ul>
-        <li v-on:click="save()">Save</li>
-        <li v-for="img in layout_imgs" v-on:click="displayLayout(img)">
-        <p>{{img.layout_name}}</p>
-        <img :src="img.img_src" height="200" width="300">
-        </li>
-    </ul>              
+      <h3>Design Templates</h3>
+      <ul>
+          <li v-on:click="save()">Save</li>
+          <li v-for="img in layout_imgs" v-on:click="displayLayout(img)">
+          <p>{{img.layout_name}}</p>
+          <img :src="img.img_src" height="200" width="300">
+          </li>
+      </ul>              
     </ul>
 </template>
 
@@ -54,10 +53,6 @@ export default {
           this.notes = notes
         })
     },
-
-    signOut () {
-      userSession.signUserOut(window.location.href)
-    }
   }
 }
 </script>

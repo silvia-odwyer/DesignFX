@@ -1,31 +1,31 @@
 <template>
     <ul>
           
-    <h3>Images</h3>
-    <ul>
-        <li v-on:click="addImage(layout_imgs[0])">Add Image</li>
+      <h3>Images</h3>
+      <ul>
+          <li v-on:click="addImage(layout_imgs[0])">Add Image</li>
 
-        <h5>Upload Image </h5>
-        <li>
-            <input v-on:change="uploadImage()" class="file-input" type="file" id='img_uploader' name="upload-image">
-                <span class="file-cta">
-                  <span class="file-icon">
-                    <i class="fas fa-upload"></i>
+          <h5>Upload Image </h5>
+          <li>
+              <input v-on:change="uploadImage()" class="file-input" type="file" id='img_uploader' name="upload-image">
+                  <span class="file-cta">
+                    <span class="file-icon">
+                      <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label">
+                      Choose an image...
+                    </span>
                   </span>
-                  <span class="file-label">
-                    Choose an image...
-                  </span>
-                </span>
 
-        </li>
-        <img v-for="user_img in user_images" :src="user_img.image.src" v-on:click="addImage(user_img)">
+          </li>
+          <img v-for="user_img in user_images" :src="user_img.image.src" v-on:click="addImage(user_img)">
 
 
-        <canvas id="canvas"></canvas>
+          <canvas id="canvas"></canvas>
 
-        <button v-on:click="saveToBlockstack">Save To Blockstack</button>
+          <button v-on:click="saveToBlockstack">Save To Blockstack</button>
 
-    </ul>              
+      </ul>              
     </ul>
 </template>
 

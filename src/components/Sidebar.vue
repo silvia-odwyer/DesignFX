@@ -1,8 +1,6 @@
 <template>
     <div class="sidebar">
-          
         <div class="sidebar_content">
-            
             <div class="sidebar_left_bar">
                 <div class="">
                     <li @click="setSidebarItem('designs')">
@@ -153,5 +151,9 @@ li:hover{
 .sidebar_content {
   padding-top: 6vh;
   height: 90%;
+}
+
+ul {
+    margin: 0;
 }
 </style>
