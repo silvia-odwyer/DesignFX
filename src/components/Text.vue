@@ -4,6 +4,17 @@
     <h3>Text</h3>
     <ul>
         <li v-on:click="addText">Draw Text</li>
+
+        <label>Font</label>
+        <select v-model="font" v-on:change="changeFont">
+          <option v-for="font in availableFonts" v-bind:key="font">{{font}}</option>
+        </select> 
+
+        <label>Text Content</label>
+        <input value="text" v-model="textContent" v-on:change="changeTextContent"/>
+
+        <label>Font Size</label>
+        <input value="text" v-model="fontSize" v-on:change="changeFontSize"/>
     </ul>              
     </ul>
 </template>
@@ -13,13 +24,15 @@
 import { userSession } from '../userSession'
 import image from "@/assets/daisies_small.jpg";
 
-
 export default {
   name: 'designs',
   props: ['user', 'text', 'allShapes'],
   data () {
     return {
-    img: null
+    img: null,
+    textContent: "Text Value",
+    font: "Comic Sans", // for the memes ok,
+    availableFonts: ["Helvetica", "Times New Roman", "Arial", "Roboto"]
     }
   },
   methods: {
@@ -41,6 +54,16 @@ export default {
 
     this.allShapes.push(simpleText);
     
+    },
+    changeFont() {
+      console.log("change font");
+      this.text[0].fontFamily = this.font;
+    },
+    changeTextContent() {
+      this.text[0].text = this.textContent;
+    },
+    changeFontSize() {
+      this.text[0].fontSize = this.fontSize;
     },
     displayLayout(img) {
       const image = new window.Image();
@@ -81,5 +104,9 @@ ul li {
   font-family: "Helvetica Neue", sans-serif;
 }
 
+label {
+  color: silver;
+  font-family: "Roboto", sans-serif;
+}
 
 </style>
