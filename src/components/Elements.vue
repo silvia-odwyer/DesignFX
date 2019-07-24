@@ -5,7 +5,16 @@
     <ul>
         <li v-on:click="addRectangle('red')">Add Red Rectangle</li>
         <li v-on:click="addRectangle('green')">Add Green Rectangle</li>
-        <input type="color" />
+        <div :style="{background: colorPickerColor}">
+            <color-picker
+                :color="colorPickerColor"
+                :sucker-hide="false"
+                :sucker-canvas="suckerCanvas"
+                :sucker-area="suckerArea"
+                @changeColor="changeColor"
+                @openSucker="openSucker"
+            />
+        </div>
         <li v-on:click="save()">Save</li>
         <li v-on:click="clear()">Clear</li>
     </ul>              
@@ -15,13 +24,21 @@
 <script>
 /* eslint-disable */
 import { userSession } from '../userSession'
+import colorPicker from '@caohenghu/vue-colorpicker'
 
 export default {
   name: 'elements',
   props: ['user', 'rectangles', 'allShapes', 'images', 'text'],
   data () {
     return {
+      colorPickerColor: '#59c7f9',
+      suckerCanvas: null,
+      suckerArea: [],
+      isSucking: false
     }
+  },
+  components: {
+    colorPicker
   },
   methods: {
     addRectangle(color) {
@@ -32,13 +49,25 @@ export default {
                 y: 10,
                 width: 100,
                 height: 100,
-                fill: color,
+                fill: this.colorPickerColor,
                 name: name,
                 draggable: true
               };
 
       this.rectangles.push(rect);
       this.allShapes.push(rect);
+    },
+    changeColor(color) {
+      let hex = color.rgba.toHexString();
+      this.colorPickerColor = hex;
+    },
+    openSucker(isOpen) {
+      if (isOpen) {
+        // this.suckerCanvas = canvas
+        // this.suckerArea = [x1, y1, x2, y2]
+      } else {
+        // this.suckerCanvas && this.suckerCanvas.remove
+      }
     },
     clear() {
       this.rectangles = [];
