@@ -1,53 +1,9 @@
 <template>
   <div class="dashboard">
-    
-      <div class="default">
-          <Header :user="user" :transformer="$refs.transformer"></Header>
-        <div class="sidebar">
-          
-          <div class="sidebar_content">
-            
-          <div class="sidebar_left_bar">
-            <div class="">
-              <li @click="setSidebarItem('designs')">
-                <img src="/avatar-placeholder.png" height="30" width="20"/>
-                Designs
-              </li>
-              <li @click="setSidebarItem('elements')">
-                <img src="/avatar-placeholder.png" height="30" width="20"/>
-                Elements 
-              </li>
-              <li @click="setSidebarItem('images')">
-                <img src="/avatar-placeholder.png" height="30" width="20"/>
-                Images 
-              </li>
-              <li @click="setSidebarItem('text')">
-                <img src="/avatar-placeholder.png" height="30" width="20"/>
-                Text 
-              </li>
-            </div>
-          </div>
+    <div class="default">
+      <Header :user="user" :transformer="$refs.transformer"></Header>
 
-          <div class="sidebar_right_bar"> 
-
-            <!-- Current chosen component is inserted here. Options include Rich Text Editor, project board, to-do, etc., -->
-            <component v-bind:is="sidebarNameToComponent[sidebarItems]" 
-            :rectangles="rectangles" 
-            :allShapes="allShapes"
-            :text="text" 
-            :images="images" 
-            :image_template="image_template"
-            ></component>
-
-            <!-- Content -->
-            <slot />
-          </div>
-
-          </div>
-          
-          </div>
-          
-          </div>
+      <Sidebar :rectangles="rectangles" :allShapes="allShapes" :text="text" :images="images"></Sidebar>
           <div class="main">
             <div class="main_content">
             
@@ -77,38 +33,12 @@
                   </v-layer>
 
                 </v-stage>
-                 <!-- <form @submit.prevent="addNote" :disabled="! note">
-                  <div>
-                    <input v-model="note" type="text" class="form-control" placeholder="Write a note..." autofocus>
-                    <span class="input-group-btn">
-                      <button class="btn btn-default bg-light" type="submit" :disabled="! note">Add</button>
-                    </span>
-                  </div>
-                </form>
-
-                <ul>
-                  <li v-for="note in notes"
-                    class="list-group-item"
-                    :class="{completed: note.completed}"
-                    :key="note.id">
-                    <label>
-                      <input type="checkbox" v-model="note.completed">{{ note.text }}
-                    </label>
-                    <a @click.prevent="notes.splice(notes.indexOf(note), 1)"
-                      class="delete float-right"
-                      href="#">X</a>
-                  </li>
-                </ul> -->
               </section>
-
          
           </div>
-          
+        
           </div>
-          
-          </div>
-      
-      </div>
+
     </div>
   </div>
 </template>
@@ -117,10 +47,8 @@
 /* eslint-disable */
 import { userSession } from '../userSession'
 import Header from "@/components/Header.vue"
-import Designs from "@/components/Designs.vue";
-import Elements from "@/components/Elements.vue";
-import Text from "@/components/Text.vue";
-import Images from "@/components/Images.vue";
+import Sidebar from "@/components/Sidebar.vue";
+
 
 var STORAGE_FILE = 'notes.json'
 var IMAGE_STORAGE_FILE = "image.PNG";
@@ -140,7 +68,7 @@ export default {
   props: ['user'],
   components: {
     Header,
-    Designs 
+    Sidebar
   },
   data () {
     return {
@@ -158,8 +86,7 @@ export default {
       images: [],
       allShapes: [],
       selectedShapeName: '',
-      sidebarItems: "designs",
-      sidebarNameToComponent: {"designs": Designs, "elements": Elements, "text": Text, "images": Images},
+
       image_template: null,
       list: [],
     }
@@ -221,7 +148,6 @@ export default {
       }
 
     },
-
 
     handleStageMouseDown(e) {
       // clicked on stage - clear the current selection
@@ -325,12 +251,6 @@ export default {
         this.allShapes.push(this.images[i]);
       }
     },
-    setSidebarItem(name) {
-    
-      this.sidebarItems = name;
-    
-    },
-    
     editText(text_elem) {
       console.log("edit text elem", text_elem);
       text_elem.isVisible = false;
@@ -418,12 +338,6 @@ label {
   }
 }
 
-
-.main-sidebar, .main-navbar, .dark {
-  background-color: rgb(34, 34, 34);
-  color: rgb(105, 105, 105);
-}
-
 .main {
   margin-left: 40vh;
   padding: 0px 10px;
@@ -433,23 +347,6 @@ label {
 
 .main_content {
   padding-top: 14vh;
-}
-
-.sidebar {
-  height: 100%;
-  width: 40vh;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  background-color: rgb(31, 31, 31);
-  overflow-x: hidden;
-  padding-top: 20px;
-}
-
-.sidebar li {
-  display: block;
-  color: rgb(105, 105, 105);
 }
 
 @media screen and (max-height: 450px) {
@@ -524,62 +421,6 @@ h4 {
   grid-template-columns: 75% 25%;
   grid-template-rows: auto;
   grid-template-areas: "main_left main_right";
-}
-
-.sidebar_content {
-  display: grid;
-  grid-template-columns: 25% 75%;
-  grid-template-rows: auto;
-  grid-template-areas: "sidebar_left sidebar_right";
-}
-
-.sidebar_left_bar {
-  grid-area: sidebar_left;
-  margin-left: 0;
-  background-color: rgb(14, 19, 24);
-}
-
-.sidebar_right_bar {
-  grid-area: sidebar_right;
-  margin-left: 0;
-  background-color: rgb(41, 48, 57);
-}
-
-#code {
-  font-size: 0.5em;
-  font-family: 'Courier New', Courier, monospace;
-}
-
-a {
-  text-decoration: none;
-  color: #f2f2f2;
-}
-
-li:hover{
-  cursor: pointer;
-}
-
-.sidebar_left_bar li {
-  margin-bottom: 8vh;
-  font-family: "Helvetica Neue", sans-serif;
-  padding-top: 3vh;
-  padding-right: 1vh;
-}
-
-.sidebar_left_bar li {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.sidebar_left_bar li:hover {
-  color: silver;
-}
-
-.sidebar_content {
-  padding-top: 6vh;
-  height: 90%;
 }
 
 </style>

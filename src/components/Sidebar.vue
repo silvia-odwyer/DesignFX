@@ -1,12 +1,10 @@
 <template>
-    <div class="default">
-          <Header :user="user" :transformer="$refs.transformer"></Header>
-        <div class="sidebar">
+    <div class="sidebar">
           
-            <div class="sidebar_content">
+        <div class="sidebar_content">
             
-                <div class="sidebar_left_bar">
-                    <div class="">
+            <div class="sidebar_left_bar">
+                <div class="">
                     <li @click="setSidebarItem('designs')">
                         <img src="/avatar-placeholder.png" height="30" width="20"/>
                         Designs
@@ -23,8 +21,8 @@
                         <img src="/avatar-placeholder.png" height="30" width="20"/>
                         Text 
                     </li>
-                    </div>
                 </div>
+            </div>
 
         <div class="sidebar_right_bar"> 
 
@@ -43,49 +41,32 @@
 
     </div>
           
-    </div>
-          
 </div>
 </template>
 
 <script>
 /* eslint-disable */
 import { userSession } from '../userSession'
+import Designs from "@/components/Designs.vue";
+import Elements from "@/components/Elements.vue";
+import Text from "@/components/Text.vue";
+import Images from "@/components/Images.vue";
 
 export default {
   name: 'header',
-  props: ['user', 'transformer'],
+  props: ['user', 'rectangles', 'allShapes', 'text', 'images'],
+  components: {
+      Designs, Elements, Text, Images
+  },
   data () {
     return {
+        sidebarItems: "designs",
+        sidebarNameToComponent: {"designs": Designs, "elements": Elements, "text": Text, "images": Images},
     }
   },
   methods: {
-    exportImage() {
-      const transformerNode = this.transformer.getStage();
-      const stage = transformerNode.getStage();
-
-      // Detach current node from the transformer
-      transformerNode.detach();
-      var dataURL = stage.toDataURL();
-      this.downloadURI(dataURL, 'new_image.png');
-
-    },
-    // Download image.
-    downloadURI(uri, name) {
-        // Create a link element
-        var link = document.createElement('a');
-        
-        // Download the link with the given name
-        link.download = name;
-
-        // Set the link's href to the URI of the stage's canvas
-        link.href = uri;
-
-        // Alert the user to the download.
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        // delete link;
+    setSidebarItem(name) {
+      this.sidebarItems = name;
     },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default
@@ -107,11 +88,30 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>.sidebar_content {
+<style lang="scss" scoped>
+
+.sidebar_content {
   display: grid;
   grid-template-columns: 25% 75%;
   grid-template-rows: auto;
   grid-template-areas: "sidebar_left sidebar_right";
+}
+
+.sidebar {
+  height: 100%;
+  width: 40vh;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: rgb(31, 31, 31);
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.sidebar li {
+  display: block;
+  color: rgb(105, 105, 105);
 }
 
 .sidebar_left_bar {
@@ -124,11 +124,6 @@ export default {
   grid-area: sidebar_right;
   margin-left: 0;
   background-color: rgb(41, 48, 57);
-}
-
-#code {
-  font-size: 0.5em;
-  font-family: 'Courier New', Courier, monospace;
 }
 
 a {
