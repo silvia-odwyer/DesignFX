@@ -26,7 +26,7 @@ import colorPicker from '@caohenghu/vue-colorpicker'
 
 export default {
   name: 'elements',
-  props: ['user', 'rectangles', 'allShapes', 'images', 'text'],
+  props: ['user', 'rectangles', 'allShapes', 'images', 'text', 'selectedNode'],
   data () {
     return {
       colorPickerColor: '#59c7f9',
@@ -58,6 +58,7 @@ export default {
     changeColor(color) {
       let hex = color.rgba.toHexString();
       this.colorPickerColor = hex;
+      this.selectedNode.fill = hex;
     },
     openSucker(isOpen) {
       if (isOpen) {

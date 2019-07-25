@@ -4,7 +4,7 @@
       <Header :user="user" :transformer="$refs.transformer"></Header>
 
       <Sidebar :rectangles="rectangles" :allShapes="allShapes" :text="text" :images="images" :transformer="$refs.transformer" 
-                :image_template="image_template" :ifTextOptions="ifTextOptions"></Sidebar>
+                :image_template="image_template" :ifTextOptions="ifTextOptions" :selectedNode="selectedNode"></Sidebar>
           <div class="main">
             <div class="main_content">
             
@@ -85,6 +85,7 @@ export default {
       images: [],
       allShapes: [],
       selectedShapeName: '',
+      selectedNode: null,
       ifTextOptions: false,
       image_template: null,
       list: [],
@@ -170,6 +171,8 @@ export default {
       // find clicked rect by its name
       const name = e.target.name();
       const rect = this.allShapes.find(r => r.name === name);
+      console.log("selectedNode is: ", rect);
+      this.selectedNode = rect;
       if (rect) {
         this.selectedShapeName = name;
       } else {
@@ -184,6 +187,7 @@ export default {
       const { selectedShapeName } = this;
 
       const selectedNode = stage.findOne('.' + selectedShapeName);
+
       // do nothing if selected node is already attached
       if (selectedNode === transformerNode.node()) {
         return;

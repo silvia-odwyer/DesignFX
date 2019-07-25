@@ -20,11 +20,7 @@
             <div :style="{background: textColor}">
                 <color-picker
                     :color="textColor"
-                    :sucker-hide="false"
-                    :sucker-canvas="suckerCanvas"
-                    :sucker-area="suckerArea"
                     @changeColor="changeColor"
-                    @openSucker="openSucker"
                 />
             </div>
           </div>
@@ -41,7 +37,7 @@ import colorPicker from '@caohenghu/vue-colorpicker'
 
 export default {
   name: 'designs',
-  props: ['user', 'text', 'allShapes', 'ifTextOptions'],
+  props: ['user', 'text', 'allShapes', 'ifTextOptions', 'selectedNode'],
   components: {
     colorPicker
   },
@@ -78,24 +74,19 @@ export default {
     changeColor(color) {
       let hex = color.rgba.toHexString();
       this.textColor = hex;
+
+      this.selectedNode.fill = hex;
     },
-    openSucker(isOpen) {
-      if (isOpen) {
-        // this.suckerCanvas = canvas
-        // this.suckerArea = [x1, y1, x2, y2]
-      } else {
-        // this.suckerCanvas && this.suckerCanvas.remove
-      }
-    },
+
     changeFont() {
       console.log("change font");
-      this.text[0].fontFamily = this.font;
+      this.selectedNode.fontFamily = this.font;
     },
     changeTextContent() {
-      this.text[0].text = this.textContent;
+      this.selectedNode.text = this.textContent;
     },
     changeFontSize() {
-      this.text[0].fontSize = this.fontSize;
+      this.selectedNode.fontSize = this.fontSize;
     },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default
