@@ -78,7 +78,7 @@ export default {
       {img_src: layout3,  layout_name: "Summer Collection"}],
       stageSize: {
               width: width / 1.5,
-              height: height
+              height: height * 0.82
             },
       rectangles: [],
       text: [],
@@ -88,6 +88,7 @@ export default {
       selectedNode: null,
       ifTextOptions: false,
       image_template: null,
+      currentSidebarComponent: "designs",
       list: [],
     }
   },
@@ -172,6 +173,8 @@ export default {
       const name = e.target.name();
       const rect = this.allShapes.find(r => r.name === name);
       console.log("selectedNode is: ", rect);
+      this.changeSidebarComponent(rect);
+
       this.selectedNode = rect;
       if (rect) {
         this.selectedShapeName = name;
@@ -227,6 +230,15 @@ export default {
       console.log(position);
     },
 
+    changeSidebarComponent(selectedNode) {
+        if (this.rectangles.includes(selectedNode)) {
+          console.log("is a rect");
+          this.currentSidebarComponent = "elements";
+        }
+        else {
+          console.log("not a rect");
+        }
+    },
     drawToCanvas() {
       var canvas = document.getElementById("canvas");
       var context = canvas.getContext("2d");
@@ -334,9 +346,9 @@ label {
 }
 
 .main {
-  margin-left: 40vh;
+  margin-left: 60vh;
   padding: 0px 10px;
-  background-color: rgb(34, 34, 34);
+  background-color: lightgray;
   height: 100%;
 }
 
@@ -416,6 +428,11 @@ h4 {
   grid-template-columns: 75% 25%;
   grid-template-rows: auto;
   grid-template-areas: "main_left main_right";
+}
+
+.content {
+  background-color: white;
+  width: 100%;
 }
 
 </style>

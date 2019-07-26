@@ -2,13 +2,13 @@
     <ul>
       <h3>Elements</h3>
       <div>
-          <button v-on:click="addRectangle()">Add Rectangle</button>
+          <div class="element_btn" v-on:click="addRectangle()">
+            <font-awesome-icon icon="square-full" size="4x"/>
+            <p>Add Rectangle</p>
+          </div>
           <div :style="{background: colorPickerColor}">
               <color-picker
                   :color="colorPickerColor"
-                  :sucker-hide="false"
-                  :sucker-canvas="suckerCanvas"
-                  :sucker-area="suckerArea"
                   @changeColor="changeColor"
                   @openSucker="openSucker"
               />
@@ -60,14 +60,6 @@ export default {
       this.colorPickerColor = hex;
       this.selectedNode.fill = hex;
     },
-    openSucker(isOpen) {
-      if (isOpen) {
-        // this.suckerCanvas = canvas
-        // this.suckerArea = [x1, y1, x2, y2]
-      } else {
-        // this.suckerCanvas && this.suckerCanvas.remove
-      }
-    },
     clear() {
       this.rectangles = [];
       this.text = [];
@@ -106,5 +98,34 @@ h3 {
   color: white;
   font-size: 3vh;
   font-family: "Helvetica Neue", sans-serif;
+}
+
+.element_btn {
+  border: solid black 0.1em;
+  border-radius: 0.3em;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  cursor: pointer;
+}
+
+.element_btn:hover {
+  color: silver;
+}
+
+font-awesome-icon {
+  display: block;
+}
+
+.elements {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+p {
+  color: silver;
 }
 </style>

@@ -4,19 +4,19 @@
             <div class="sidebar_left_bar">
                 <div class="">
                     <li @click="setSidebarItem('designs')">
-                        <img src="/avatar-placeholder.png" height="30" width="20"/>
+                          <font-awesome-icon icon="layer-group" size="2x"/>
                         Designs
                     </li>
                     <li @click="setSidebarItem('elements')">
-                        <img src="/avatar-placeholder.png" height="30" width="20"/>
-                        Elements 
+                          <font-awesome-icon icon="shapes" size="2x"/>
+                          Elements 
                     </li>
                     <li @click="setSidebarItem('images')">
-                        <img src="/avatar-placeholder.png" height="30" width="20"/>
+                          <font-awesome-icon icon="images" size="2x"/>
                         Images 
                     </li>
                     <li @click="setSidebarItem('text')">
-                        <img src="/avatar-placeholder.png" height="30" width="20"/>
+                          <font-awesome-icon icon="align-justify" size="2x"/>
                         Text 
                     </li>
                 </div>
@@ -25,13 +25,14 @@
         <div class="sidebar_right_bar"> 
 
             <!-- Current chosen component is inserted here. Options include Rich Text Editor, project board, to-do, etc., -->
-            <component v-bind:is="sidebarNameToComponent[sidebarItems]" 
+            <component v-bind:is="sidebarNameToComponent[currentSidebarComponent]" 
             :rectangles="rectangles" 
             :allShapes="allShapes"
             :text="text" 
             :images="images" 
             :image_template="image_template"
             :ifTextOptions="ifTextOptions"
+            :selectedNode="selectedNode"
             ></component>
 
             <!-- Content -->
@@ -53,19 +54,19 @@ import Images from "@/components/Images.vue";
 
 export default {
   name: 'header',
-  props: ['user', 'rectangles', 'allShapes', 'text', 'images', 'transformer', 'image_template', 'ifTextOptions'],
+  props: ['user', 'rectangles', 'allShapes', 'text', 'images', 'transformer', 'image_template', 'ifTextOptions', 'selectedNode'],
   components: {
       Designs, Elements, Text, Images
   },
   data () {
     return {
-        sidebarItems: "designs",
         sidebarNameToComponent: {"designs": Designs, "elements": Elements, "text": Text, "images": Images},
+        currentSidebarComponent: 'designs'
     }
   },
   methods: {
     setSidebarItem(name) {
-      this.sidebarItems = name;
+      this.currentSidebarComponent = name;
     },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default
@@ -94,7 +95,7 @@ export default {
 
 .sidebar {
   height: 100%;
-  width: 40vh;
+  width: 50vh;
   position: fixed;
   z-index: 1;
   top: 0;
@@ -132,9 +133,10 @@ li:hover{
 
 .sidebar_left_bar li {
   margin-bottom: 8vh;
-  font-family: "Helvetica Neue", sans-serif;
+  font-family: "Roboto", sans-serif;
   padding-top: 3vh;
   padding-right: 1vh;
+  
 }
 
 .sidebar_left_bar li {

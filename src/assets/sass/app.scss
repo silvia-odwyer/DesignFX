@@ -4,9 +4,23 @@
 // Bootstrap
 @import "variables";
 
-html, body {
+html, body, #dashboard {
   height: 100%;
-  background-color: rgb(34, 34, 34);
+  background-color: lightgray;
+}
+
+body {
+  margin: 0;
+}
+
+h3 {
+  color: white;
+  font-family: "Roboto", sans-serif;
+  padding-top: 4vh;
+}
+
+* {
+  font-family: "Roboto", sans-serif;
 }
 
 .avatar {
@@ -32,12 +46,6 @@ html, body {
   color: $purple-100;
 }
 
-.page-header {
-  margin-bottom: 0px;
-  font-size: 1.8rem;
-  padding-bottom: 12px;
-  border-bottom: 1px solid $gray-100;
-}
 
 .sign-out {
   float: right;

@@ -5,7 +5,8 @@
       <ul>
           <li v-on:click="addText">Draw Text</li>
 
-          <div v-if="ifTextOptions">
+          <div v-if="ifTextOptions" class="textOptions">
+            <h4>Text Options</h4>
             <label>Font</label>
             <select v-model="font" v-on:change="changeFont">
               <option v-for="font in availableFonts" v-bind:key="font">{{font}}</option>
@@ -47,7 +48,7 @@ export default {
     textContent: "Text Value",
     fontSize: 120,
     textColor: '#59c7f9',
-    font: "Comic Sans", // for the memes ok
+    font: "Roboto",
     availableFonts: ["Helvetica", "Times New Roman", "Arial", "Roboto"]
     }
   },
@@ -60,7 +61,7 @@ export default {
         y: 50,
         text: 'Simple Text',
         fontSize: 100,
-        fontFamily: 'Calibri',
+        fontFamily: this.font,
         fill: this.textColor,
         draggable: 'true',
         name: name,
@@ -70,6 +71,7 @@ export default {
 
     this.allShapes.push(simpleText);
     console.log("iftextopts", this.ifTextOptions);
+    this.ifTextOptions = true;
     },
     changeColor(color) {
       let hex = color.rgba.toHexString();
@@ -118,6 +120,11 @@ ul li {
 label {
   color: silver;
   font-family: "Roboto", sans-serif;
+  display: block;
+}
+
+.textOptions {
+  padding-top: 3vh;
 }
 
 </style>
