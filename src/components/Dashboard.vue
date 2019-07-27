@@ -3,7 +3,7 @@
     <div class="default">
       <Header :user="user" :transformer="$refs.transformer"></Header>
 
-      <Sidebar :rectangles="rectangles" :allShapes="allShapes" :text="text" :images="images" :transformer="$refs.transformer" 
+      <Sidebar :elements="elements" :allShapes="allShapes" :text="text" :images="images" :transformer="$refs.transformer" 
                 :image_template="image_template" :ifTextOptions="ifTextOptions" :selectedNode="selectedNode"></Sidebar>
           <div class="main">
             <div class="main_content">
@@ -18,10 +18,22 @@
                   </v-layer>
 
                   <v-layer ref="layer">
-                    <v-rect v-for="item in rectangles" :config="item" v-on:dragEnd="writeMessage(item)" />
+                    <v-rect v-for="item in elements.rectangles" :config="item" v-on:dragEnd="updateNodePosition(item)" />
                     <v-text v-for="item in text" :key="item.id" :config="item" v-on:dblclick="editText(item)" 
+                    v-on:dragEnd="updateNodePosition(item)"
                     v-on:click="showTextOptions" v-if="item.isVisible"/>
-                    <v-image v-for="img in images" :config="img" />
+                    <v-image v-for="img in images" :config="img" v-on:dragEnd="updateNodePosition(img)"/>
+                          <v-line :config="{
+        x: 20,
+        y: 200,
+        points: [0, 0, 100, 0, 100, 100],
+        tension: 0.5,
+        closed: true,
+        stroke: 'black',
+        fillLinearGradientStartPoint: { x: -50, y: -50 },
+        fillLinearGradientEndPoint: { x: 50, y: 50 },
+        fillLinearGradientColorStops: [0, 'red', 1, 'yellow']
+      }"/>
 <!-- 
                             <v-circle
                               v-for="item in list"
@@ -34,9 +46,9 @@
 
                 </v-stage>
               </section>
-         
           </div>
-        
+          <button v-on:click="save">Save</button>
+
           </div>
 
     </div>
@@ -74,13 +86,11 @@ export default {
       notes: [],
       note: '',
       uidCount: 0,
-      layout_imgs: [{img_src: layout1, layout_name: "Travel"}, {img_src: layout2, layout_name: "Lemonade"}, 
-      {img_src: layout3,  layout_name: "Summer Collection"}],
       stageSize: {
-              width: width / 1.5,
+              width: width * 0.82,
               height: height * 0.82
             },
-      rectangles: [],
+      elements: {rectangles: []},
       text: [],
       images: [],
       allShapes: [],
@@ -103,7 +113,7 @@ export default {
   },
   mounted () {
     // this.fetchData();
-    // this.loadDesign();
+    this.loadDesign();
   },
   methods: {
     displayLayout(img) {
@@ -123,7 +133,7 @@ export default {
 
       // create JSON canvas representation
       var canvas_to_json = {
-        rectangles: this.rectangles,
+        rectangles: this.elements.rectangles,
         text: this.text,
         images: this.images
       };
@@ -139,7 +149,7 @@ export default {
       if (data.length != 0) {
         console.log(data.rectangles);
         if (data.rectangles != []) {
-          this.rectangles = data.rectangles;
+          this.elements.rectangles = data.rectangles;
         }
         if (data.text != []) {
           this.text = data.text;
@@ -148,7 +158,6 @@ export default {
           // this.images = data.images;
         }
 
-        console.log("this.rectangles after", this.rectangles);
         this.updateAllShapes();
       }
 
@@ -202,6 +211,9 @@ export default {
       } else {
         // remove transformer
         transformerNode.detach();
+
+        // set selected node back to null
+        this.selectedNode = null;
       }
       transformerNode.getLayer().batchDraw();
     },
@@ -217,21 +229,20 @@ export default {
       })
       this.note = ''
     },
-    writeMessage(rect) {
-      console.log("write msg");
-      console.log(rect);
+    updateNodePosition(item) {
       const transformerNode = this.$refs.transformer.getStage();
       const stage = transformerNode.getStage();
-      let position = stage.getPointerPosition();
-
-      rect.x = position.x;
-      rect.y = position.y;
       
-      console.log(position);
+      const selectedNode = stage.findOne('.' + item.name);
+
+      let newPos = selectedNode.absolutePosition();
+      item.x = newPos.x;
+      item.y = newPos.y;
+      
     },
 
     changeSidebarComponent(selectedNode) {
-        if (this.rectangles.includes(selectedNode)) {
+        if (this.elements.rectangles.includes(selectedNode)) {
           console.log("is a rect");
           this.currentSidebarComponent = "elements";
         }
@@ -258,8 +269,8 @@ export default {
      
     },
     updateAllShapes() {
-      for (var i = 0; i < this.rectangles.length; i++) {
-        this.allShapes.push(this.rectangles[i]);
+      for (var i = 0; i < this.elements.rectangles.length; i++) {
+        this.allShapes.push(this.elements.rectangles[i]);
       }
 
       for (var i = 0; i < this.text.length; i++) {
@@ -314,10 +325,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-input::placeholder {
-  color: grey;
-}
-
 label {
   margin-bottom: 0;
   // width: 100%;
@@ -360,24 +367,6 @@ label {
   .sidebar {padding-top: 15px;}
     .sidebar a {font-size: 18px;}
   }
-
-nav {
-  overflow: hidden;
-  background-color: rgb(29, 29, 29);
-  position: fixed; /* Set the navbar to fixed position */
-  top: 0; /* Position the navbar at the top of the page */
-  width: 100%; /* Full width */
-}
-
-nav li {
-  float: left;
-  display: block;
-  color: #f2f2f2;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-  font-family: "Roboto", sans-serif;
-}
 
 ul li {
   text-decoration: none;

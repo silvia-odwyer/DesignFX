@@ -2,8 +2,8 @@
     <div class="sidebar">
         <div class="sidebar_content">
             <div class="sidebar_left_bar">
-                <div class="">
-                    <li @click="setSidebarItem('designs')">
+                <div>
+                    <li @click="setSidebarItem('designs')" class="currentComponentBtn">
                           <font-awesome-icon icon="layer-group" size="2x"/>
                         Designs
                     </li>
@@ -26,7 +26,7 @@
 
             <!-- Current chosen component is inserted here. Options include Rich Text Editor, project board, to-do, etc., -->
             <component v-bind:is="sidebarNameToComponent[currentSidebarComponent]" 
-            :rectangles="rectangles" 
+            :elements="elements" 
             :allShapes="allShapes"
             :text="text" 
             :images="images" 
@@ -54,7 +54,7 @@ import Images from "@/components/Images.vue";
 
 export default {
   name: 'header',
-  props: ['user', 'rectangles', 'allShapes', 'text', 'images', 'transformer', 'image_template', 'ifTextOptions', 'selectedNode'],
+  props: ['user', 'elements', 'allShapes', 'text', 'images', 'transformer', 'image_template', 'ifTextOptions', 'selectedNode'],
   components: {
       Designs, Elements, Text, Images
   },
@@ -85,6 +85,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+
+.currentComponentBtn {
+  color: yellow;
+}
 
 .sidebar_content {
   display: grid;
@@ -158,4 +162,5 @@ li:hover{
 ul {
     margin: 0;
 }
+
 </style>

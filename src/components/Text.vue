@@ -5,7 +5,7 @@
       <ul>
           <li v-on:click="addText">Draw Text</li>
 
-          <div v-if="ifTextOptions" class="textOptions">
+          <div v-if="mutableIfTextOptions" class="textOptions">
             <h4>Text Options</h4>
             <label>Font</label>
             <select v-model="font" v-on:change="changeFont">
@@ -49,11 +49,13 @@ export default {
     fontSize: 120,
     textColor: '#59c7f9',
     font: "Roboto",
-    availableFonts: ["Helvetica", "Times New Roman", "Arial", "Roboto"]
+    availableFonts: ["Helvetica", "Times New Roman", "Arial", "Roboto"],
+    mutableIfTextOptions: this.ifTextOptions
     }
   },
   methods: {
     addText() {
+
       let name = `text_node${this.text.length + 1}`
       
       let simpleText = {
@@ -70,14 +72,15 @@ export default {
     this.text.push(simpleText);
 
     this.allShapes.push(simpleText);
-    console.log("iftextopts", this.ifTextOptions);
-    this.ifTextOptions = true;
+    this.mutableIfTextOptions = true;
     },
     changeColor(color) {
+      console.log("changed color");
       let hex = color.rgba.toHexString();
       this.textColor = hex;
-
-      this.selectedNode.fill = hex;
+      if (this.selectedNode) {
+        this.selectedNode.fill = hex;
+      }
     },
 
     changeFont() {

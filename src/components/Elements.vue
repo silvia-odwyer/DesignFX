@@ -10,7 +10,6 @@
               <color-picker
                   :color="colorPickerColor"
                   @changeColor="changeColor"
-                  @openSucker="openSucker"
               />
           </div>
           <li v-on:click="save()">Save</li>
@@ -26,7 +25,7 @@ import colorPicker from '@caohenghu/vue-colorpicker'
 
 export default {
   name: 'elements',
-  props: ['user', 'rectangles', 'allShapes', 'images', 'text', 'selectedNode'],
+  props: ['user', 'elements', 'allShapes', 'images', 'text', 'selectedNode'],
   data () {
     return {
       colorPickerColor: '#59c7f9',
@@ -40,7 +39,7 @@ export default {
   },
   methods: {
     addRectangle(color) {
-      let name = `rect${this.rectangles.length + 1}`
+      let name = `rect${this.elements.rectangles.length + 1}`
 
       var rect = {
                 x: 10,
@@ -52,7 +51,7 @@ export default {
                 draggable: true
               };
 
-      this.rectangles.push(rect);
+      this.elements.rectangles.push(rect);
       this.allShapes.push(rect);
     },
     changeColor(color) {
@@ -61,7 +60,7 @@ export default {
       this.selectedNode.fill = hex;
     },
     clear() {
-      this.rectangles = [];
+      this.elements.rectangles = [];
       this.text = [];
       this.images = [];
     //   const transformerNode = this.$refs.transformer.getStage();
