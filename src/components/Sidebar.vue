@@ -3,19 +3,19 @@
         <div class="sidebar_content">
             <div class="sidebar_left_bar">
                 <div>
-                    <li @click="setSidebarItem('designs')" class="currentComponentBtn">
+                    <li @click="setSidebarItem('designs')" id="currentComponentBtn" :class="{ active : activeBtn == 'designs' }">
                           <font-awesome-icon icon="layer-group" size="2x"/>
                         Designs
                     </li>
-                    <li @click="setSidebarItem('elements')">
+                    <li @click="setSidebarItem('elements')" :class="{ active : activeBtn == 'elements' }">
                           <font-awesome-icon icon="shapes" size="2x"/>
                           Elements 
                     </li>
-                    <li @click="setSidebarItem('images')">
+                    <li @click="setSidebarItem('images')" :class="{ active : activeBtn == 'images' }">
                           <font-awesome-icon icon="images" size="2x"/>
                         Images 
                     </li>
-                    <li @click="setSidebarItem('text')">
+                    <li @click="setSidebarItem('text')" :class="{ active : activeBtn == 'text' }">
                           <font-awesome-icon icon="align-justify" size="2x"/>
                         Text 
                     </li>
@@ -61,12 +61,15 @@ export default {
   data () {
     return {
         sidebarNameToComponent: {"designs": Designs, "elements": Elements, "text": Text, "images": Images},
-        currentSidebarComponent: 'designs'
+        currentSidebarComponent: 'designs',
+        activeBtn: "designs"
     }
   },
   methods: {
     setSidebarItem(name) {
       this.currentSidebarComponent = name;
+
+      this.activeBtn = name;
     },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default
@@ -85,10 +88,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-
-.currentComponentBtn {
-  color: yellow;
-}
 
 .sidebar_content {
   display: grid;
@@ -109,7 +108,7 @@ export default {
   padding-top: 20px;
 }
 
-.sidebar li {
+.sidebar {
   display: block;
   color: rgb(105, 105, 105);
 }
@@ -162,5 +161,10 @@ li:hover{
 ul {
     margin: 0;
 }
+
+.active {
+  color: aliceblue;
+}
+
 
 </style>

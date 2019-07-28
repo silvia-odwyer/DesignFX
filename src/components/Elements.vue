@@ -2,10 +2,26 @@
     <ul>
       <h3>Elements</h3>
       <div>
-          <div class="element_btn" v-on:click="addRectangle()">
+          <div class="element_btn" v-on:click="addShapeElement('rectangle')">
             <font-awesome-icon icon="square-full" size="4x"/>
             <p>Add Rectangle</p>
           </div>
+
+          <div class="element_btn" v-on:click="addShapeElement('circle')">
+            <font-awesome-icon icon="circle" size="4x"/>
+            <p>Add Circle</p>
+          </div>
+
+          <div class="element_btn" v-on:click="addShapeElement('ellipse')">
+            <font-awesome-icon icon="circle" size="4x"/>
+            <p>Add Ellipse</p>
+          </div>
+
+          <div class="element_btn" v-on:click="addShapeElement('line')">
+            <font-awesome-icon icon="circle" size="4x"/>
+            <p>Add Line</p>
+          </div>
+
           <div :style="{background: colorPickerColor}">
               <color-picker
                   :color="colorPickerColor"
@@ -29,19 +45,32 @@ export default {
   data () {
     return {
       colorPickerColor: '#59c7f9',
-      suckerCanvas: null,
-      suckerArea: [],
-      isSucking: false
+      canvasShapes: {"line" : this.elements.lines, "circle": this.elements.circles, "rectangle": this.elements.rectangles, "ellipse": this.elements.ellipses},
     }
   },
   components: {
     colorPicker
   },
   methods: {
-    addRectangle(color) {
-      let name = `rect${this.elements.rectangles.length + 1}`
+    addShapeElement(shape_name) {
+      var shape_list = this.canvasShapes[shape_name];
+      let name = `${shape_name}${shape_list.length + 1}`;
+      var shape;
 
-      var rect = {
+      switch (shape_name) {
+        case "line": 
+          shape = {
+            x: 20,
+            y: 200,
+            tension: 0.5,
+            stroke: 'black',
+            draggable: true,
+            name: name
+          };
+          break;
+
+        case "rectangle":
+           shape = {
                 x: 10,
                 y: 10,
                 width: 100,
@@ -49,10 +78,36 @@ export default {
                 fill: this.colorPickerColor,
                 name: name,
                 draggable: true
-              };
+            };
+            break;
 
-      this.elements.rectangles.push(rect);
-      this.allShapes.push(rect);
+        case "circle":
+           shape = {
+            x : 30, 
+            y: 40, 
+            radius: 50, 
+            fill: this.colorPickerColor, 
+            name: name,
+            draggable: true
+            }
+            break;
+        
+        case "ellipse": 
+          shape = {
+              radius : {
+                x : 50,
+                y : 610
+              },
+              fill: this.colorPickerColor,
+              draggable: true,
+              name: name
+            };
+            break;
+        
+      }
+      shape_list.push(shape);
+      this.allShapes.push(shape);
+      
     },
     changeColor(color) {
       let hex = color.rgba.toHexString();
@@ -60,7 +115,11 @@ export default {
       this.selectedNode.fill = hex;
     },
     clear() {
-      this.elements.rectangles = [];
+      for (var i = 0; i < this.elements.length; i++) {
+        let list = this.elements[i];
+        list = [];
+      };
+      
       this.text = [];
       this.images = [];
     //   const transformerNode = this.$refs.transformer.getStage();

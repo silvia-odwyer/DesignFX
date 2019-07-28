@@ -23,23 +23,16 @@
                     v-on:dragEnd="updateNodePosition(item)"
                     v-on:click="showTextOptions" v-if="item.isVisible"/>
                     <v-image v-for="img in images" :config="img" v-on:dragEnd="updateNodePosition(img)"/>
-                          <v-line :config="{
-        x: 20,
-        y: 200,
-        points: [0, 0, 100, 0, 100, 100],
-        tension: 0.5,
-        closed: true,
-        stroke: 'black',
-        fillLinearGradientStartPoint: { x: -50, y: -50 },
-        fillLinearGradientEndPoint: { x: 50, y: 50 },
-        fillLinearGradientColorStops: [0, 'red', 1, 'yellow']
-      }"/>
-<!-- 
+                    <v-line v-for="item in elements.lines" :config="item"/>
+ 
                             <v-circle
-                              v-for="item in list"
+                              v-for="item in elements.circles"
                               :key="item.id"
-                              :config="{
-                                x : item.x, y: item.y, radius: 50, fill: 'red',}"></v-circle> -->
+                              :config="item"></v-circle>
+                            <v-ellipse
+                              v-for="item in elements.ellipses"
+                              :key="item.id"
+                              :config="item"></v-ellipse>
 
                     <v-transformer ref="transformer" />
                   </v-layer>
@@ -90,7 +83,7 @@ export default {
               width: width * 0.82,
               height: height * 0.82
             },
-      elements: {rectangles: []},
+      elements: {rectangles: [], circles: [], lines: [], ellipses: []},
       text: [],
       images: [],
       allShapes: [],
@@ -185,6 +178,7 @@ export default {
       this.changeSidebarComponent(rect);
 
       this.selectedNode = rect;
+      console.log("ALL SHAPES", this.allShapes);
       if (rect) {
         this.selectedShapeName = name;
       } else {
