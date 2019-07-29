@@ -2,6 +2,7 @@
     <ul>
       <h3>Design Templates</h3>
       <ul>
+          <li v-on:click="createNewDesign()">Create Design</li>
           <li v-on:click="save()">Save</li>
           <li v-for="img in layout_imgs" v-on:click="displayLayout(img)">
           <p>{{img.layout_name}}</p>
@@ -33,7 +34,9 @@ export default {
     }
   },
   methods: {
-      
+    createNewDesign() {
+      super.clear();
+    },
     displayLayout(img) {
       const image = new window.Image();
       image.src = img.img_src;

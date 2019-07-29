@@ -1,0 +1,21 @@
+{
+    "designTemplates": [
+        {
+            "elements": {
+            "rectangles": [] ,
+            "circles": [{"x" : 160, 
+                "y": 180, 
+                "radius": 50, 
+                "fill": "#0f0f0f", 
+                "name": "circle1",
+                "draggable": true
+            }],
+            "lines" : [],
+            "ellipses": []
+            },
+            "text": [],
+            "images": []
+        }
+    ]
+
+}      

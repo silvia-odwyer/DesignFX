@@ -3,7 +3,7 @@
     <div class="default">
       <Header :user="user" :transformer="$refs.transformer"></Header>
 
-      <Sidebar :elements="elements" :allShapes="allShapes" :text="text" :images="images" :transformer="$refs.transformer" 
+      <Sidebar :elements="canvas_to_json.elements" :allShapes="allShapes" :text="text" :images="images" :transformer="$refs.transformer" 
                 :image_template="image_template" :ifTextOptions="ifTextOptions" :selectedNode="selectedNode"></Sidebar>
           <div class="main">
             <div class="main_content">
@@ -18,21 +18,16 @@
                   </v-layer>
 
                   <v-layer ref="layer">
-                    <v-rect v-for="item in elements.rectangles" :config="item" v-on:dragEnd="updateNodePosition(item)" />
+                    <v-rect v-for="item in canvas_to_json.elements.rectangles" :config="item" v-on:dragEnd="updateNodePosition(item)" />
                     <v-text v-for="item in text" :key="item.id" :config="item" v-on:dblclick="editText(item)" 
                     v-on:dragEnd="updateNodePosition(item)"
                     v-on:click="showTextOptions" v-if="item.isVisible"/>
                     <v-image v-for="img in images" :config="img" v-on:dragEnd="updateNodePosition(img)"/>
-                    <v-line v-for="item in elements.lines" :config="item"/>
+                    <v-line v-for="item in canvas_to_json.elements.lines" :config="item"/>
  
-                            <v-circle
-                              v-for="item in elements.circles"
-                              :key="item.id"
-                              :config="item"></v-circle>
-                            <v-ellipse
-                              v-for="item in elements.ellipses"
-                              :key="item.id"
-                              :config="item"></v-ellipse>
+                    <v-circle v-for="item in canvas_to_json.elements.circles" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)"></v-circle>
+                    
+                    <v-ellipse v-for="item in canvas_to_json.elements.ellipses" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)"></v-ellipse>
 
                     <v-transformer ref="transformer" />
                   </v-layer>
@@ -41,6 +36,7 @@
               </section>
           </div>
           <button v-on:click="save">Save</button>
+          <button v-on:click="setTemplate">Set Template</button>
 
           </div>
 
@@ -50,6 +46,7 @@
 
 <script>
 /* eslint-disable */
+import designTemplates from "@/assets/json/designTemplates.json"
 import { userSession } from '../userSession'
 import Header from "@/components/Header.vue"
 import Sidebar from "@/components/Sidebar.vue";
@@ -83,7 +80,6 @@ export default {
               width: width * 0.82,
               height: height * 0.82
             },
-      elements: {rectangles: [], circles: [], lines: [], ellipses: []},
       text: [],
       images: [],
       allShapes: [],
@@ -93,6 +89,17 @@ export default {
       image_template: null,
       currentSidebarComponent: "designs",
       list: [],
+      designTemplates: designTemplates,
+      canvas_to_json: {
+        elements: {
+          rectangles: [],
+          circles: [],
+          lines : [],
+          ellipses: [],
+        },
+        text: this.text,
+        images: this.images
+      }
     }
   },
   watch: {
@@ -123,16 +130,8 @@ export default {
     },
     save() {
       console.log("save");
-
-      // create JSON canvas representation
-      var canvas_to_json = {
-        rectangles: this.elements.rectangles,
-        text: this.text,
-        images: this.images
-      };
-
-      console.log("save list", canvas_to_json);
-      localStorage.setItem('storage', JSON.stringify(canvas_to_json));
+      console.log("save list", this.canvas_to_json);
+      localStorage.setItem('storage', JSON.stringify(this.canvas_to_json));
     },
     loadDesign() {
       var data = localStorage.getItem('storage') || '[]';
@@ -142,7 +141,7 @@ export default {
       if (data.length != 0) {
         console.log(data.rectangles);
         if (data.rectangles != []) {
-          this.elements.rectangles = data.rectangles;
+          this.canvas_to_json.elements = data.elements;
         }
         if (data.text != []) {
           this.text = data.text;
@@ -236,7 +235,7 @@ export default {
     },
 
     changeSidebarComponent(selectedNode) {
-        if (this.elements.rectangles.includes(selectedNode)) {
+        if (this.canvas_to_json.elements.rectangles.includes(selectedNode)) {
           console.log("is a rect");
           this.currentSidebarComponent = "elements";
         }
@@ -263,8 +262,8 @@ export default {
      
     },
     updateAllShapes() {
-      for (var i = 0; i < this.elements.rectangles.length; i++) {
-        this.allShapes.push(this.elements.rectangles[i]);
+      for (var i = 0; i < this.canvas_to_json.elements.rectangles.length; i++) {
+        this.allShapes.push(this.canvas_to_json.elements.rectangles[i]);
       }
 
       for (var i = 0; i < this.text.length; i++) {
@@ -280,7 +279,12 @@ export default {
       text_elem.isVisible = false;
 
     },
-    displayTemplate(img) {
+    setTemplate() {
+      let templates = this.designTemplates["designTemplates"];
+      this.canvas_to_json = templates[0];
+      
+    },
+     displayTemplate(img) {
       console.log("display template")
       var canvas = document.getElementById("canvas");
       var context = canvas.getContext("2d");

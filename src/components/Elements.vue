@@ -1,7 +1,7 @@
 <template>
     <ul>
       <h3>Elements</h3>
-      <div>
+      <div class="elements">
           <div class="element_btn" v-on:click="addShapeElement('rectangle')">
             <font-awesome-icon icon="square-full" size="4x"/>
             <p>Add Rectangle</p>
@@ -83,8 +83,8 @@ export default {
 
         case "circle":
            shape = {
-            x : 30, 
-            y: 40, 
+            x : 160, 
+            y: 180, 
             radius: 50, 
             fill: this.colorPickerColor, 
             name: name,
@@ -96,18 +96,18 @@ export default {
           shape = {
               radius : {
                 x : 50,
-                y : 610
+                y : 70
               },
+              x: 100, 
+              y: 100,
               fill: this.colorPickerColor,
               draggable: true,
               name: name
             };
             break;
-        
       }
       shape_list.push(shape);
       this.allShapes.push(shape);
-      
     },
     changeColor(color) {
       let hex = color.rgba.toHexString();
