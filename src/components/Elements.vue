@@ -41,11 +41,12 @@ import colorPicker from '@caohenghu/vue-colorpicker'
 
 export default {
   name: 'elements',
-  props: ['user', 'elements', 'allShapes', 'images', 'text', 'selectedNode'],
+  props: ['user', 'canvas_to_json', 'allShapes', 'images', 'text', 'selectedNode'],
   data () {
     return {
       colorPickerColor: '#59c7f9',
-      canvasShapes: {"line" : this.elements.lines, "circle": this.elements.circles, "rectangle": this.elements.rectangles, "ellipse": this.elements.ellipses},
+      canvasShapes: {"line" : this.canvas_to_json.elements.lines, "circle": this.canvas_to_json.elements.circles, 
+      "rectangle": this.canvas_to_json.elements.rectangles, "ellipse": this.canvas_to_json.elements.ellipses},
     }
   },
   components: {
@@ -115,8 +116,8 @@ export default {
       this.selectedNode.fill = hex;
     },
     clear() {
-      for (var i = 0; i < this.elements.length; i++) {
-        let list = this.elements[i];
+      for (var i = 0; i < this.canvas_to_json.elements.length; i++) {
+        let list = this.canvas_to_json.elements[i];
         list = [];
       };
       

@@ -4,6 +4,7 @@
       <ul>
           <li v-on:click="createNewDesign()">Create Design</li>
           <li v-on:click="save()">Save</li>
+          <li v-for="template in designTemplates" v-on:click="displayTemplate(template)">Template</li>
           <li v-for="img in layout_imgs" v-on:click="displayLayout(img)">
           <p>{{img.layout_name}}</p>
           <img :src="img.img_src" height="200" width="300">
@@ -25,17 +26,18 @@ import layout6 from "@/assets/summer_collection.png";
 
 export default {
   name: 'designs',
-  props: ['user', 'image_template'],
+  props: ['user', 'image_template', 'designTemplates', 'canvas_to_json'],
   data () {
     return {
     layout_imgs: [{img_src: layout1, layout_name: "Travel"}, {img_src: layout2, layout_name: "Lemonade"}, 
       {img_src: layout3,  layout_name: "Summer Collection"}],
-    img: null
+    img: null,
+    canvas_to_json_mut: this.canvas_to_json
     }
   },
   methods: {
     createNewDesign() {
-      super.clear();
+      console.log(this.designTemplates);
     },
     displayLayout(img) {
       const image = new window.Image();
@@ -44,6 +46,13 @@ export default {
         // set image only when it is loaded
         this.image_template = {image: image, draggable: true, name: img.layout_name};
       };
+    },
+    displayTemplate(template) {
+      this.canvas_to_json_mut = template;
+      this.updateCanvasToJson();
+    },
+     updateCanvasToJson: function () {
+      this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
     },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default

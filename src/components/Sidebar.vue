@@ -26,13 +26,15 @@
 
             <!-- Current chosen component is inserted here. Options include Rich Text Editor, project board, to-do, etc., -->
             <component v-bind:is="sidebarNameToComponent[currentSidebarComponent]" 
-            :elements="elements" 
+            :canvas_to_json="canvas_to_json" 
             :allShapes="allShapes"
             :text="text" 
             :images="images" 
             :image_template="image_template"
             :ifTextOptions="ifTextOptions"
             :selectedNode="selectedNode"
+            :designTemplates="designTemplates"
+            @updateCanvasToJson="updateCanvas"
             ></component>
 
             <!-- Content -->
@@ -54,7 +56,7 @@ import Images from "@/components/Images.vue";
 
 export default {
   name: 'header',
-  props: ['user', 'elements', 'allShapes', 'text', 'images', 'transformer', 'image_template', 'ifTextOptions', 'selectedNode'],
+  props: ['user', 'canvas_to_json', 'designTemplates', 'allShapes', 'text', 'images', 'transformer', 'image_template', 'ifTextOptions', 'selectedNode'],
   components: {
       Designs, Elements, Text, Images
   },
@@ -62,14 +64,22 @@ export default {
     return {
         sidebarNameToComponent: {"designs": Designs, "elements": Elements, "text": Text, "images": Images},
         currentSidebarComponent: 'designs',
-        activeBtn: "designs"
+        activeBtn: "designs",
+        canvas_to_json_mut: this.canvas_to_json
     }
+  },
+  mounted() {
+      console.log("design templates sidebar", this.designTemplates);
   },
   methods: {
     setSidebarItem(name) {
       this.currentSidebarComponent = name;
 
       this.activeBtn = name;
+    },
+    updateCanvas: function(canvas_to_json) {
+      this.canvas_to_json_mut = canvas_to_json;
+      this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
     },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default

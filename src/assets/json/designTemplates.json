@@ -15,6 +15,45 @@
             },
             "text": [],
             "images": []
+        },
+        {
+            "elements": {
+            "rectangles": [] ,
+            "circles": [{"x" : 160, 
+                "y": 180, 
+                "radius": 50, 
+                "fill": "#0f0f0f", 
+                "name": "circle1",
+                "draggable": true
+            },
+            {"x" : 260, 
+                "y": 480, 
+                "radius": 50, 
+                "fill": "blue", 
+                "name": "circle1",
+                "draggable": true
+            }],
+            "lines" : [],
+            "ellipses": []
+            },
+            "text": [],
+            "images": []
+        },
+        {
+            "elements": {
+            "rectangles": [] ,
+            "circles": [{"x" : 160, 
+                "y": 180, 
+                "radius": 50, 
+                "fill": "red", 
+                "name": "circle1",
+                "draggable": true
+            }],
+            "lines" : [],
+            "ellipses": []
+            },
+            "text": [],
+            "images": []
         }
     ]
 

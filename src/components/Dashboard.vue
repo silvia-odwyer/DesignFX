@@ -3,8 +3,10 @@
     <div class="default">
       <Header :user="user" :transformer="$refs.transformer"></Header>
 
-      <Sidebar :elements="canvas_to_json.elements" :allShapes="allShapes" :text="text" :images="images" :transformer="$refs.transformer" 
-                :image_template="image_template" :ifTextOptions="ifTextOptions" :selectedNode="selectedNode"></Sidebar>
+      <Sidebar :canvas_to_json="canvas_to_json" :allShapes="allShapes" :text="text" :images="images" :transformer="$refs.transformer" 
+                :image_template="image_template" :ifTextOptions="ifTextOptions" :selectedNode="selectedNode" :designTemplates="designTemplates"
+                @updateCanvasToJson="updateCanvas"                
+        ></Sidebar>
           <div class="main">
             <div class="main_content">
             
@@ -36,7 +38,9 @@
               </section>
           </div>
           <button v-on:click="save">Save</button>
-          <button v-on:click="setTemplate">Set Template</button>
+          <button v-on:click="setTemplate(0)">1</button>
+          <button v-on:click="setTemplate(1)">1</button>
+          <button v-on:click="setTemplate(2)">1</button>
 
           </div>
 
@@ -46,7 +50,7 @@
 
 <script>
 /* eslint-disable */
-import designTemplates from "@/assets/json/designTemplates.json"
+import designTemplatesJSON from "@/assets/json/designTemplates.json"
 import { userSession } from '../userSession'
 import Header from "@/components/Header.vue"
 import Sidebar from "@/components/Sidebar.vue";
@@ -89,7 +93,7 @@ export default {
       image_template: null,
       currentSidebarComponent: "designs",
       list: [],
-      designTemplates: designTemplates,
+      designTemplates: designTemplatesJSON["designTemplates"],
       canvas_to_json: {
         elements: {
           rectangles: [],
@@ -123,6 +127,9 @@ export default {
         // set image only when it is loaded
         this.image_template = {image: image, draggable: true, name: img.layout_name};
       };
+    },
+    updateCanvas: function(canvas_to_json) {
+      this.canvas_to_json = canvas_to_json;
     },
     showTextOptions() {
       console.log("showtextoptions");
@@ -279,10 +286,10 @@ export default {
       text_elem.isVisible = false;
 
     },
-    setTemplate() {
-      let templates = this.designTemplates["designTemplates"];
-      this.canvas_to_json = templates[0];
+    setTemplate(num) {
+      this.canvas_to_json = this.designTemplates[num];
       
+      this.updateAllShapes()
     },
      displayTemplate(img) {
       console.log("display template")
