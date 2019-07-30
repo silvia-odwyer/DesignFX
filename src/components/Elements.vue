@@ -8,7 +8,7 @@
           </div>
 
           <div class="element_btn" v-on:click="addShapeElement('circle')">
-            <font-awesome-icon icon="circle" size="4x"/>
+            <font-awesome-icon icon="ellipsis-h" size="4x"/>
             <p>Add Circle</p>
           </div>
 
@@ -18,7 +18,7 @@
           </div>
 
           <div class="element_btn" v-on:click="addShapeElement('line')">
-            <font-awesome-icon icon="circle" size="4x"/>
+            <font-awesome-icon icon="chart-line" size="4x"/>
             <p>Add Line</p>
           </div>
 

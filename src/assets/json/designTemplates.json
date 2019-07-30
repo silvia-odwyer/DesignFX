@@ -5,17 +5,20 @@
             "imageThumbnail": "lemonade.png",
             "elements": {
             "rectangles": [] ,
-            "circles": [{"x" : 160, 
-                "y": 180, 
-                "radius": 50, 
-                "fill": "#0f0f0f", 
-                "name": "circle1",
-                "draggable": true
-            }],
+            "circles": [],
             "lines" : [],
             "ellipses": []
             },
-            "text": [],
+            "text": [  
+                {"x": 90,
+                "y": 250,
+                "text": "THE LEMONADE CO.",
+                "fontSize": 80,
+                "fontFamily": "Roboto",
+                "fill": "black",
+                "draggable": "true",
+                "name": "text1",
+                "isVisible": true}],
             "images": [],
             "backgroundColor" : "gold"
         },
@@ -62,8 +65,8 @@
             },
             "text": [        
                 {"x": 50,
-                "y": 50,
-                "text": "The Beach",
+                "y": 350,
+                "text": "The Summer Collection",
                 "fontSize": 100,
                 "fontFamily": "Roboto",
                 "fill": "black",

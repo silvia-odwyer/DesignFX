@@ -47,7 +47,7 @@ export default {
     img: null,
     textContent: "Text Value",
     fontSize: 120,
-    textColor: '#59c7f9',
+    textColor: this.selectedNode.fill,
     font: "Roboto",
     availableFonts: ["Helvetica", "Times New Roman", "Arial", "Roboto"],
     mutableIfTextOptions: this.ifTextOptions

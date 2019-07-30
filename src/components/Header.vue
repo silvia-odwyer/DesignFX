@@ -4,7 +4,6 @@
         <nav class="topnav">
           <h3 class="logo">gda</h3>
             <ul>
-                <li><a>Docu</a></li>
                 <li><a href="https://github.com/silvia-odwyer/photon">GitHub</a></li>
                 <li>
                   <button id="download" v-on:click="exportImage">Download</button>

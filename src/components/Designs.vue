@@ -30,8 +30,6 @@ export default {
   props: ['user', 'image_template', 'designTemplates', 'canvas_to_json'],
   data () {
     return {
-    layout_imgs: [{img_src: layout1, layout_name: "Travel"}, {img_src: layout2, layout_name: "Lemonade"}, 
-      {img_src: layout3,  layout_name: "Summer Collection"}],
     img: null,
     canvas_to_json_mut: this.canvas_to_json,
     designImageLinks: {"Travel" : layout4, "Lemonade": layout2, "The Summer Collection" : layout3}
@@ -53,17 +51,35 @@ export default {
 
       var template_copy = cloneDeepWith(this.designTemplates[template_index]);
       this.canvas_to_json_mut = template_copy;
+      this.updateCanvasToJson();
 
-          // Create an Image element using this info
+        // if (template_copy.imageThumbnail != "" ) {
+        //   // Create an Image element using this info
+        //   var newImg = new Image();
+        //   var app = this;
+        //   newImg.onload = () => {
+        //     let img_obj = {image: newImg, draggable: true, name: "img1_image"};
+        //     app.canvas_to_json_mut.images.push(img_obj);
+        //     console.log("imgs", app.canvas_to_json.images);
+        //     app.updateCanvasToJson();
+        //   };
+        //   newImg.src = this.designImageLinks[template_copy.name];
+        // }
+
+    },
+    loadImage() {
+      if (template_copy.imageThumbnail != "" ) {
+        // Create an Image element using this info
         var newImg = new Image();
         var app = this;
         newImg.onload = () => {
-          let img_obj = {image: newImg, draggable: true, name: "img1_image"};
-          app.canvas_to_json_mut.images.push(img_obj);
+           let img_obj = {image: newImg, draggable: true, name: "img1_image"};
+           app.canvas_to_json_mut.images.push(img_obj);
           console.log("imgs", app.canvas_to_json.images);
           app.updateCanvasToJson();
         };
         newImg.src = this.designImageLinks[template_copy.name];
+      }
     },
      updateCanvasToJson: function () {
        console.log("UPDATE CANVAS TO JSON", this.canvas_to_json_mut);
@@ -93,13 +109,21 @@ ul li {
     list-style: none;
 }
 
-img {
-  width: 50%;
-}
-
 .img_templates {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+.img_templates li {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+
+}
+
+.img_templates img {
+  width: 50%;
 }
 </style>
