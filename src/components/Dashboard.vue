@@ -24,7 +24,7 @@
                     <v-text v-for="item in canvas_to_json.text" :key="item.name" :config="item" v-on:dblclick="editText(item)" 
                     v-on:dragEnd="updateNodePosition(item)"
                     v-on:click="showTextOptions" v-if="item.isVisible"/>
-                    <v-image v-for="img in images" :config="img" v-on:dragEnd="updateNodePosition(img)"/>
+                    <v-image v-for="img in canvas_to_json.images" :config="img" v-on:dragEnd="updateNodePosition(img)"/>
                     <v-line v-for="item in canvas_to_json.elements.lines" :config="item"/>
  
                     <v-circle v-for="item in canvas_to_json.elements.circles" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)"></v-circle>
@@ -114,7 +114,7 @@ export default {
   },
   mounted () {
     // this.fetchData();
-    this.loadDesign();
+    // this.loadDesign();
   },
   methods: {
     displayLayout(img) {
@@ -127,8 +127,9 @@ export default {
     },
     updateCanvas: function(canvas_to_json) {
       this.canvas_to_json = canvas_to_json;
+      console.log("canvas to json UPDATE CANVAS", this.canvas_to_json);
+      this.resetAllShapes();
       this.updateAllShapes();
-      this.save();
     },
     showTextOptions() {
       console.log("showtextoptions");
@@ -268,27 +269,67 @@ export default {
      
     },
     updateAllShapes() {
-      for (var i = 0; i < this.canvas_to_json.elements.rectangles.length; i++) {
-        this.allShapes.push(this.canvas_to_json.elements.rectangles[i]);
-      }
+      let elem_keys = Object.keys(this.canvas_to_json.elements);
 
-      for (var i = 0; i < this.text.length; i++) {
-        this.allShapes.push(this.text[i]);
-      }
+      for (var i = 0; i < elem_keys.length; i++) {
+        let elem_key = elem_keys[i];
+        var vals = this.canvas_to_json.elements[elem_key];
 
-      for (var i = 0; i < this.images.length; i++) {
-        this.allShapes.push(this.images[i]);
-      }
+        for (var k = 0; k < vals.length; k++) {
+          let shape = vals[k];
+          this.allShapes.push(shape);
+        }
+      };
+
+
+      // console.log("imgsds", this.canvas_to_json.images);
+      // for (var j = 0; j < this.canvas_to_json.images.length; j++) {
+      //   let img = this.canvas_to_json.images[j];
+
+      //   this.allShapes.push(img);
+      //   console.log("all shapes from imgs", this.allShapes);
+      // }
+
+      // for (var i = 0; i < this.canvas_to_json.text.length; i++) {
+      //   this.allShapes.push(this.canvas_to_json.text[i]);
+      // }
+      console.log("updated all shapes", this.allShapes);
+
     },
     editText(text_elem) {
-      console.log("edit text elem", text_elem);
       text_elem.isVisible = false;
 
     },
     setTemplate(num) {
+      this.removeTransformer();
       this.canvas_to_json = this.designTemplates[num];
+      this.resetAllShapes();
+      this.resetCanvasToJson();
+      this.updateAllShapes();
+    },
+    resetAllShapes() {
+      this.allShapes = [];
+
+    },
+    resetCanvasToJson() {
+      this.canvas_to_json = {
+        elements: {
+          rectangles: [],
+          circles: [],
+          lines : [],
+          ellipses: [],
+        },
+        text: [],
+        images: []
+
+      }
+    },
+    removeTransformer() {
+      const transformerNode = this.$refs.transformer.getStage();
+
+      // remove transformer
+      transformerNode.detach();
       
-      this.updateAllShapes()
     },
      displayTemplate(img) {
       console.log("display template")

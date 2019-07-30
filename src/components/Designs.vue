@@ -4,14 +4,10 @@
       <p v-on:click="createNewDesign()">Create Design</p>
       <p v-on:click="save()">Save</p>
         
-      <ul>
-           <li v-for="template in designTemplates" v-bind:key="template.name" v-on:click="displayTemplate(template)">
+      <ul class="img_templates">
+           <li v-for="(template, index) in designTemplates" v-bind:key="template.name" v-on:click="displayTemplate(index)">
             <p>{{template.name}}</p>
             <img :src="require(`@/assets/${template.imageThumbnail}`)"/>
-          </li>
-          <li v-for="img in layout_imgs" v-on:click="displayLayout(img)">
-            <p>{{img.layout_name}}</p>
-            <img :src="img.img_src">
           </li>
       </ul>              
     </ul>
@@ -19,6 +15,7 @@
 
 <script>
 /* eslint-disable */
+import {cloneDeepWith} from "lodash-es";
 import { userSession } from '../userSession'
 import image from "@/assets/daisies_small.jpg";
 import layout1 from "@/assets/travel.png";
@@ -51,9 +48,24 @@ export default {
         this.image_template = {image: image, draggable: true, name: img.layout_name};
       };
     },
-    displayTemplate(template) {
-      this.canvas_to_json_mut = template;
+    displayTemplate(template_index) {
+
+      var template_copy = cloneDeepWith(this.designTemplates[template_index]);
+      this.canvas_to_json_mut = template_copy;
+
+          //   // Create an Image element using this info
+          //   var newImg = new Image();
+          //   var app = this;
+          //   newImg.onload = () => {
+          //       let img_obj = {image: newImg, draggable: true, name: "img1"};
+          //       app.canvas_to_json_mut.images.push(img_obj);
+          //       console.log("imgs", app.canvas_to_json.images);
+          // };
+          //   newImg.src = this.layout_imgs[0].img_src;
+      
       this.updateCanvasToJson();
+
+
     },
      updateCanvasToJson: function () {
       this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
@@ -84,5 +96,11 @@ ul li {
 
 img {
   width: 50%;
+}
+
+.img_templates {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 </style>
