@@ -16,7 +16,8 @@
             "ellipses": []
             },
             "text": [],
-            "images": []
+            "images": [],
+            "backgroundColor" : "gold"
         },
         {
             "name": "Travel",
@@ -34,14 +35,15 @@
                 "y": 480, 
                 "radius": 50, 
                 "fill": "blue", 
-                "name": "circle1",
+                "name": "circle2",
                 "draggable": true
             }],
             "lines" : [],
             "ellipses": []
             },
             "text": [],
-            "images": []
+            "images": [],
+            "backgroundColor": "white"
         },
         {
             "name": "The Summer Collection",
@@ -68,7 +70,8 @@
                 "draggable": "true",
                 "name": "text1",
                 "isVisible": true}],
-            "images": []
+            "images": [],
+            "backgroundColor": "white"
         }
     ]
 

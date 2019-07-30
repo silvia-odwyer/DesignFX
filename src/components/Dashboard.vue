@@ -12,7 +12,8 @@
             
               <section class="content">
                 
-                <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown" id="stage">
+                <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown" id="stage" 
+                  v-bind:style="canvasStyles">
                   
                   <v-layer ref="layer2">
                     <v-image :config="image_template" />
@@ -88,6 +89,7 @@ export default {
       selectedNode: null,
       ifTextOptions: false,
       image_template: null,
+      canvasStyles: {backgroundColor: "white"},
       currentSidebarComponent: "designs",
       list: [],
       designTemplates: designTemplatesJSON["designTemplates"],
@@ -127,26 +129,24 @@ export default {
     },
     updateCanvas: function(canvas_to_json) {
       this.canvas_to_json = canvas_to_json;
-      console.log("canvas to json UPDATE CANVAS", this.canvas_to_json);
+      this.canvasStyles.backgroundColor = canvas_to_json.backgroundColor;
+
       this.resetAllShapes();
       this.updateAllShapes();
     },
     showTextOptions() {
-      console.log("showtextoptions");
+
       this.ifTextOptions = true;
     },
     save() {
-      console.log("save");
-      console.log("save list", this.canvas_to_json);
+
       localStorage.setItem('storage', JSON.stringify(this.canvas_to_json));
     },
     loadDesign() {
       var data = localStorage.getItem('storage') || '[]';
       data = JSON.parse(data);
-      console.log(data);
 
       if (data.length != 0) {
-        console.log(data.rectangles);
         if (data.rectangles != []) {
           this.canvas_to_json.elements = data.elements;
         }
@@ -180,11 +180,11 @@ export default {
       // find clicked rect by its name
       const name = e.target.name();
       const rect = this.allShapes.find(r => r.name === name);
-      console.log("selectedNode is: ", rect);
+
       this.changeSidebarComponent(rect);
 
       this.selectedNode = rect;
-      console.log("ALL SHAPES", this.allShapes);
+
       if (rect) {
         this.selectedShapeName = name;
       } else {
@@ -282,17 +282,17 @@ export default {
       };
 
 
-      // console.log("imgsds", this.canvas_to_json.images);
-      // for (var j = 0; j < this.canvas_to_json.images.length; j++) {
-      //   let img = this.canvas_to_json.images[j];
+      console.log("imgsds", this.canvas_to_json.images);
+      for (var j = 0; j < this.canvas_to_json.images.length; j++) {
+        let img = this.canvas_to_json.images[j];
 
-      //   this.allShapes.push(img);
+        this.allShapes.push(img);
       //   console.log("all shapes from imgs", this.allShapes);
-      // }
+      }
 
-      // for (var i = 0; i < this.canvas_to_json.text.length; i++) {
-      //   this.allShapes.push(this.canvas_to_json.text[i]);
-      // }
+      for (var i = 0; i < this.canvas_to_json.text.length; i++) {
+        this.allShapes.push(this.canvas_to_json.text[i]);
+      }
       console.log("updated all shapes", this.allShapes);
 
     },
@@ -467,6 +467,10 @@ h4 {
 .content {
   background-color: white;
   width: 100%;
+}
+
+#stage {
+
 }
 
 </style>
