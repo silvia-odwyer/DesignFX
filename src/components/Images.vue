@@ -41,7 +41,7 @@ import layout5 from "@/assets/lemonade.png";
 import layout6 from "@/assets/summer_collection.png";
 
 export default {
-  name: 'designs',
+  name: 'images',
   props: ['user', 'allShapes', 'images'],
   data () {
     return {

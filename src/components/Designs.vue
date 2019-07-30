@@ -1,13 +1,17 @@
 <template>
     <ul>
       <h3>Design Templates</h3>
+      <p v-on:click="createNewDesign()">Create Design</p>
+      <p v-on:click="save()">Save</p>
+        
       <ul>
-          <li v-on:click="createNewDesign()">Create Design</li>
-          <li v-on:click="save()">Save</li>
-          <li v-for="template in designTemplates" v-on:click="displayTemplate(template)">Template</li>
+           <li v-for="template in designTemplates" v-bind:key="template.name" v-on:click="displayTemplate(template)">
+            <p>{{template.name}}</p>
+            <img :src="require(`@/assets/${template.imageThumbnail}`)"/>
+          </li>
           <li v-for="img in layout_imgs" v-on:click="displayLayout(img)">
-          <p>{{img.layout_name}}</p>
-          <img :src="img.img_src" height="200" width="300">
+            <p>{{img.layout_name}}</p>
+            <img :src="img.img_src">
           </li>
       </ul>              
     </ul>
@@ -76,5 +80,9 @@ ul li {
     color: silver;
     font-family: "Helvetica Neue", sans-serif;
     list-style: none;
+}
+
+img {
+  width: 50%;
 }
 </style>

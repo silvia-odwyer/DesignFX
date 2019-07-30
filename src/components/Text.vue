@@ -37,8 +37,8 @@ import image from "@/assets/daisies_small.jpg";
 import colorPicker from '@caohenghu/vue-colorpicker'
 
 export default {
-  name: 'designs',
-  props: ['user', 'text', 'allShapes', 'ifTextOptions', 'selectedNode'],
+  name: 'text',
+  props: ['user', 'text', 'allShapes', 'ifTextOptions', 'selectedNode', 'canvas_to_json'],
   components: {
     colorPicker
   },
@@ -55,8 +55,8 @@ export default {
   },
   methods: {
     addText() {
-
-      let name = `text_node${this.text.length + 1}`
+      console.log("text canvas to json", this.canvas_to_json);
+      let name = `text_node${this.canvas_to_json.text.length + 1}`
       
       let simpleText = {
         x: 50,
@@ -69,7 +69,7 @@ export default {
         name: name,
         isVisible: true
       };
-    this.text.push(simpleText);
+    this.canvas_to_json.text.push(simpleText);
 
     this.allShapes.push(simpleText);
     this.mutableIfTextOptions = true;

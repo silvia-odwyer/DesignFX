@@ -1,6 +1,8 @@
 {
     "designTemplates": [
         {
+            "name": "Lemonade",
+            "imageThumbnail": "lemonade.png",
             "elements": {
             "rectangles": [] ,
             "circles": [{"x" : 160, 
@@ -17,6 +19,8 @@
             "images": []
         },
         {
+            "name": "Travel",
+            "imageThumbnail": "travel.png",
             "elements": {
             "rectangles": [] ,
             "circles": [{"x" : 160, 
@@ -40,6 +44,8 @@
             "images": []
         },
         {
+            "name": "The Summer Collection",
+            "imageThumbnail": "summer_collection.png",
             "elements": {
             "rectangles": [] ,
             "circles": [{"x" : 160, 
@@ -52,7 +58,16 @@
             "lines" : [],
             "ellipses": []
             },
-            "text": [],
+            "text": [        
+                {"x": 50,
+                "y": 50,
+                "text": "The Beach",
+                "fontSize": 100,
+                "fontFamily": "Roboto",
+                "fill": "black",
+                "draggable": "true",
+                "name": "text1",
+                "isVisible": true}],
             "images": []
         }
     ]

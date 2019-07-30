@@ -2,7 +2,16 @@
 
 A graphic design app, with decentralized storage, and pre-built templates. 
 
-This allows you to add text, shapes, and imagery to your designs, or convert your images to designs. 
+This app allows you to create graphics, complete with elements, text, and imagery, and resize these graphics 
+for social media and beyond. 
+
+Features:
+- **No UI library**, allows for more flexible styling, and a more lightweight codebase
+- **Decentralized storage.** Your designs are private and always yours.
+- **Powered by Vue.**
+- **Import images from Unsplash**
+- **Save/export** final graphics, and design layouts as JSON
+- **Resize** graphics for social media
 
 Images will be generated using the gdl WebAssembly library, which allows for faster conversion of the canvas to an image. 
 

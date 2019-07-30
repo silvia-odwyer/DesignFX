@@ -69,7 +69,7 @@ export default {
     }
   },
   mounted() {
-      console.log("design templates sidebar", this.designTemplates);
+      console.log("canvas to json", this.canvas_to_json);
   },
   methods: {
     setSidebarItem(name) {

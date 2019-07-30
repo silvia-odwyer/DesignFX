@@ -21,7 +21,7 @@
 
                   <v-layer ref="layer">
                     <v-rect v-for="item in canvas_to_json.elements.rectangles" :config="item" v-on:dragEnd="updateNodePosition(item)" />
-                    <v-text v-for="item in text" :key="item.id" :config="item" v-on:dblclick="editText(item)" 
+                    <v-text v-for="item in canvas_to_json.text" :key="item.name" :config="item" v-on:dblclick="editText(item)" 
                     v-on:dragEnd="updateNodePosition(item)"
                     v-on:click="showTextOptions" v-if="item.isVisible"/>
                     <v-image v-for="img in images" :config="img" v-on:dragEnd="updateNodePosition(img)"/>
@@ -38,9 +38,6 @@
               </section>
           </div>
           <button v-on:click="save">Save</button>
-          <button v-on:click="setTemplate(0)">1</button>
-          <button v-on:click="setTemplate(1)">1</button>
-          <button v-on:click="setTemplate(2)">1</button>
 
           </div>
 
@@ -101,8 +98,8 @@ export default {
           lines : [],
           ellipses: [],
         },
-        text: this.text,
-        images: this.images
+        text: [],
+        images: []
       }
     }
   },
@@ -130,6 +127,8 @@ export default {
     },
     updateCanvas: function(canvas_to_json) {
       this.canvas_to_json = canvas_to_json;
+      this.updateAllShapes();
+      this.save();
     },
     showTextOptions() {
       console.log("showtextoptions");
