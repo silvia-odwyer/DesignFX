@@ -19,6 +19,10 @@
                           <font-awesome-icon icon="align-justify" size="2x"/>
                         Text 
                     </li>
+                    <li @click="setSidebarItem('background')" :class="{ active : activeBtn == 'background' }">
+                        <font-awesome-icon icon="align-justify" size="2x"/>
+                        Background 
+                    </li>
                 </div>
             </div>
 
@@ -28,11 +32,10 @@
             <component v-bind:is="sidebarNameToComponent[currentSidebarComponent]" 
             :canvas_to_json="canvas_to_json" 
             :allShapes="allShapes"
-            :text="text" 
-            :images="images" 
             :image_template="image_template"
             :ifTextOptions="ifTextOptions"
             :selectedNode="selectedNode"
+            :transformer="transformer"
             :designTemplates="designTemplates"
             @updateCanvasToJson="updateCanvas"
             ></component>
@@ -53,16 +56,17 @@ import Designs from "@/components/Designs.vue";
 import Elements from "@/components/Elements.vue";
 import Text from "@/components/Text.vue";
 import Images from "@/components/Images.vue";
+import Background from "@/components/Background.vue";
 
 export default {
   name: 'header',
-  props: ['user', 'canvas_to_json', 'designTemplates', 'allShapes', 'text', 'images', 'transformer', 'image_template', 'ifTextOptions', 'selectedNode'],
+  props: ['user', 'canvas_to_json', 'designTemplates', 'allShapes', 'transformer', 'image_template', 'ifTextOptions', 'selectedNode'],
   components: {
       Designs, Elements, Text, Images
   },
   data () {
     return {
-        sidebarNameToComponent: {"designs": Designs, "elements": Elements, "text": Text, "images": Images},
+        sidebarNameToComponent: {"designs": Designs, "elements": Elements, "text": Text, "images": Images, "background" : Background},
         currentSidebarComponent: 'designs',
         activeBtn: "designs",
         canvas_to_json_mut: this.canvas_to_json

@@ -8,6 +8,9 @@
                 <li>
                   <button id="download" v-on:click="exportImage">Download</button>
                 </li>
+                <li>
+                  <button v-on:click="exportAsJSON">Export As JSON</button>
+                </li>
             </ul>
           <h1>
             <img :src="user.avatarUrl() ? user.avatarUrl() : '/avatar-placeholder.png'" class="avatar">
@@ -29,7 +32,7 @@ import { userSession } from '../userSession'
 
 export default {
   name: 'header',
-  props: ['user', 'transformer'],
+  props: ['user', 'transformer', 'canvas_to_json'],
   data () {
     return {
     }
@@ -46,6 +49,25 @@ export default {
       });
       this.downloadURI(dataURL, 'new_image.png');
 
+    },
+    exportAsJSON() {
+      let exportObj = this.canvas_to_json;
+      let exportName = "Canvas2JSON";
+
+      var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
+      
+      var downloadAnchor = document.createElement('a');
+      
+      downloadAnchor.setAttribute("href", dataStr);
+      
+      downloadAnchor.setAttribute("download", exportName + ".json");
+      
+      document.body.appendChild(downloadAnchor); // required for FireFox
+      
+      downloadAnchor.click();
+      
+      downloadAnchor.remove();
+  
     },
     // Download image.
     downloadURI(uri, name) {

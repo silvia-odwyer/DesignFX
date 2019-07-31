@@ -1,16 +1,16 @@
 <template>
-    <ul>
+    <article>
       <h3>Design Templates</h3>
       <p v-on:click="createNewDesign()">Create Design</p>
       <p v-on:click="save()">Save</p>
         
-      <ul class="img_templates">
-           <li v-for="(template, index) in designTemplates" v-bind:key="template.name" v-on:click="displayTemplate(index)">
+      <div class="img_templates">
+           <div v-for="(template, index) in designTemplates" v-bind:key="template.name" v-on:click="displayTemplate(index)">
             <p>{{template.name}}</p>
             <img :src="require(`@/assets/${template.imageThumbnail}`)"/>
-          </li>
-      </ul>              
-    </ul>
+          </div>
+      </div>              
+    </article>
 </template>
 
 <script>
@@ -24,15 +24,16 @@ import layout3 from "@/assets/summer_collection.png";
 import layout4 from "@/assets/travel.png";
 import layout5 from "@/assets/lemonade.png";
 import layout6 from "@/assets/summer_collection.png";
+import layout7 from "@/assets/stockholm.png";
 
 export default {
   name: 'designs',
-  props: ['user', 'image_template', 'designTemplates', 'canvas_to_json'],
+  props: ['user', 'image_template', 'designTemplates', 'canvas_to_json', 'transformer'],
   data () {
     return {
     img: null,
     canvas_to_json_mut: this.canvas_to_json,
-    designImageLinks: {"Travel" : layout4, "Lemonade": layout2, "The Summer Collection" : layout3}
+    designImageLinks: {"Travel" : layout4, "Lemonade": layout2, "The Summer Collection" : layout3, "Stockholm": layout7}
     }
   },
   methods: {
@@ -48,23 +49,23 @@ export default {
       };
     },
     displayTemplate(template_index) {
-
+      this.removeTransformer();
       var template_copy = cloneDeepWith(this.designTemplates[template_index]);
       this.canvas_to_json_mut = template_copy;
       this.updateCanvasToJson();
-
-        // if (template_copy.imageThumbnail != "" ) {
-        //   // Create an Image element using this info
-        //   var newImg = new Image();
-        //   var app = this;
-        //   newImg.onload = () => {
-        //     let img_obj = {image: newImg, draggable: true, name: "img1_image"};
-        //     app.canvas_to_json_mut.images.push(img_obj);
-        //     console.log("imgs", app.canvas_to_json.images);
-        //     app.updateCanvasToJson();
-        //   };
-        //   newImg.src = this.designImageLinks[template_copy.name];
-        // }
+        console.log("feature image", template_copy.featureImage);
+        if (template_copy.featureImage.name !=  "") {
+          // Create an Image element using this info
+          var newImg = new Image();
+          var app = this;
+          newImg.onload = () => {
+            let img_obj = {image: newImg, draggable: true, name: "img1_image"};
+            app.canvas_to_json_mut.images.push(img_obj);
+            console.log("imgs", app.canvas_to_json.images);
+            app.updateCanvasToJson();
+          };
+          newImg.src = this.designImageLinks[template_copy.name];
+        }
 
     },
     loadImage() {
@@ -84,6 +85,12 @@ export default {
      updateCanvasToJson: function () {
        console.log("UPDATE CANVAS TO JSON", this.canvas_to_json_mut);
       this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
+    },
+    removeTransformer() {
+      const transformerNode = this.transformer.getStage();
+      const stage = transformerNode.getStage();
+      // Detach current node from the transformer
+      transformerNode.detach();
     },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default
@@ -109,21 +116,30 @@ ul li {
     list-style: none;
 }
 
+img {
+  width: 100%;
+}
+
 .img_templates {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+
 }
 
-.img_templates li {
+.img_templates div {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  flex: 1 0 50%;
+  cursor: pointer;
+}
 
-
+.img_templates div:hover {
+  color: whitesmoke;
 }
 
 .img_templates img {
-  width: 50%;
+
 }
 </style>

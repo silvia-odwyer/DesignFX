@@ -41,7 +41,7 @@ import colorPicker from '@caohenghu/vue-colorpicker'
 
 export default {
   name: 'elements',
-  props: ['user', 'canvas_to_json', 'allShapes', 'images', 'text', 'selectedNode'],
+  props: ['user', 'canvas_to_json', 'allShapes', 'selectedNode'],
   data () {
     return {
       colorPickerColor: '#59c7f9',
@@ -121,8 +121,6 @@ export default {
         list = [];
       };
       
-      this.text = [];
-      this.images = [];
     //   const transformerNode = this.$refs.transformer.getStage();
     //   transformerNode.detach();
 
@@ -162,12 +160,12 @@ h3 {
 .element_btn {
   border: solid black 0.1em;
   border-radius: 0.3em;
-  width: 50%;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
   cursor: pointer;
+  flex: 1 0 50%;
 }
 
 .element_btn:hover {

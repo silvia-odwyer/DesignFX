@@ -15,6 +15,11 @@ Features:
 
 Images will be generated using the gdl WebAssembly library, which allows for faster conversion of the canvas to an image. 
 
+## Known Bugs
+- Offline loading of fonts. Text does not display until the fonts have loaded, however if the user does not have an Internet
+connection, they will be unable to view the text.
+- Clicking on the Text pane without clicking on text leads to no text options popup.
+
 ## Build Setup
 ``` bash
 # install dependencies

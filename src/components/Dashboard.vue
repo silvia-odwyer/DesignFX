@@ -1,12 +1,12 @@
 <template>
   <div class="dashboard">
     <div class="default">
-      <Header :user="user" :transformer="$refs.transformer"></Header>
+      <Header :user="user" :transformer="$refs.transformer" :canvas_to_json="canvas_to_json"></Header>
 
-      <Sidebar :canvas_to_json="canvas_to_json" :allShapes="allShapes" :text="text" :images="images" :transformer="$refs.transformer" 
+      <Sidebar :canvas_to_json="canvas_to_json" :allShapes="allShapes" :transformer="$refs.transformer" 
                 :image_template="image_template" :ifTextOptions="ifTextOptions" :selectedNode="selectedNode" :designTemplates="designTemplates"
-                @updateCanvasToJson="updateCanvas"                
-        ></Sidebar>
+                @updateCanvasToJson="updateCanvas"></Sidebar>
+          
           <div class="main">
             <div class="main_content">
             
@@ -101,14 +101,11 @@ export default {
               width: width * 0.52,
               height: height * 0.82
             },
-      text: [],
-      images: [],
       allShapes: [],
       selectedShapeName: '',
       selectedNode: null,
       ifTextOptions: false,
       image_template: null,
-      canvasStyles: {backgroundColor: "white"},
       currentSidebarComponent: "designs",
       list: [],
       designTemplates: designTemplatesJSON["designTemplates"],
@@ -121,7 +118,8 @@ export default {
         },
         text: [],
         images: [],
-        background: {}
+        background: {},
+        backgroundColor: "#13466A"
       },
       textFontsLoaded: false
     }
@@ -138,7 +136,8 @@ export default {
   mounted () {
     // this.fetchData();
     // this.loadDesign();
-    this.textFontsLoaded = true;
+    console.log("mounted dashboard", this.canvas_to_json);
+    this.initCanvas();
   },
   methods: {
     displayLayout(img) {
@@ -148,6 +147,21 @@ export default {
         // set image only when it is loaded
         this.image_template = {image: image, draggable: true, name: img.layout_name};
       };
+    },
+
+    // Initialise the canvas by creating a background rect, etc.,
+    initCanvas() {
+      let backgroundColor = this.canvas_to_json.backgroundColor;
+
+      let backgroundRect = {
+              x: 0,
+              y: 0,
+              width: this.stageSize.width,
+              height: this.stageSize.height,
+              fill: backgroundColor,
+              name: "backgroundRect",
+            };
+      this.canvas_to_json.background = backgroundRect;
     },
     updateCanvas: function(canvas_to_json) {
       this.resetAllShapes();      
@@ -338,13 +352,6 @@ export default {
     editText(text_elem) {
       text_elem.isVisible = false;
 
-    },
-    setTemplate(num) {
-      this.removeTransformer();
-      this.canvas_to_json = this.designTemplates[num];
-      this.resetAllShapes();
-      this.resetCanvasToJson();
-      this.updateAllShapes();
     },
     resetAllShapes() {
       this.allShapes = [];

@@ -28,9 +28,11 @@ import colorPicker from '@caohenghu/vue-colorpicker'
 export default {
   name: 'background',
   props: ['user', 'canvas_to_json', 'allShapes', 'selectedNode'],
+  mounted() {
+  },
   data () {
     return {
-      colorPickerColor: '#59c7f9',
+      colorPickerColor: this.canvas_to_json.background.fill,
     }
   },
   components: {

@@ -42,7 +42,7 @@ import layout6 from "@/assets/summer_collection.png";
 
 export default {
   name: 'images',
-  props: ['user', 'allShapes', 'images'],
+  props: ['user', 'allShapes'],
   data () {
     return {
         img: null,

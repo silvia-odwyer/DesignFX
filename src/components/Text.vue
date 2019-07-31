@@ -38,7 +38,7 @@ import colorPicker from '@caohenghu/vue-colorpicker'
 
 export default {
   name: 'textOptions',
-  props: ['user', 'text', 'allShapes', 'ifTextOptions', 'selectedNode', 'canvas_to_json'],
+  props: ['user', 'allShapes', 'ifTextOptions', 'selectedNode', 'canvas_to_json'],
   components: {
     colorPicker
   },
