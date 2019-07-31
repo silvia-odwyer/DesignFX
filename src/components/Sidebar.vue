@@ -70,6 +70,8 @@ export default {
   },
   mounted() {
       console.log("canvas to json", this.canvas_to_json);
+
+      console.log("if text options", this.ifTextOptions);
   },
   methods: {
     setSidebarItem(name) {

@@ -37,7 +37,7 @@ import image from "@/assets/daisies_small.jpg";
 import colorPicker from '@caohenghu/vue-colorpicker'
 
 export default {
-  name: 'text',
+  name: 'textOptions',
   props: ['user', 'text', 'allShapes', 'ifTextOptions', 'selectedNode', 'canvas_to_json'],
   components: {
     colorPicker
@@ -47,13 +47,17 @@ export default {
     img: null,
     textContent: "Text Value",
     fontSize: 120,
-    textColor: this.selectedNode.fill,
+    textColor: "black",
     font: "Roboto",
     availableFonts: ["Helvetica", "Times New Roman", "Arial", "Roboto"],
     mutableIfTextOptions: this.ifTextOptions
     }
   },
+  mounted() {
+    console.log("if text options text comp", this.ifTextOptions);
+  },
   methods: {
+    
     addText() {
       console.log("text canvas to json", this.canvas_to_json);
       let name = `text_node${this.canvas_to_json.text.length + 1}`
@@ -78,20 +82,27 @@ export default {
       console.log("changed color");
       let hex = color.rgba.toHexString();
       this.textColor = hex;
-      if (this.selectedNode) {
+      if (this.selectedNode != undefined || this.selectedNode != null ) {
         this.selectedNode.fill = hex;
       }
     },
 
     changeFont() {
       console.log("change font");
-      this.selectedNode.fontFamily = this.font;
+      if (this.selectedNode != undefined || this.selectedNode != null ) {
+
+        this.selectedNode.fontFamily = this.font;
+      }
     },
     changeTextContent() {
-      this.selectedNode.text = this.textContent;
+      if (this.selectedNode != undefined || this.selectedNode != null ) {
+        this.selectedNode.text = this.textContent;
+      }
     },
     changeFontSize() {
+      if (this.selectedNode != undefined || this.selectedNode != null ) {
       this.selectedNode.fontSize = this.fontSize;
+      }
     },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default

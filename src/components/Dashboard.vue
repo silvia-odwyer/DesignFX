@@ -22,9 +22,13 @@
 
                   <v-layer ref="layer">
                     <v-rect v-for="item in canvas_to_json.elements.rectangles" :config="item" v-on:dragEnd="updateNodePosition(item)" />
-                    <v-text v-for="item in canvas_to_json.text" :key="item.name" :config="item" v-on:dblclick="editText(item)" 
-                    v-on:dragEnd="updateNodePosition(item)"
-                    v-on:click="showTextOptions" v-if="item.isVisible"/>
+                    
+                    <div v-if="textFontsLoaded" >
+                      <v-text v-for="item in canvas_to_json.text" :key="item.name" :config="item" v-on:dblclick="editText(item)" 
+                      v-on:dragEnd="updateNodePosition(item)"
+                      v-on:click="showTextOptions"/>
+                    </div>
+                    
                     <v-image v-for="img in canvas_to_json.images" :config="img" v-on:dragEnd="updateNodePosition(img)"/>
                     <v-line v-for="item in canvas_to_json.elements.lines" :config="item"/>
  
@@ -63,6 +67,8 @@ import layout4 from "@/assets/travel.png";
 import layout5 from "@/assets/lemonade.png";
 import layout6 from "@/assets/summer_collection.png";
 
+import WebFontLoader from 'webfontloader';
+
 const width = window.innerWidth;
 const height = window.innerHeight;
 
@@ -72,6 +78,14 @@ export default {
   components: {
     Header,
     Sidebar
+  },
+  created() {
+    WebFontLoader.load({
+      google: {
+        families: ['Oswald', 'Droid Serif']
+      },
+      active: this.setFontLoaded,
+    });
   },
   data () {
     return {
@@ -102,7 +116,8 @@ export default {
         },
         text: [],
         images: []
-      }
+      },
+      textFontsLoaded: false
     }
   },
   watch: {
@@ -117,6 +132,7 @@ export default {
   mounted () {
     // this.fetchData();
     // this.loadDesign();
+    this.textFontsLoaded = true;
   },
   methods: {
     displayLayout(img) {
@@ -161,7 +177,11 @@ export default {
       }
 
     },
-
+    setFontLoaded() {
+      console.log("Google Font Loaded");
+      this.textFontsLoaded = true;
+      this.$emit('font-loaded');
+    },
     handleStageMouseDown(e) {
       // clicked on stage - clear the current selection
       if (e.target === e.target.getStage()) {
@@ -349,6 +369,17 @@ export default {
       imageElem.src = img.img_src;
      
     },
+    stageToJSON() {
+      const transformerNode = this.$refs.transformer.getStage();
+      const stage = transformerNode.getStage();
+      
+      var image = stage.toImage({
+        callback(img) {
+          console.log(img);
+        }
+      });
+    
+    },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default
         .then((todosText) => {
@@ -370,6 +401,16 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+@import url("https://fonts.googleapis.com/css?family=Source+Code+Pro:300,400,500,600,700|Oswald");
+
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/fonts/fontawesome-webfont.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 label {
   margin-bottom: 0;
   // width: 100%;
