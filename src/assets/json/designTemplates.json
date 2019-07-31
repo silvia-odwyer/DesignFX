@@ -31,7 +31,8 @@
                     "isVisible": true}
                 ],
             "images": [],
-            "backgroundColor" : "gold"
+            "backgroundColor" : "gold",
+            "background": {}
         },
         {
             "name": "Travel",
@@ -57,7 +58,8 @@
             },
             "text": [],
             "images": [],
-            "backgroundColor": "white"
+            "backgroundColor": "aliceblue",
+            "background": {}
         },
         {
             "name": "The Summer Collection",
@@ -75,17 +77,18 @@
             "ellipses": []
             },
             "text": [        
-                {"x": 50,
-                "y": 350,
+                {"x": 30,
+                "y": 550,
                 "text": "The Summer Collection",
-                "fontSize": 100,
-                "fontFamily": "Roboto",
+                "fontSize": 60,
+                "fontFamily": "Montserrat",
                 "fill": "black",
                 "draggable": "true",
                 "name": "text1",
                 "isVisible": true}],
             "images": [],
-            "backgroundColor": "white"
+            "backgroundColor": "white",
+            "background": {}
         }
     ]
 

@@ -41,7 +41,9 @@ export default {
 
       // Detach current node from the transformer
       transformerNode.detach();
-      var dataURL = stage.toDataURL();
+      var dataURL = stage.toDataURL({
+        pixelRatio: 4
+      });
       this.downloadURI(dataURL, 'new_image.png');
 
     },

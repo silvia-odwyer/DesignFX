@@ -12,16 +12,21 @@
             
               <section class="content">
                 
-                <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown" id="stage" 
-                  v-bind:style="canvasStyles">
+                <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown" id="stage" >
                   
                   <v-layer ref="layer2">
                     <v-image :config="image_template" />
 
                   </v-layer>
 
+                  <v-layer>
+                    <v-rect :config="canvas_to_json.background"/>
+
+                  </v-layer>
+
                   <v-layer ref="layer">
                     <v-rect v-for="item in canvas_to_json.elements.rectangles" :config="item" v-on:dragEnd="updateNodePosition(item)" />
+                  
                     
                     <div v-if="textFontsLoaded" >
                       <v-text v-for="item in canvas_to_json.text" :key="item.name" :config="item" v-on:dblclick="editText(item)" 
@@ -93,7 +98,7 @@ export default {
       note: '',
       uidCount: 0,
       stageSize: {
-              width: width * 0.82,
+              width: width * 0.52,
               height: height * 0.82
             },
       text: [],
@@ -115,7 +120,8 @@ export default {
           ellipses: [],
         },
         text: [],
-        images: []
+        images: [],
+        background: {}
       },
       textFontsLoaded: false
     }
@@ -144,10 +150,21 @@ export default {
       };
     },
     updateCanvas: function(canvas_to_json) {
-      this.canvas_to_json = canvas_to_json;
-      this.canvasStyles.backgroundColor = canvas_to_json.backgroundColor;
+      this.resetAllShapes();      
 
-      this.resetAllShapes();
+      let backgroundColor = canvas_to_json.backgroundColor;
+
+      let backgroundRect = {
+        x: 0,
+        y: 0,
+        width: this.stageSize.width,
+        height: this.stageSize.height,
+        fill: backgroundColor,
+        name: "backgroundRect",
+      };
+      canvas_to_json.background = backgroundRect;
+
+      this.canvas_to_json = canvas_to_json;
       this.updateAllShapes();
     },
     showTextOptions() {
@@ -186,6 +203,7 @@ export default {
       // clicked on stage - clear the current selection
       if (e.target === e.target.getStage()) {
         this.selectedShapeName = '';
+
         this.updateTransformer();
         return;
       }
@@ -216,6 +234,7 @@ export default {
       // here we need to manually attach or detach Transformer node
       const transformerNode = this.$refs.transformer.getStage();
       const stage = transformerNode.getStage();
+
       const { selectedShapeName } = this;
 
       const selectedNode = stage.findOne('.' + selectedShapeName);
@@ -508,10 +527,6 @@ h4 {
 .content {
   background-color: white;
   width: 100%;
-}
-
-#stage {
-
 }
 
 </style>
