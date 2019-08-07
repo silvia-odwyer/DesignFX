@@ -64,6 +64,17 @@ export default {
   components: {
       Designs, Elements, Text, Images
   },
+  watch : {
+    selectedNode : function (node) {
+      // Update selected node
+      if (node.name.startsWith("circle") || node.name.startsWith("rect")) {
+        this.currentSidebarComponent = "elements";
+      }
+      else if (node.name.startsWith("text")) {
+        this.currentSidebarComponent = "text";
+      }
+    }
+  },
   data () {
     return {
         sidebarNameToComponent: {"designs": Designs, "elements": Elements, "text": Text, "images": Images, "background" : Background},

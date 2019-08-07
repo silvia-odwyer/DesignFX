@@ -28,10 +28,14 @@
                     <v-rect v-for="item in canvas_to_json.elements.rectangles" :config="item" v-on:dragEnd="updateNodePosition(item)" />
                   
                     
-                    <div v-if="textFontsLoaded" >
+                    <div v-if="textFontsLoaded">
                       <v-text v-for="item in canvas_to_json.text" :key="item.name" :config="item" v-on:dblclick="editText(item)" 
                       v-on:dragEnd="updateNodePosition(item)"
                       v-on:click="showTextOptions"/>
+                    </div>
+
+                    <div v-if="!textFontsLoaded">
+                      <v-circle v-for="item in canvas_to_json.elements.circles" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)"></v-circle>
                     </div>
                     
                     <v-image v-for="img in canvas_to_json.images" :config="img" v-on:dragEnd="updateNodePosition(img)"/>
@@ -87,7 +91,7 @@ export default {
   created() {
     WebFontLoader.load({
       google: {
-        families: ['Oswald', 'Droid Serif']
+        families: ['Oswald', 'Droid Serif', 'Montserrat']
       },
       active: this.setFontLoaded,
     });
@@ -158,7 +162,7 @@ export default {
               y: 0,
               width: this.stageSize.width,
               height: this.stageSize.height,
-              fill: backgroundColor,
+              fill: "",
               name: "backgroundRect",
             };
       this.canvas_to_json.background = backgroundRect;
@@ -210,8 +214,8 @@ export default {
     },
     setFontLoaded() {
       console.log("Google Font Loaded");
-      this.textFontsLoaded = true;
       this.$emit('font-loaded');
+      this.textFontsLoaded = true;
     },
     handleStageMouseDown(e) {
       // clicked on stage - clear the current selection
@@ -234,8 +238,8 @@ export default {
       const rect = this.allShapes.find(r => r.name === name);
 
       this.changeSidebarComponent(rect);
-
       this.selectedNode = rect;
+      console.log("SELECTED NODE IS NOW", this.selectedNode);
 
       if (rect) {
         this.selectedShapeName = name;

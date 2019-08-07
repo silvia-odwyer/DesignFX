@@ -44,7 +44,7 @@ export default {
   props: ['user', 'canvas_to_json', 'allShapes', 'selectedNode'],
   data () {
     return {
-      colorPickerColor: '#59c7f9',
+      colorPickerColor: this.selectedNode.fill,
       canvasShapes: {"line" : this.canvas_to_json.elements.lines, "circle": this.canvas_to_json.elements.circles, 
       "rectangle": this.canvas_to_json.elements.rectangles, "ellipse": this.canvas_to_json.elements.ellipses},
     }

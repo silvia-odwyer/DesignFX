@@ -1,9 +1,9 @@
 <template>
-    <ul>
+    <section>
           
     <h3>Text</h3>
-      <ul>
-          <li v-on:click="addText">Draw Text</li>
+      <div>
+          <p v-on:click="addText">Draw Text</p>
 
           <div v-if="mutableIfTextOptions" class="textOptions">
             <h4>Text Options</h4>
@@ -26,8 +26,8 @@
             </div>
           </div>
 
-      </ul>              
-    </ul>
+      </div>              
+    </section>
 </template>
 
 <script>
@@ -42,10 +42,19 @@ export default {
   components: {
     colorPicker
   },
+  watch : {
+    selectedNode : function (value) {
+      // Update text options
+      this.textContent = value.text
+      this.textColor = value.textColor;
+      this.fontFamily = value.fontFamily;
+      this.fontSize = value.fontSize;
+    }
+  },
   data () {
     return {
     img: null,
-    textContent: "Text Value",
+    textContent: this.selectedNode.text,
     fontSize: 120,
     textColor: "black",
     font: "Roboto",
@@ -95,6 +104,7 @@ export default {
       }
     },
     changeTextContent() {
+      console.log("CURRENT TEXT NODE", this.selectedNode);
       if (this.selectedNode != undefined || this.selectedNode != null ) {
         this.selectedNode.text = this.textContent;
       }
