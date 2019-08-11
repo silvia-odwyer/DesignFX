@@ -8,8 +8,8 @@
           <div v-if="mutableIfTextOptions" class="textOptions">
             <h4>Text Options</h4>
             <label>Font</label>
-            <select v-model="font" v-on:change="changeFont">
-              <option v-for="font in availableFonts" v-bind:key="font">{{font}}</option>
+            <select v-model="fontFamily" v-on:change="changeFont">
+              <option v-for="fontFamily in availableFonts" v-bind:key="fontFamily">{{fontFamily}}</option>
             </select> 
 
             <label>Text Content</label>
@@ -44,22 +44,34 @@ export default {
   },
   watch : {
     selectedNode : function (value) {
-      // Update text options
-      this.textContent = value.text
-      this.textColor = value.textColor;
-      this.fontFamily = value.fontFamily;
-      this.fontSize = value.fontSize;
+
+
+      if (value != null) {
+        if (value.name.startsWith("text")) {
+          // Update text options
+          this.textContent = value.text
+          this.textColor = value.textColor;
+          this.fontFamily = value.fontFamily;
+          this.fontSize = value.fontSize;
+
+          // make text options visible
+          this.mutableIfTextOptions = true;
+        }
+      }
+    },
+    ifTextOptions: function(ifTextOptions) {
+      this.ifTextOptions = ifTextOptions;
     }
   },
   data () {
     return {
-    img: null,
-    textContent: this.selectedNode.text,
-    fontSize: 120,
-    textColor: "black",
-    font: "Roboto",
-    availableFonts: ["Helvetica", "Times New Roman", "Arial", "Roboto"],
-    mutableIfTextOptions: this.ifTextOptions
+      img: null,
+      textContent: "sample text",
+      fontSize: 120,
+      textColor: "black",
+      fontFamily: "Roboto",
+      availableFonts: ["Helvetica", "Times New Roman", "Arial", "Roboto", "Oswald"],
+      mutableIfTextOptions: this.ifTextOptions
     }
   },
   mounted() {
@@ -74,7 +86,7 @@ export default {
       let simpleText = {
         x: 50,
         y: 50,
-        text: 'Simple Text',
+        text: 'Sample Text',
         fontSize: 100,
         fontFamily: this.font,
         fill: this.textColor,
@@ -82,10 +94,11 @@ export default {
         name: name,
         isVisible: true
       };
-    this.canvas_to_json.text.push(simpleText);
+      this.canvas_to_json.text.push(simpleText);
 
-    this.allShapes.push(simpleText);
-    this.mutableIfTextOptions = true;
+      this.allShapes.push(simpleText);
+      this.mutableIfTextOptions = true;
+      this.selectedNode = simpleText;
     },
     changeColor(color) {
       console.log("changed color");
@@ -100,7 +113,7 @@ export default {
       console.log("change font");
       if (this.selectedNode != undefined || this.selectedNode != null ) {
 
-        this.selectedNode.fontFamily = this.font;
+        this.selectedNode.fontFamily = this.fontFamily;
       }
     },
     changeTextContent() {
@@ -113,17 +126,6 @@ export default {
       if (this.selectedNode != undefined || this.selectedNode != null ) {
       this.selectedNode.fontSize = this.fontSize;
       }
-    },
-    fetchData () {
-      userSession.getFile(STORAGE_FILE) // decryption is enabled by default
-        .then((todosText) => {
-          var notes = JSON.parse(todosText || '[]')
-          notes.forEach(function (note, index) {
-            note.id = index
-          })
-          this.uidCount = notes.length
-          this.notes = notes
-        })
     },
   }
 }

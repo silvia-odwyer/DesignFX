@@ -2,10 +2,16 @@
     <ul>
       <h3>Background</h3>
       <div class="elements">
-          <div class="element_btn" v-on:click="changeBackground()">
+          <div class="element_btn" v-on:click="changeBackground('solid')">
             <font-awesome-icon icon="square-full" size="4x"/>
-            <p>Change Background</p>
+            <p>Change Solid Background</p>
           </div>
+
+          <div class="element_btn" v-on:click="changeBackground('gradient')">
+            <font-awesome-icon icon="square-full" size="4x"/>
+            <p>Add Gradient</p>
+          </div>
+
 
           <div :style="{background: colorPickerColor}">
               <color-picker
@@ -29,6 +35,7 @@ export default {
   name: 'background',
   props: ['user', 'canvas_to_json', 'allShapes', 'selectedNode'],
   mounted() {
+    console.log("BACKGROUND", this.canvas_to_json);
   },
   data () {
     return {
@@ -39,14 +46,32 @@ export default {
     colorPicker
   },
   methods: {
-    changeBackground() {
-        this.canvas_to_json.background.fill = this.colorPickerColor;
+    changeBackground(background_type) {
+
+        switch (background_type) {
+            case "solid":
+                this.canvas_to_json.background.fill = this.colorPickerColor;
+                break;
+
+            case "gradient":
+                this.addGradient();
+                break;
+                
+            default: 
+                this.canvas_to_json.background.fill = this.colorPickerColor;
+        }
+    },
+    addGradient() {
+        this.canvas_to_json.background["fillLinearGradientStartPoint"] = { x: -50, y: -50 }
+        this.canvas_to_json.background["fillLinearGradientEndPoint"] = { x: 250, y: 250 };
+        this.canvas_to_json.background["fillLinearGradientColorStops"] = [0, 'red', 1, 'yellow'];
     },
     changeColor(color) {
       let hex = color.rgba.toHexString();
       this.colorPickerColor = hex;
       this.changeBackground();
     }
+
   }
 }
 </script>

@@ -6,12 +6,14 @@ This app allows you to create graphics, complete with elements, text, and imager
 for social media and beyond. 
 
 Features:
-- **No UI library**, allows for more flexible styling, and a more lightweight codebase
-- **Decentralized storage.** Your designs are private and always yours.
-- **Powered by Vue.**
 - **Import images from Unsplash**
 - **Save/export** final graphics, and design layouts as JSON
 - **Resize** graphics for social media
+
+Dev Notes:
+- **No UI library**, allows for more flexible styling, and a more lightweight codebase
+- **Decentralized storage.** Your designs are private and always yours.
+- **Powered by Vue.**
 
 Images will be generated using the gdl WebAssembly library, which allows for faster conversion of the canvas to an image. 
 

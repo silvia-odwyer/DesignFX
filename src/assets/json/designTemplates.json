@@ -32,34 +32,23 @@
                 ],
             "images": [],
             "backgroundColor" : "gold",
-            "background": {}
+            "background": {},
+            "featureImage" : {"name": ""}
         },
         {
             "name": "Travel",
             "imageThumbnail": "travel.png",
             "elements": {
             "rectangles": [] ,
-            "circles": [{"x" : 160, 
-                "y": 180, 
-                "radius": 50, 
-                "fill": "#0f0f0f", 
-                "name": "circle1",
-                "draggable": true
-            },
-            {"x" : 260, 
-                "y": 480, 
-                "radius": 50, 
-                "fill": "blue", 
-                "name": "circle2",
-                "draggable": true
-            }],
+            "circles": [],
             "lines" : [],
             "ellipses": []
             },
             "text": [],
             "images": [],
             "backgroundColor": "aliceblue",
-            "background": {}
+            "background": {},
+            "featureImage" : {"name" : "travel.png"}
         },
         {
             "name": "The Summer Collection",
@@ -88,7 +77,33 @@
                 "isVisible": true}],
             "images": [],
             "backgroundColor": "white",
-            "background": {}
+            "background": {},
+            "featureImage" : {"name" : "summer_collection.png"}
+
+        },
+        {
+            "name": "Stockholm",
+            "imageThumbnail": "stockholm.png",
+            "elements": {
+            "rectangles": [] ,
+            "circles": [],
+            "lines" : [],
+            "ellipses": []
+            },
+            "text": [        
+                {"x": 30,
+                "y": 250,
+                "text": "VISIT STOCKHOLM",
+                "fontSize": 100,
+                "fontFamily": "Oswald",
+                "fill": "white",
+                "draggable": "true",
+                "name": "text1",
+                "isVisible": true}],
+            "images": [],
+            "backgroundColor": "white",
+            "background": {},
+            "featureImage" : {"name" : "stockholm.png"}
         }
     ]
 

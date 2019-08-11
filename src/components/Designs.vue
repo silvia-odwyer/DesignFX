@@ -38,7 +38,21 @@ export default {
   },
   methods: {
     createNewDesign() {
+      this.removeTransformer();
       console.log(this.designTemplates);
+      this.canvas_to_json_mut = {
+        elements: {
+          rectangles: [],
+          circles: [],
+          lines : [],
+          ellipses: [],
+        },
+        text: [],
+        images: [],
+        background: {},
+        backgroundColor: "#FFFFFF"
+      }
+      this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
     },
     displayLayout(img) {
       const image = new window.Image();

@@ -33,7 +33,7 @@
             :canvas_to_json="canvas_to_json" 
             :allShapes="allShapes"
             :image_template="image_template"
-            :ifTextOptions="ifTextOptions"
+            :ifTextOptions="mutableIfTextOptions"
             :selectedNode="selectedNode"
             :transformer="transformer"
             :designTemplates="designTemplates"
@@ -67,11 +67,16 @@ export default {
   watch : {
     selectedNode : function (node) {
       // Update selected node
+      if (node == null) {
+        return;
+      };
+      
       if (node.name.startsWith("circle") || node.name.startsWith("rect")) {
-        this.currentSidebarComponent = "elements";
+        this.setSidebarItem("elements");
       }
       else if (node.name.startsWith("text")) {
-        this.currentSidebarComponent = "text";
+        this.setSidebarItem("text");
+        this.mutableIfTextOptions = true;
       }
     }
   },
@@ -80,7 +85,8 @@ export default {
         sidebarNameToComponent: {"designs": Designs, "elements": Elements, "text": Text, "images": Images, "background" : Background},
         currentSidebarComponent: 'designs',
         activeBtn: "designs",
-        canvas_to_json_mut: this.canvas_to_json
+        canvas_to_json_mut: this.canvas_to_json,
+        mutableIfTextOptions: false
     }
   },
   mounted() {

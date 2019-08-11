@@ -171,7 +171,7 @@ export default {
       this.resetAllShapes();      
 
       let backgroundColor = canvas_to_json.backgroundColor;
-
+      console.log("background color", backgroundColor);
       let backgroundRect = {
         x: 0,
         y: 0,
@@ -370,8 +370,8 @@ export default {
           ellipses: [],
         },
         text: [],
-        images: []
-
+        images: [],
+        backgroundColor: "#000000"
       }
     },
     removeTransformer() {
