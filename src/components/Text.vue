@@ -124,7 +124,7 @@ export default {
     },
     changeFontSize() {
       if (this.selectedNode != undefined || this.selectedNode != null ) {
-      this.selectedNode.fontSize = this.fontSize;
+        this.selectedNode.fontSize = this.fontSize;
       }
     },
   }

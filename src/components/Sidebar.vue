@@ -131,7 +131,7 @@ export default {
 
 .sidebar {
   height: 100%;
-  width: 50vh;
+  width: 60vh;
   position: fixed;
   z-index: 1;
   top: 0;

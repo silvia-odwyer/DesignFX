@@ -4,22 +4,22 @@
       <div class="elements">
           <div class="element_btn" v-on:click="addShapeElement('rectangle')">
             <font-awesome-icon icon="square-full" size="4x"/>
-            <p>Add Rectangle</p>
+            <p>Rectangle</p>
           </div>
 
           <div class="element_btn" v-on:click="addShapeElement('circle')">
             <font-awesome-icon icon="ellipsis-h" size="4x"/>
-            <p>Add Circle</p>
+            <p>Circle</p>
           </div>
 
           <div class="element_btn" v-on:click="addShapeElement('ellipse')">
             <font-awesome-icon icon="circle" size="4x"/>
-            <p>Add Ellipse</p>
+            <p>Ellipse</p>
           </div>
 
           <div class="element_btn" v-on:click="addShapeElement('line')">
             <font-awesome-icon icon="chart-line" size="4x"/>
-            <p>Add Line</p>
+            <p>Line</p>
           </div>
 
           <div :style="{background: colorPickerColor}">
@@ -166,7 +166,7 @@ ul li {
 h3 {
   color: white;
   font-size: 3vh;
-  font-family: "Helvetica Neue", sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 .element_btn {
@@ -177,7 +177,9 @@ h3 {
   flex-wrap: wrap;
   align-items: center;
   cursor: pointer;
-  flex: 1 0 50%;
+  margin: 0 0.5vh 0.5vh;
+  padding: 0.5vh 0.5vh 0.5vh 0.5vh;
+  flex: 1 0 33%;
 }
 
 .element_btn:hover {

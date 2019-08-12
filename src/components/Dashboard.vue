@@ -25,8 +25,8 @@
                   </v-layer>
 
                   <v-layer ref="layer">
+                    <v-image v-for="img in canvas_to_json.images" :config="img" v-on:dragEnd="updateNodePosition(img)"/>
                     <v-rect v-for="item in canvas_to_json.elements.rectangles" :config="item" v-on:dragEnd="updateNodePosition(item)" />
-                  
                     
                     <div v-if="textFontsLoaded">
                       <v-text v-for="item in canvas_to_json.text" :key="item.name" :config="item" v-on:dblclick="editText(item)" 
@@ -38,7 +38,7 @@
                       <v-circle v-for="item in canvas_to_json.elements.circles" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)"></v-circle>
                     </div>
                     
-                    <v-image v-for="img in canvas_to_json.images" :config="img" v-on:dragEnd="updateNodePosition(img)"/>
+
                     <v-line v-for="item in canvas_to_json.elements.lines" :config="item"/>
  
                     <v-circle v-for="item in canvas_to_json.elements.circles" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)"></v-circle>
@@ -469,7 +469,7 @@ label {
 }
 
 .main {
-  margin-left: 60vh;
+  margin-left: 70vh;
   padding: 0px 10px;
   background-color: lightgray;
   height: 100%;

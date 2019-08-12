@@ -2,15 +2,16 @@
     <div class="default">
 
         <nav class="topnav">
-          <h3 class="logo">gda</h3>
+          <h3 class="logo">DesignVision</h3>
             <ul>
-                <li><a href="https://github.com/silvia-odwyer/photon">GitHub</a></li>
                 <li>
-                  <button id="download" v-on:click="exportImage">Download</button>
+                  <button id="download" v-on:click="exportImage">Download
+                    <font-awesome-icon icon="arrow-alt-circle-down" size="s"/>
+                  </button>
                 </li>
-                <li>
+                <!-- <li>
                   <button v-on:click="exportAsJSON">Export As JSON</button>
-                </li>
+                </li> -->
             </ul>
           <h1>
             <img :src="user.avatarUrl() ? user.avatarUrl() : '/avatar-placeholder.png'" class="avatar">
@@ -114,6 +115,7 @@ nav {
   top: 0; /* Position the navbar at the top of the page */
   z-index: 2;
   width: 100%; /* Full width */
+  background-image: linear-gradient(90deg, navy, fuchsia);
 }
 
 nav li {
@@ -130,6 +132,8 @@ ul li {
   text-decoration: none;
   list-style: none;
   padding-right: 4em;
+  margin-top: 0em;
+  margin-bottom: 0em;
 }
 
 ul li:hover {
@@ -146,6 +150,7 @@ ul li:hover {
 .logo {
   color: white;
   font-size: 1em;
+  font-family: "Helvetica";
   margin-left: 1em;
   padding: 14px 16px;
   flex-grow: 1;
@@ -170,6 +175,20 @@ a {
 
 li:hover{
   cursor: pointer;
+}
+
+button {
+  margin-top: 0em;
+  margin-bottom: 0em;
+  font-family: "Roboto";
+  background-color: rgb(0, 174, 255);
+  border: solid black 0.1vh;
+  border-radius: 1vh;
+  cursor: pointer;
+}
+
+button:hover {
+  color: whitesmoke;
 }
 
 .topnav {
