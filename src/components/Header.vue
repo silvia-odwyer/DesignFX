@@ -10,19 +10,33 @@
                   </button>
                 </li>
                 <!-- <li>
-                  <button v-on:click="exportAsJSON">Export As JSON</button>
                 </li> -->
             </ul>
           <h1>
             <img :src="user.avatarUrl() ? user.avatarUrl() : '/avatar-placeholder.png'" class="avatar">
-            <small><span class="sign-out">(<a href="#" @click.prevent="signOut">Sign Out</a>)</span></small>
           </h1>
           <h2 class="user-info">
             <small>
-            {{ user.username ? user.username.substring(0, user.username.length - 14) : user.identityAddress }}
+              {{ user.username ? user.username.substring(0, user.username.length - 14) : user.identityAddress }}
             </small>
+             <font-awesome-icon :icon="dropdownIcon" size="s" v-on:click="toggleDropdown"/>
+
           </h2>
+                    
+                <transition name="slide-fade">
+                  <div class="w4 mt1" v-if="showDropdown">
+                    <ul class="dropdown">
+                      <li>
+                        <button v-on:click="exportAsJSON">Export As JSON</button>
+                      </li>
+                     <li class="list">
+                        <a href="#" @click.prevent="signOut">Sign Out</a>
+                      </li>
+                    </ul>
+                </div>
+              </transition>
         </nav>
+      
     </div>
 </template>
 
@@ -36,6 +50,8 @@ export default {
   props: ['user', 'transformer', 'canvas_to_json'],
   data () {
     return {
+      showDropdown: false,
+      dropdownIcon: "sort-down"
     }
   },
   methods: {
@@ -86,6 +102,10 @@ export default {
         link.click();
         document.body.removeChild(link);
         // delete link;
+    },
+    toggleDropdown() {
+      this.showDropdown = !this.showDropdown;
+      this.dropdownIcon = this.showDropdown ? "sort-up" : "sort-down";
     },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default
@@ -173,6 +193,10 @@ a {
   color: #f2f2f2;
 }
 
+a:hover {
+  color: black;
+}
+
 li:hover{
   cursor: pointer;
 }
@@ -196,4 +220,33 @@ button:hover {
   flex-direction: row;
   justify-content: flex-end;
 }
+
+.slide-fade-enter-active {
+  transition: all .3s ease;
+}
+.slide-fade-leave-active {
+  transition: all .2s ease;
+}
+.slide-fade-enter { 
+  transform: translateY(-50px);
+  opacity: 0;
+}
+.slide-fade-leave-to {
+ transform: translateY(-50px);
+  opacity: 0; 
+}
+
+font-awesome-icon {
+  cursor: pointer;
+}
+
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+
+}
+
 </style>

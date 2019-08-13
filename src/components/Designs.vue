@@ -1,12 +1,9 @@
 <template>
     <article>
-      <h3>Design Templates</h3>
-      <p v-on:click="createNewDesign()">Create Design</p>
-      <p v-on:click="save()">Save</p>
+
         
       <div class="img_templates">
            <div v-for="(template, index) in designTemplates" v-bind:key="template.name" v-on:click="displayTemplate(index)">
-            <p>{{template.name}}</p>
             <img :src="require(`@/assets/${template.imageThumbnail}`)"/>
           </div>
       </div>              
@@ -138,14 +135,12 @@ img {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-
+  margin-top: 5vh;
 }
 
 .img_templates div {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  flex: 1 0 50%;
+  flex: 1 0 33%;
+  padding: 0 0.5vh;
   cursor: pointer;
 }
 
