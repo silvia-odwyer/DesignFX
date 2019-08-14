@@ -1,7 +1,7 @@
 <template>
-    <div class="default">
+    <div>
 
-        <nav class="topnav">
+        <nav class="topnav" v-bind:style='gradientStyle'>
           <h3 class="logo">DesignVision</h3>
             <ul>
                 <li>
@@ -29,6 +29,12 @@
                       <li>
                         <button v-on:click="exportAsJSON">Export As JSON</button>
                       </li>
+                      <li v-on:click="showOptions">
+                        Options
+                      </li>
+                      <li v-on:click="changeNavGradient">
+                        Change Gradient
+                      </li>
                      <li class="list">
                         <a href="#" @click.prevent="signOut">Sign Out</a>
                       </li>
@@ -36,14 +42,16 @@
                 </div>
               </transition>
         </nav>
-      
+      <Modal v-if="showOptionsModal">
+        <p>hi there</p>
+      </Modal>
     </div>
 </template>
 
 <script>
 /* eslint-disable */
 import { userSession } from '../userSession'
-
+import Modal from "@/components/Modal.vue"
 
 export default {
   name: 'header',
@@ -51,8 +59,15 @@ export default {
   data () {
     return {
       showDropdown: false,
-      dropdownIcon: "sort-down"
+      dropdownIcon: "sort-down",
+      showOptionsModal: false,
+      gradientStyle: "background-image: linear-gradient(90deg, darkorange, fuchsia)",
+      gradients: [["blue", "fuchsia"], ["#3494E6", "#EC6EAD"], ["#67B26F", "#4ca2cd"], ["#36D1DC", "#5B86E5"], ["blue", "fuchsia"], ["#1c92d2", "#f2fcfe"], ["#000000", "#0f9b0f"], ["#CB356B", "#BD3F32"], ["#3A1C71", "#D76D77", "#FFAF7B"], ["#283c86", "#45a247", ["#159957", "#155799"], ["#000046", "#1CB5E0"]]],
+      totalGradientStyle: "background: #6190E8;  /* fallback for old browsers */\nbackground: -webkit-linear-gradient(to right, #A7BFE8, #6190E8);  /* Chrome 10-25, Safari 5.1-6 */\nbackground: linear-gradient(to right, #A7BFE8, #6190E8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */"
     }
+  },
+  components: {
+    Modal
   },
   methods: {
     exportImage() {
@@ -107,6 +122,14 @@ export default {
       this.showDropdown = !this.showDropdown;
       this.dropdownIcon = this.showDropdown ? "sort-up" : "sort-down";
     },
+    changeNavGradient() {
+      let substr = this.gradientStyle.substring(0, 41);
+      console.log(substr);
+      let ran_num = this.getRandomNumber(0, this.gradients.length - 1);
+      let gradient_cols = this.gradients[ran_num].join(", ");
+      substr += gradient_cols + ")";
+      this.gradientStyle = substr;
+    },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default
         .then((todosText) => {
@@ -118,9 +141,15 @@ export default {
           this.notes = notes
         })
     },
-
+    showOptions() {
+      console.log("show options");
+      this.showOptionsModal = true;
+    },
     signOut () {
       userSession.signUserOut(window.location.href)
+    },
+    getRandomNumber(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
     }
   }
 }
@@ -135,7 +164,7 @@ nav {
   top: 0; /* Position the navbar at the top of the page */
   z-index: 2;
   width: 100%; /* Full width */
-  background-image: linear-gradient(90deg, navy, fuchsia);
+
 }
 
 nav li {

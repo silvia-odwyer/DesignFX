@@ -37,7 +37,10 @@
             :selectedNode="selectedNode"
             :transformer="transformer"
             :designTemplates="designTemplates"
+            :changesMade="changesMade"
             @updateCanvasToJson="updateCanvas"
+            @toggleModal="toggleModal"
+            @editChangesMade="editChangesMade"
             ></component>
 
             <!-- Content -->
@@ -60,7 +63,7 @@ import Background from "@/components/Background.vue";
 
 export default {
   name: 'header',
-  props: ['user', 'canvas_to_json', 'designTemplates', 'allShapes', 'transformer', 'image_template', 'ifTextOptions', 'selectedNode'],
+  props: ['user', 'canvas_to_json', 'designTemplates', 'allShapes', 'transformer', 'image_template', 'ifTextOptions', 'changesMade', 'selectedNode'],
   components: {
       Designs, Elements, Text, Images
   },
@@ -103,6 +106,12 @@ export default {
     updateCanvas: function(canvas_to_json) {
       this.canvas_to_json_mut = canvas_to_json;
       this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
+    },
+    toggleModal: function() {
+      this.$emit("toggleModal");
+    },
+    editChangesMade: function(result) {
+      this.$emit("editChangesMade", result);
     },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default

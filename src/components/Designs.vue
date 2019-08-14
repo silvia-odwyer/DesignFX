@@ -25,7 +25,7 @@ import layout7 from "@/assets/stockholm.png";
 
 export default {
   name: 'designs',
-  props: ['user', 'image_template', 'designTemplates', 'canvas_to_json', 'transformer'],
+  props: ['user', 'image_template', 'designTemplates', 'canvas_to_json', 'transformer', 'changesMade'],
   data () {
     return {
     img: null,
@@ -60,6 +60,10 @@ export default {
       };
     },
     displayTemplate(template_index) {
+      console.log("changes made", this.changesMade);
+      if (this.changesMade) {
+        this.$emit('toggleModal');
+      }
       this.removeTransformer();
       var template_copy = cloneDeepWith(this.designTemplates[template_index]);
       this.canvas_to_json_mut = template_copy;
@@ -74,10 +78,15 @@ export default {
             app.canvas_to_json_mut.images.push(img_obj);
             console.log("imgs", app.canvas_to_json.images);
             app.updateCanvasToJson();
+            
+            // Reset changes made back to false, since this is a new design.
+            this.$emit("editChangesMade", false);
           };
           newImg.src = this.designImageLinks[template_copy.name];
         }
 
+        // Reset changes made back to false, since this is a new design.
+        this.$emit("editChangesMade", false);
     },
     loadImage() {
       if (template_copy.imageThumbnail != "" ) {

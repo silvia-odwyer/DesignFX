@@ -5,7 +5,7 @@
 
       <Sidebar :canvas_to_json="canvas_to_json" :allShapes="allShapes" :transformer="$refs.transformer" 
                 :image_template="image_template" :ifTextOptions="ifTextOptions" :selectedNode="selectedNode" :designTemplates="designTemplates"
-                @updateCanvasToJson="updateCanvas"></Sidebar>
+                @updateCanvasToJson="updateCanvas" :changesMade="changesMade" @toggleModal="toggleModal" @editChangesMade="editChangesMade"></Sidebar>
           
           <div class="main">
             <div class="main_content">
@@ -38,7 +38,6 @@
                       <v-circle v-for="item in canvas_to_json.elements.circles" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)"></v-circle>
                     </div>
                     
-
                     <v-line v-for="item in canvas_to_json.elements.lines" :config="item"/>
  
                     <v-circle v-for="item in canvas_to_json.elements.circles" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)"></v-circle>
@@ -51,10 +50,11 @@
                 </v-stage>
               </section>
           </div>
-          <button v-on:click="save">Save</button>
+            <button v-on:click="save">Save</button>
+            <button v-on:click="toggleModal">Show Modal</button>
 
           </div>
-
+          <Modal v-if="showModal" @close="toggleModal"></Modal>
     </div>
   </div>
 </template>
@@ -65,6 +65,7 @@ import designTemplatesJSON from "@/assets/json/designTemplates.json"
 import { userSession } from '../userSession'
 import Header from "@/components/Header.vue"
 import Sidebar from "@/components/Sidebar.vue";
+import Modal from "@/components/Modal.vue";
 
 var STORAGE_FILE = 'notes.json'
 var IMAGE_STORAGE_FILE = "image.PNG";
@@ -86,7 +87,8 @@ export default {
   props: ['user'],
   components: {
     Header,
-    Sidebar
+    Sidebar,
+    Modal
   },
   created() {
     WebFontLoader.load({
@@ -125,7 +127,9 @@ export default {
         background: {},
         backgroundColor: "#13466A"
       },
-      textFontsLoaded: false
+      textFontsLoaded: false,
+      showModal: false,
+      changesMade: false
     }
   },
   watch: {
@@ -167,7 +171,12 @@ export default {
             };
       this.canvas_to_json.background = backgroundRect;
     },
+    
     updateCanvas: function(canvas_to_json) {
+
+      // Changes have been made to the canvas, therefore it must be saved
+      // so that auto-saving can occur, etc.,
+      this.changesMade = true;
       this.resetAllShapes();      
 
       let backgroundColor = canvas_to_json.backgroundColor;
@@ -212,6 +221,11 @@ export default {
       }
 
     },
+    toggleModal() {
+      console.log("toggle modal")
+      this.showModal = !this.showModal;
+    },
+
     setFontLoaded() {
       console.log("Google Font Loaded");
       this.$emit('font-loaded');
@@ -380,6 +394,10 @@ export default {
       // remove transformer
       transformerNode.detach();
       
+    },
+    editChangesMade: function(result) {
+      console.log("changes made DASH", result);
+      this.changesMade = result;
     },
      displayTemplate(img) {
       console.log("display template")
