@@ -2,34 +2,54 @@
     <ul>
       <h3>Elements</h3>
       <div class="elements">
-          <div class="element_btn" v-on:click="addShapeElement('rectangle')">
-            <font-awesome-icon icon="square-full" size="4x"/>
+          <div class="element_btn" v-on:click="addShapeElement('rectangle', 'solid')">
+            <font-awesome-icon icon="square-full" size="4x" style="color: red"/>
             <p>Rectangle</p>
           </div>
 
-          <div class="element_btn" v-on:click="addShapeElement('circle')">
-            <font-awesome-icon icon="ellipsis-h" size="4x"/>
+          <div class="element_btn" v-on:click="addShapeElement('circle', 'solid')">
+            <font-awesome-icon icon="circle" size="4x" style="color: orange"/>
             <p>Circle</p>
           </div>
 
-          <div class="element_btn" v-on:click="addShapeElement('ellipse')">
+          <div class="element_btn" v-on:click="addShapeElement('ellipse', 'solid')">
             <font-awesome-icon icon="circle" size="4x"/>
             <p>Ellipse</p>
           </div>
 
-          <div class="element_btn" v-on:click="addShapeElement('line')">
+          <div class="element_btn" v-on:click="addShapeElement('line', 'solid')">
             <font-awesome-icon icon="chart-line" size="4x"/>
             <p>Line</p>
           </div>
+      </div>
+      
+      <h2> Gradients </h2>
+      <div class="elements">
 
-          <div :style="{background: colorPickerColor}">
+          <div class="element_btn" v-on:click="addShapeElement('rectangle', 'gradient')">
+            <font-awesome-icon icon="square-full" size="4x"/>
+            <p>Rectangle</p>
+          </div>   
+
+          <div class="element_btn" v-on:click="addShapeElement('circle', 'gradient')">
+            <font-awesome-icon icon="circle" size="4x"/>
+            <p>Circle</p>
+          </div>   
+
+          <div class="element_btn" v-on:click="addShapeElement('ellipse', 'gradient')">
+            <font-awesome-icon icon="square-full" size="4x"/>
+            <p>Ellipse</p>
+          </div>   
+
+          <div class="elementOptions" v-if="showElementOptions">
+            <h4>Element Options</h4>
+            <h5>Fill</h5>
               <color-picker
                   :color="colorPickerColor"
                   @changeColor="changeColor"
               />
           </div>
-          <li v-on:click="save()">Save</li>
-          <li v-on:click="clear()">Clear</li>
+
       </div>              
     </ul>
 </template>
@@ -57,14 +77,16 @@ export default {
   data () {
     return {
       colorPickerColor: null,
-      canvasShapes: null
+      canvasShapes: null,
+      showElementOptions: false
     }
   },
   components: {
     colorPicker
   },
   methods: {
-    addShapeElement(shape_name) {
+    addShapeElement(shape_name, fill) {
+      this.showElementOptions = true;
       console.log("canvas shapes", this.canvasShapes);
       var shape_list = this.canvasShapes[shape_name];
       let name = `${shape_name}${shape_list.length + 1}`;
@@ -88,18 +110,15 @@ export default {
                 y: 10,
                 width: 100,
                 height: 100,
-                fill: this.colorPickerColor,
                 name: name,
                 draggable: true
             };
             break;
-
         case "circle":
            shape = {
             x : 160, 
             y: 180, 
             radius: 50, 
-            fill: this.colorPickerColor, 
             name: name,
             draggable: true
             }
@@ -113,11 +132,23 @@ export default {
               },
               x: 100, 
               y: 100,
-              fill: this.colorPickerColor,
               draggable: true,
               name: name
             };
             break;
+      }
+
+      // Add fill to element 
+      switch (fill) {
+        case "solid":
+          shape.fill = this.colorPickerColor;
+          break;
+
+        case "gradient":
+          shape.fillLinearGradientStartPoint = { x: -50, y: -50 };
+          shape.fillLinearGradientEndPoint = { x: 250, y: 250 };
+          shape.fillLinearGradientColorStops = [0, this.colorPickerColor, 1, 'yellow'];
+          break;
       }
       shape_list.push(shape);
       this.allShapes.push(shape);

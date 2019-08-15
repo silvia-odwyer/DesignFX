@@ -558,4 +558,8 @@ h4 {
   width: 100%;
 }
 
+#stage {
+  margin-left: auto;
+  margin-right: auto;
+}
 </style>

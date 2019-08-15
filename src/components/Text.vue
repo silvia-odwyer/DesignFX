@@ -18,7 +18,7 @@
             <label>Font Size</label>
             <input value="text" v-model="fontSize" v-on:change="changeFontSize"/>
 
-            <div :style="{background: textColor}">
+            <div>
                 <color-picker
                     :color="textColor"
                     @changeColor="changeColor"
