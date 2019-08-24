@@ -19,7 +19,7 @@
   
       <article class="landing_hero">
         <article class="landing_text">
-          <h1>Graphic Design Made Easy</h1>
+          <h1>Supercharge your Graphic Design</h1>
           <p>Supercharge your design process.
           </p>
           
@@ -30,7 +30,7 @@
         </article>
   
         <article class="landing_image">
-          <img src="/demo.png" id="img"/>
+          <img src="../assets/images/demo.png" id="img"/>
         </article>
       </article>
   
@@ -69,22 +69,14 @@
 
             </div>
           </section>
-            
-
-
-
-
-
 
       </article>
   
-
-  
       <footer>
         <div class="footer_lhs">
-          <h1>Photon</h1>
-          <p>Image processing with WebAssembly.</p>
-          <p>&copy; Copyright 2019. All Rights Reserved. Software open-sourced under Apache License 2.0.</p>
+          <h1>DesignVision</h1>
+          <p>Graphic design software.</p>
+          <p>&copy; Copyright 2019, Silvia O'Dwyer. All Rights Reserved. Software open-sourced under Apache License 2.0.</p>
   
         </div>
   
@@ -117,6 +109,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 .hello {
   height: 100%;
   display: flex;
@@ -125,6 +118,11 @@ export default {
 }
 
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap');
+@import url('https://rsms.me/inter/inter.css');
+html { font-family: 'Inter', sans-serif; }
+@supports (font-variation-settings: normal) {
+  html { font-family: 'Inter var', sans-serif; }
+}
 
 html, body {
   margin: 0;
@@ -139,8 +137,8 @@ h1{
 }
 
 h1, h2, h3 {
-  font-family: "Segoe UI", sans-serif;
-
+  font-family: "Inter var", sans-serif;
+  color: black;
 }
 
 p {
@@ -175,7 +173,7 @@ img {
 
 .content {
   margin-left: 15vh;
-  font-family: "Roboto", sans-serif;
+  font-family: "Inter var", sans-serif;
 }
 
 nav ul li {
@@ -208,14 +206,11 @@ a:hover {
 	grid-template-rows: auto;
 	grid-template-areas: "lhero_left lhero_right";
 
-  font-family: "Roboto", sans-serif;
-
 }
 
 .landing_text {
   grid-area: lhero_left;
   width: 60%;
-  margin-top: 20vh;
 }
 
 #img, #js_img, #wasm_img, #img3, #img2 {
@@ -224,7 +219,6 @@ a:hover {
 
 
 .landing_text h1 {
-  color: white;
   font-size: 3em;
 }
 
@@ -281,7 +275,8 @@ button {
   position: relative;
   padding: 0.5em 1em;
   outline: none;
-  background-color: rgb(255, 51, 102);
+  background-color: rgb(0, 0, 175);
+  /* background-color: rgb(255, 51, 102); */
 }
 
 button:hover {
@@ -296,7 +291,7 @@ button:hover {
   bottom: 0;
   left: 0;
   right: 0;
-  border: 4px solid rgb(255, 51, 102);
+  border: 4px solid rgb(0, 0, 175);
   transform-origin: center;
   transform: scale(1);
 }
@@ -316,7 +311,7 @@ button:hover {
   color: white;
   padding: 0.5em 1em;
   outline: none;
-  border: solid rgb(255, 51, 102) 0.1em;
+  border: solid rgb(0, 0, 175) 0.1em;
   background-color: transparent;
 }
 
@@ -337,19 +332,19 @@ button:hover {
 }
 
 .btn_fill {
-    background-color: rgb(255, 51, 102);
+    background-color: rgb(0, 0, 175);
     color: white;
 }
 
 .btn_outline {
   color: rgb(255, 51, 102);
   background-color: transparent;
-  border: 2px solid rgb(255, 51, 102);
+  border: 2px solid rgb(0, 0, 175);
 }
 
 .btn-outline:hover {
   color: white;
-  background-color: rgb(255, 51, 102);
+  background-color: rgb(0, 0, 175);
 }
 
 .features_list {

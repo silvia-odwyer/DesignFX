@@ -6,7 +6,7 @@
 
 html, body, #dashboard {
   height: 100%;
-  background-color: lightgray;
+  background-color: rgb(211, 211, 211);
 }
 
 body {
@@ -17,10 +17,6 @@ h3 {
   color: white;
   font-family: "Roboto", sans-serif;
   padding-top: 4vh;
-}
-
-* {
-  font-family: "Roboto", sans-serif;
 }
 
 .avatar {
