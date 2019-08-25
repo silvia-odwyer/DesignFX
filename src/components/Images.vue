@@ -20,7 +20,6 @@
           </li>
           <img v-for="user_img in user_images" :src="user_img.image.src" v-on:click="addImage(user_img)">
 
-
           <canvas id="canvas"></canvas>
 
           <button v-on:click="saveToBlockstack">Save To Blockstack</button>
@@ -49,17 +48,20 @@ export default {
         layout_imgs: [{img_src: layout1, layout_name: "Travel"}, {img_src: layout2, layout_name: "Lemonade"}, 
         {img_src: layout3,  layout_name: "Summer Collection"}],
         user_images: [],
-        img_num: 0
+        img_num: 0,
+        canvas_to_json_mut: this.canvas_to_json
     }
   },
   mounted() {
-    // this.fetchData();
+    this.fetchData();
   },
   methods: {
     addImage(img) {
       let img_obj = {image: img.image, draggable: true, name: img.layout_name}
-      this.images.push(img_obj);
+
       this.allShapes.push(img_obj);
+      this.canvas_to_json_mut.images.push(img_obj);
+      this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
     },
     uploadImage() {
 
