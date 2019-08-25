@@ -42,7 +42,7 @@ import layout6 from "@/assets/summer_collection.png";
 
 export default {
   name: 'images',
-  props: ['user', 'allShapes'],
+  props: ['user', 'allShapes', 'canvas_to_json'],
   data () {
     return {
         img: null,
@@ -53,7 +53,7 @@ export default {
     }
   },
   mounted() {
-    this.fetchData();
+    // this.fetchData();
   },
   methods: {
     addImage(img) {

@@ -39,12 +39,13 @@
   
           <section class="guide_pane">
             <section>
-              <h2>Write once, run anywhere.</h2>
-              <p>Photon can be executed:</p>
+              <h2>50+ Templates</h2>
+              <p>Create a multitude of designs from our range of pre-set templates.</p>
+              <p>You can create: </p>
               <ul>
-                <li>In the browser via JS</li>
-                <li>On Node.JS</li>
-                <li>Natively on any machine</li>
+                <li></li>
+                <li></li>
+                <li></li>
               </ul>
               <p>Photon compiles to WebAssembly, which allows the execution of native-speed code in the browser and on Node.JS. 
                 This means incredible performance and since Photon's core library is written in Rust, it promises security and safety.

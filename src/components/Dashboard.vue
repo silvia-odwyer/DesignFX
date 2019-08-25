@@ -146,6 +146,8 @@ export default {
     // this.loadDesign();
     console.log("mounted dashboard", this.canvas_to_json);
     this.initCanvas();
+
+    this.initDefaultFonts();
   },
   methods: {
     displayLayout(img) {
@@ -155,6 +157,12 @@ export default {
         // set image only when it is loaded
         this.image_template = {image: image, draggable: true, name: img.layout_name};
       };
+    },
+
+    initDefaultFonts() {
+      if (this.textFontsLoaded) {
+        return;
+      }
     },
 
     // Initialise the canvas by creating a background rect, etc.,

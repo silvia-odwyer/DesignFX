@@ -20,7 +20,7 @@
             </select> 
 
             <label>Text Content</label>
-            <input value="text" v-model="textContent" v-on:change="changeTextContent"/>
+            <input value="text" v-model="textContent" v-on:input="changeTextContent"/>
 
             <label>Font Size</label>
             <input value="text" v-model="fontSize" v-on:change="changeFontSize"/>

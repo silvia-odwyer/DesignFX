@@ -12,17 +12,19 @@
                 <!-- <li>
                 </li> -->
             </ul>
-          <h1>
-            <img :src="user.avatarUrl() ? user.avatarUrl() : '/avatar-placeholder.png'" class="avatar">
-          </h1>
-          <h2 class="user-info">
-            <small>
-              {{ user.username ? user.username.substring(0, user.username.length - 14) : user.identityAddress }}
-            </small>
-             <font-awesome-icon :icon="dropdownIcon" size="s" v-on:click="toggleDropdown"/>
 
-          </h2>
-                    
+          <div class="user_dropdown">
+            <h1>
+              <img :src="user.avatarUrl() ? user.avatarUrl() : '/avatar-placeholder.png'" class="avatar">
+            </h1>
+            <h2 class="user-info" v-on:click="toggleDropdown">
+              <small>
+                {{ user.username ? user.username.substring(0, user.username.length - 14) : user.identityAddress }}
+              </small>
+              <font-awesome-icon :icon="dropdownIcon" size="s" />
+
+            </h2>
+          </div> 
                 <transition name="slide-fade">
                   <div class="w4 mt1" v-if="showDropdown">
                     <ul class="dropdown">
@@ -233,15 +235,16 @@ li:hover{
 button {
   margin-top: 0em;
   margin-bottom: 0em;
+  padding: 0.8em;
   font-family: "Roboto";
-  background-color: rgb(0, 174, 255);
+  background-color: rgb(39, 86, 216);
   border: solid black 0.1vh;
   border-radius: 1vh;
   cursor: pointer;
 }
 
-button:hover {
-  color: whitesmoke;
+#download:hover {
+  background-color: rgb(22, 62, 192);
 }
 
 .topnav {
@@ -276,6 +279,28 @@ font-awesome-icon {
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 
+}
+
+.user_dropdown {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 0.7em;
+  margin-right: 0.1em;
+}
+
+ul, h1, h2 {
+  margin-top: 0.2em;
+  margin-bottom: 0;
+}
+
+ul {
+  padding-right: 0em;
+  margin-right: 0em;
+}
+
+.user-info {
+  cursor: pointer;
 }
 
 </style>
