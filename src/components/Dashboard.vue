@@ -52,7 +52,7 @@
                 </section>
             </div>
               <button v-on:click="save">Save</button>
-              <!-- <button v-on:click="toggleModal">Show Modal</button> -->
+              <button v-on:click="toggleModal">Show Modal</button>
             </div>
             </div>
             <Modal v-if="showModal" @close="toggleModal"></Modal>
@@ -539,11 +539,7 @@ h4 {
   letter-spacing: 4px;
 }
 
-.content {
-  grid-area: "main_left";
-  width: 80%;
-     
-}
+
 
 .colour_scheme {
   border: solid transparent 0.1em;
@@ -554,31 +550,24 @@ h4 {
   padding-left: 4em;
 }
 
-.main_content {
-  display: grid;
-  grid-template-columns: 75% 25%;
-  grid-template-rows: auto;
-  grid-template-areas: "main_left main_right";
-}
+// .under_header {
+//   display: grid;
+//   grid-template-columns: 20% 80%;
+//   grid-template-rows: auto;
+//   grid-template-areas: "sidebar_area main_area";
+// }
 
-.under_header {
-  display: grid;
-  grid-template-columns: 20% 80%;
-  grid-template-rows: auto;
-  grid-template-areas: "sidebar_area main_area";
-}
+// .sidebar {
+//   grid-area: "sidebar_area";
+// }
 
-.sidebar {
-  grid-area: "sidebar_area";
-}
-
-.main {
-  grid-area: "main_area";
-}
+// .main {
+//   grid-area: "main_area";
+// }
 
 .content {
   background-color: white;
-  width: 100%;
+  width: 80%;
 }
 
 #stage {

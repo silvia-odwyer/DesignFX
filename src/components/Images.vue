@@ -1,31 +1,29 @@
 <template>
-    <ul>
-          
+    <div>
       <h3>Images</h3>
       <ul>
-          <li v-on:click="addImage(layout_imgs[0])">Add Image</li>
-
-          <h5>Upload Image </h5>
           <li>
-              <input v-on:change="uploadImage()" class="file-input" type="file" id='img_uploader' name="upload-image">
-                  <span class="file-cta">
+            <label class="custom-file-upload file-input" name="upload-image">
+                <input type="file" id="img_uploader" v-on:change="uploadImage()"/>
+                Upload Image
+                <span class="file-cta">
                     <span class="file-icon">
                       <i class="fas fa-upload"></i>
                     </span>
-                    <span class="file-label">
-                      Choose an image...
-                    </span>
                   </span>
-
+            </label>
           </li>
-          <img v-for="user_img in user_images" :src="user_img.image.src" v-on:click="addImage(user_img)">
+          
+          <div class="img_templates">
+            <img v-for="user_img in user_images" :src="user_img.image.src" v-on:click="addImage(user_img)">
+          </div>
 
           <canvas id="canvas"></canvas>
 
           <button v-on:click="saveToBlockstack">Save To Blockstack</button>
 
       </ul>              
-    </ul>
+    </div>
 </template>
 
 <script>
@@ -152,6 +150,30 @@ ul li {
   cursor: pointer;
   color: silver;
   font-family: "Helvetica Neue", sans-serif;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.img_templates {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 5vh;
+}
+
+.img_templates img {
+  flex: 1 0 33%;
+  padding: 0 0.5vh;
+  cursor: pointer;
 }
 
 </style>

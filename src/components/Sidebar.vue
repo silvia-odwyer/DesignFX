@@ -145,16 +145,14 @@ export default {
   z-index: 1;
   top: 0;
   left: 0;
+  position: fixed;
   background-color: rgb(31, 31, 31);
   overflow-x: hidden;
   padding-top: 20px;
-  position: fixed;
+  color: rgb(105, 105, 105);
+  display: block;
 }
 
-.sidebar {
-  display: block;
-  color: rgb(105, 105, 105);
-}
 
 .sidebar_left_bar {
   grid-area: sidebar_left;
@@ -167,6 +165,9 @@ export default {
 .sidebar_right_bar {
   grid-area: sidebar_right;
   margin-left: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
   background-color: rgb(41, 48, 57);
 }
 

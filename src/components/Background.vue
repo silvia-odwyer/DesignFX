@@ -12,7 +12,6 @@
             <p>Add Gradient</p>
           </div>
 
-
           <div :style="{background: colorPickerColor}">
               <color-picker
                   :color="colorPickerColor"
