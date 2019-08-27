@@ -3,59 +3,60 @@
     <div class="default">
       <Header :user="user" :transformer="$refs.transformer" :canvas_to_json="canvas_to_json"></Header>
 
-      <Sidebar :canvas_to_json="canvas_to_json" :allShapes="allShapes" :transformer="$refs.transformer" 
-                :image_template="image_template" :ifTextOptions="ifTextOptions" :selectedNode="selectedNode" :designTemplates="designTemplates"
-                @updateCanvasToJson="updateCanvas" :changesMade="changesMade" @toggleModal="toggleModal" @editChangesMade="editChangesMade"></Sidebar>
-          
-          <div class="main">
-            <div class="main_content">
+      <div class="under_header">
+        <Sidebar class="sidebar" :canvas_to_json="canvas_to_json" :allShapes="allShapes" :transformer="$refs.transformer" 
+                  :image_template="image_template" :ifTextOptions="ifTextOptions" :selectedNode="selectedNode" :designTemplates="designTemplates"
+                  @updateCanvasToJson="updateCanvas" :changesMade="changesMade" @toggleModal="toggleModal" @editChangesMade="editChangesMade"></Sidebar>
             
-              <section class="content">
-                
-                <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown" id="stage" >
+            <div class="main">
+              <div class="main_content">
+              
+                <section class="content">
                   
-                  <v-layer ref="layer2">
-                    <v-image :config="image_template" />
-
-                  </v-layer>
-
-                  <v-layer>
-                    <v-rect :config="canvas_to_json.background"/>
-
-                  </v-layer>
-
-                  <v-layer ref="layer">
-                    <v-image v-for="img in canvas_to_json.images" :config="img" v-on:dragEnd="updateNodePosition(img)"/>
-                    <v-rect v-for="item in canvas_to_json.elements.rectangles" :config="item" v-on:dragEnd="updateNodePosition(item)" />
+                  <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown" id="stage" >
                     
-                    <div v-if="textFontsLoaded">
-                      <v-text v-for="item in canvas_to_json.text" :key="item.name" :config="item" v-on:dblclick="editText(item)" 
-                      v-on:dragEnd="updateNodePosition(item)"
-                      v-on:click="showTextOptions"/>
-                    </div>
+                    <v-layer ref="layer2">
+                      <v-image :config="image_template" />
 
-                    <div v-if="!textFontsLoaded">
+                    </v-layer>
+
+                    <v-layer>
+                      <v-rect :config="canvas_to_json.background"/>
+
+                    </v-layer>
+
+                    <v-layer ref="layer">
+                      <v-image v-for="img in canvas_to_json.images" :config="img" v-on:dragEnd="updateNodePosition(img)"/>
+                      <v-rect v-for="item in canvas_to_json.elements.rectangles" :config="item" v-on:dragEnd="updateNodePosition(item)" />
+                      
+                      <div v-if="textFontsLoaded">
+                        <v-text v-for="item in canvas_to_json.text" :key="item.name" :config="item" v-on:dblclick="editText(item)" 
+                        v-on:dragEnd="updateNodePosition(item)"
+                        v-on:click="showTextOptions"/>
+                      </div>
+
+                      <div v-if="!textFontsLoaded">
+                        <v-circle v-for="item in canvas_to_json.elements.circles" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)"></v-circle>
+                      </div>
+                      
+                      <v-line v-for="item in canvas_to_json.elements.lines" :config="item"/>
+  
                       <v-circle v-for="item in canvas_to_json.elements.circles" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)"></v-circle>
-                    </div>
-                    
-                    <v-line v-for="item in canvas_to_json.elements.lines" :config="item"/>
- 
-                    <v-circle v-for="item in canvas_to_json.elements.circles" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)"></v-circle>
-                    
-                    <v-ellipse v-for="item in canvas_to_json.elements.ellipses" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)"></v-ellipse>
+                      
+                      <v-ellipse v-for="item in canvas_to_json.elements.ellipses" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)"></v-ellipse>
 
-                    <v-transformer ref="transformer" />
-                  </v-layer>
+                      <v-transformer ref="transformer" />
+                    </v-layer>
 
-                </v-stage>
-              </section>
-          </div>
-            <button v-on:click="save">Save</button>
-            <button v-on:click="toggleModal">Show Modal</button>
-
-          </div>
-          <Modal v-if="showModal" @close="toggleModal"></Modal>
-    </div>
+                  </v-stage>
+                </section>
+            </div>
+              <button v-on:click="save">Save</button>
+              <!-- <button v-on:click="toggleModal">Show Modal</button> -->
+            </div>
+            </div>
+            <Modal v-if="showModal" @close="toggleModal"></Modal>
+      </div>
   </div>
 </template>
 
@@ -125,7 +126,7 @@ export default {
         text: [],
         images: [],
         background: {},
-        backgroundColor: "#13466A"
+        backgroundColor: "#FFFFFF"
       },
       textFontsLoaded: false,
       showModal: false,
@@ -466,7 +467,6 @@ export default {
     font-style: normal;
 }
 
-
 label {
   margin-bottom: 0;
   // width: 100%;
@@ -559,6 +559,21 @@ h4 {
   grid-template-columns: 75% 25%;
   grid-template-rows: auto;
   grid-template-areas: "main_left main_right";
+}
+
+.under_header {
+  display: grid;
+  grid-template-columns: 20% 80%;
+  grid-template-rows: auto;
+  grid-template-areas: "sidebar_area main_area";
+}
+
+.sidebar {
+  grid-area: "sidebar_area";
+}
+
+.main {
+  grid-area: "main_area";
 }
 
 .content {

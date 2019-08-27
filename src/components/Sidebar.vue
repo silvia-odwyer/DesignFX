@@ -20,7 +20,7 @@
                         Text 
                     </li>
                     <li @click="setSidebarItem('background')" :class="{ active : activeBtn == 'background' }">
-                        <font-awesome-icon icon="align-justify" size="2x"/>
+                        <font-awesome-icon icon="clone" size="2x"/>
                         Background 
                     </li>
                 </div>
@@ -133,21 +133,22 @@ export default {
 
 .sidebar_content {
   display: grid;
-  grid-template-columns: 25% 75%;
+  grid-template-columns: 20% 80%;
   grid-template-rows: auto;
   grid-template-areas: "sidebar_left sidebar_right";
+  height: 100%;
 }
 
 .sidebar {
   height: 100%;
   width: 60vh;
-  position: fixed;
   z-index: 1;
   top: 0;
   left: 0;
   background-color: rgb(31, 31, 31);
   overflow-x: hidden;
   padding-top: 20px;
+  position: fixed;
 }
 
 .sidebar {
@@ -157,6 +158,8 @@ export default {
 
 .sidebar_left_bar {
   grid-area: sidebar_left;
+  position: fixed;
+  height: 100%;
   margin-left: 0;
   background-color: rgb(14, 19, 24);
 }
