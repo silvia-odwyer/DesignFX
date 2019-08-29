@@ -75,11 +75,16 @@ export default {
     addImage(img) {
       let app = this;
       var imageObj = new Image();
+      
       imageObj.onload = function() {
-        let img_obj = {image: imageObj, draggable: true, name: img.name}
+        let name = img.name + this.img_num;
+        let img_obj = {image: imageObj, draggable: true, name: name}
+        console.log("IMG NAME in ADDIMAGE", img);
+        console.log("IMG OBJ in ADDIMAGE", img_obj);
+        
         app.allShapes.push(img_obj);
         app.canvas_to_json_mut.images.push(img_obj);
-        console.log("IMG OBJ", img_obj);
+
         app.$emit('updateCanvasToJson', app.canvas_to_json_mut);
 
       }
@@ -91,7 +96,7 @@ export default {
         let reader = new FileReader();
         reader.onloadend = function () {
             let img_src = reader.result; // Set the global image to the path of the file on the client's PC.
-            let img_obj = {img_src: img_src, layout_name: `img_${app.img_num}`};
+            let img_obj = {img_src: img_src};
             app.user_images.push(img_obj);
             app.img_num += 1;
             app.addToImageList(img_obj);
@@ -172,6 +177,8 @@ export default {
         id: `${id_num}`,
         name: name
       });
+
+      img_obj.name = name;
       this.uidCount++;
       console.log("IMAGE", {id: id_num, name: name});
 

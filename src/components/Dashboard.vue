@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <div class="default">
-      <Header :user="user" :transformer="$refs.transformer" :canvas_to_json="canvas_to_json"></Header>
+      <Header :user="user" :transformer="$refs.transformer" :canvas_to_json="canvas_to_json" @updateCanvasToJson="updateCanvas"></Header>
 
       <div class="under_header">
         <Sidebar class="sidebar" :canvas_to_json="canvas_to_json" :allShapes="allShapes" :transformer="$refs.transformer" 
@@ -94,7 +94,7 @@ export default {
   created() {
     WebFontLoader.load({
       google: {
-        families: ['Oswald', 'Droid Serif', 'Montserrat']
+        families: ['Oswald', 'Droid Serif', 'Montserrat', 'Lato']
       },
       active: this.setFontLoaded,
     });
@@ -117,6 +117,7 @@ export default {
       list: [],
       designTemplates: designTemplatesJSON["designTemplates"],
       canvas_to_json: {
+        filename: "",
         elements: {
           rectangles: [],
           circles: [],
@@ -258,6 +259,9 @@ export default {
 
       // find clicked rect by its name
       const name = e.target.name();
+
+      console.log("THIS.ALLSHAPES", this.allShapes);
+      
       const rect = this.allShapes.find(r => r.name === name);
 
       this.changeSidebarComponent(rect);
@@ -386,6 +390,7 @@ export default {
     },
     resetCanvasToJson() {
       this.canvas_to_json = {
+        filename: "",
         elements: {
           rectangles: [],
           circles: [],

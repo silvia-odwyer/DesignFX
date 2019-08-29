@@ -182,7 +182,7 @@ li:hover{
 
 .sidebar_left_bar li {
   margin-bottom: 8vh;
-  font-family: "Roboto", sans-serif;
+  font-family: "Lato", sans-serif;
   padding-top: 3vh;
   padding-right: 1vh;
   
