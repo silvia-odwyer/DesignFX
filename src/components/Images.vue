@@ -13,9 +13,16 @@
                   </span>
             </label>
         </li>
-        <article class="img_templates">
-          <img v-for="user_img in user_images" :src="user_img.img_src" v-on:click="addImage(user_img)">
+        <article class="imgs">
+          <div v-for="user_img in user_images" class="img">
+            <img :src="user_img.img_src" v-on:click="addImage(user_img)">
+             <a @click.prevent="deleteImage(user_img)" class="delete pull-right" href="#">x</a> 
+
+          </div>
+
         </article>
+
+        <LoadingAnimation v-if="!imagesLoaded"></LoadingAnimation>
 
     </ul>              
     </div>
@@ -25,33 +32,32 @@
 /* eslint-disable */
 import { userSession } from '../userSession'
 import image from "@/assets/daisies_small.jpg";
-import layout1 from "@/assets/travel.png";
-import layout2 from "@/assets/lemonade.png";
-import layout3 from "@/assets/summer_collection.png";
-import layout4 from "@/assets/travel.png";
-import layout5 from "@/assets/lemonade.png";
-import layout6 from "@/assets/summer_collection.png";
+import LoadingAnimation from "@/components/LoadingAnimation.vue";
 
 var IMAGE_LIST_FILE = "image_list.json";
 
 export default {
   name: 'designs',
-  props: ['user', 'allShapes'],
+  props: ['user', 'allShapes', 'canvas_to_json'],
   data () {
     return {
         img: null,
-        layout_imgs: [{img_src: layout1, layout_name: "Travel"}, {img_src: layout2, layout_name: "Lemonade"}, 
-        {img_src: layout3,  layout_name: "Summer Collection"}],
         user_images: [],
         img_num: 0,
         images: [],
         imageList: [],
-        uidCount: 0
+        blockstack: window.blockstack,
+        uidCount: 0,
+        canvas_to_json_mut: null,
+        imagesLoaded: false
     }
   },
   mounted() {
-      this.fetchData();
       this.fetchImageList();
+      this.canvas_to_json_mut = this.canvas_to_json;
+  },
+  components: {
+    LoadingAnimation
   },
   watch: {
     imageList: {
@@ -60,6 +66,9 @@ export default {
         return userSession.putFile(IMAGE_LIST_FILE, JSON.stringify(imageList) );
       },
       deep: true
+    },
+    canvas_to_json: function(canvas_to_json) {
+      this.canvas_to_json_mut = canvas_to_json;
     }
   },
   methods: {
@@ -67,9 +76,12 @@ export default {
       let app = this;
       var imageObj = new Image();
       imageObj.onload = function() {
-        let img_obj = {image: imageObj, draggable: true, name: img.layout_name}
-        app.images.push(img_obj);
+        let img_obj = {image: imageObj, draggable: true, name: img.name}
         app.allShapes.push(img_obj);
+        app.canvas_to_json_mut.images.push(img_obj);
+        console.log("IMG OBJ", img_obj);
+        app.$emit('updateCanvasToJson', app.canvas_to_json_mut);
+
       }
       imageObj.src = img.img_src;
     },
@@ -93,77 +105,77 @@ export default {
 
 
     },
-    fetchData() {
-        userSession.getFile("image1.PNG") // decryption is enabled by default
-         .then((buffer) => {
-             let app = this;
-          var canvas = document.createElement("canvas");
-          var context = canvas.getContext("2d");
-          var imageData2 = context.createImageData(canvas.width, canvas.height);
-          imageData2.data.set(buffer);
-          context.putImageData(imageData2, 0, 0);
-          
-          let uri = canvas.toDataURL();
-          let canvasToImg = new Image();
-          canvasToImg.onload = () => {
-            let img_obj = {img_src: uri, layout_name: `img_${app.img_num}`};
-            app.user_images.push(img_obj);
-          }
-          canvasToImg.src = uri;
-        })
-    },
     fetchImageList() {
       console.log("fetching image list");
       userSession.getFile(IMAGE_LIST_FILE)
         .then((imageList) => {
           var images = JSON.parse(imageList || '[]')
           this.imageList = images;
+          this.uidCount = images.length;
           this.fetchImages();
         })
 
     },
     fetchImages() {
-      for (let i = 0; i < this.imageList.length; i++) {
-        let image_name = this.imageList[i].name;
-        console.log("FETCHING IMAGE", image_name);
-        userSession.getFile(image_name) // decryption is enabled by default
-         .then((buffer) => {
-           if (buffer == null) {
-             console.log("NULL")
-           }
-           else {
-            let app = this;
-            var canvas = document.createElement("canvas");
-            var context = canvas.getContext("2d");
-            var imageData2 = context.createImageData(canvas.width, canvas.height);
-            imageData2.data.set(buffer);
-            context.putImageData(imageData2, 0, 0);
-            
-            let uri = canvas.toDataURL();
-            let canvasToImg = new Image();
-            canvasToImg.onload = () => {
-              let img_obj = {img_src: uri, layout_name: `img_${app.img_num}`};
-              app.user_images.push(img_obj);
-            }
-            canvasToImg.src = uri;
-           }
+        if (this.imageList.length == 0) {
+            this.imagesLoaded = true;
 
-        })
-        .catch("there was an error")
-      }
+        }
+        else {
+          for (let i = 0; i < this.imageList.length; i++) {
+            console.log("IMAGE LIST @ LOAD", this.imageList);
+              let image_name = this.imageList[i].name;
+                                        
+                    console.log("IMAGE NAME", image_name);
+                    userSession.getFile(image_name) // decryption is enabled by default
+                    .then((buffer) => {
+                      if (buffer != null) {
+                          let app = this;
+                          var canvas = document.createElement("canvas");
+                          var context = canvas.getContext("2d");
+                          var imageData2 = context.createImageData(canvas.width, canvas.height);
+                          imageData2.data.set(buffer);
+                          context.putImageData(imageData2, 0, 0);
+
+                          console.log("IMAGE LIST", app.imageList);
+
+                                                 
+                          
+                          let uri = canvas.toDataURL();
+                          let canvasToImg = new Image();
+                          canvasToImg.onload = () => {
+                            console.log("IMAGE NAME IN ONLOAD", image_name);
+                            let img_obj = {img_src: uri, name: image_name};
+                            app.user_images.push(img_obj);
+                            
+                            // Check if on last iteration
+                            if (i == app.imageList.length - 1) {
+                              app.imagesLoaded = true;
+                              console.log("FINAL USER IMAGES", app.user_images);
+                            }
+                          }
+                          canvasToImg.src = uri;
+
+                      }
+
+                    })
+          }
+        }  
     },
     addToImageList(img_obj) {
       let id_num = this.uidCount;
-      this.uidCount++;
-      console.log("id num", id_num);
+      console.log("ID NUM", id_num);
 
-      let name = `IMAGE_${id_num}.PNG`;
+      let random_id = this.genRandomID();
+      let name = `IMAGE_${random_id}.PNG`;
       this.imageList.unshift({
-        id: this.uidCount++,
+        id: `${id_num}`,
         name: name
       });
+      this.uidCount++;
+      console.log("IMAGE", {id: id_num, name: name});
 
-      console.log(this.imageList);
+  
       this.uploadImageToBlockstack(name, img_obj);
     },
     uploadImageToBlockstack(img_name, img_obj) {
@@ -181,6 +193,28 @@ export default {
       }
       imageElem.src = img_obj.img_src;
     },
+    deleteImage(img) {
+      // remove from image list 
+      this.imageList.splice(this.imageList.indexOf(img), 1);
+      // console.log("IMAGE LIST", this.imageList);
+      
+      blockstack.deleteFile(IMAGE_LIST_FILE, {wasSigned: false});
+    },
+    getRandomNumber(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+    genRandomID() {
+      let random_id = "";
+      let ID_LENGTH = 10;
+      let alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+      for (var j = 0; j < ID_LENGTH; j++) {
+        let ran_num = this.getRandomNumber(0, alphabet.length - 1);
+        let letter = alphabet[ran_num];
+        random_id += letter;
+      }
+
+      return random_id;
+    }
   }
 }
 </script>
@@ -224,12 +258,20 @@ input[type="file"] {
     cursor: pointer;
 }
 
-.img_templates {
+.imgs {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   margin-top: 5vh;
 }
 
+.delete {
+		display: inline;
+		color: grey;
+		&:hover {
+			text-decoration: none;
+			color: red;
+		}
+	}
 
 </style>
