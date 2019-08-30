@@ -38,7 +38,7 @@ var IMAGE_LIST_FILE = "image_list.json";
 
 export default {
   name: 'designs',
-  props: ['user', 'allShapes', 'canvas_to_json'],
+  props: ['user', 'allShapes', 'canvas_to_json', 'selectedNode'],
   data () {
     return {
         img: null,
@@ -48,13 +48,12 @@ export default {
         imageList: [],
         blockstack: window.blockstack,
         uidCount: 0,
-        canvas_to_json_mut: null,
+        canvas_to_json_mut: this.canvas_to_json,
         imagesLoaded: false
     }
   },
   mounted() {
       this.fetchImageList();
-      this.canvas_to_json_mut = this.canvas_to_json;
   },
   components: {
     LoadingAnimation
@@ -77,16 +76,14 @@ export default {
       var imageObj = new Image();
       
       imageObj.onload = function() {
-        let name = img.name + this.img_num;
+        let name = img.name + app.img_num;
         let img_obj = {image: imageObj, draggable: true, name: name}
-        console.log("IMG NAME in ADDIMAGE", img);
-        console.log("IMG OBJ in ADDIMAGE", img_obj);
         
         app.allShapes.push(img_obj);
         app.canvas_to_json_mut.images.push(img_obj);
 
         app.$emit('updateCanvasToJson', app.canvas_to_json_mut);
-
+        app.img_num++;
       }
       imageObj.src = img.img_src;
     },
@@ -124,7 +121,6 @@ export default {
     fetchImages() {
         if (this.imageList.length == 0) {
             this.imagesLoaded = true;
-
         }
         else {
           for (let i = 0; i < this.imageList.length; i++) {
@@ -144,9 +140,8 @@ export default {
 
                           console.log("IMAGE LIST", app.imageList);
 
-                                                 
-                          
                           let uri = canvas.toDataURL();
+                          console.log("DATA URL", uri);
                           let canvasToImg = new Image();
                           canvasToImg.onload = () => {
                             console.log("IMAGE NAME IN ONLOAD", image_name);
@@ -156,13 +151,17 @@ export default {
                             // Check if on last iteration
                             if (i == app.imageList.length - 1) {
                               app.imagesLoaded = true;
-                              console.log("FINAL USER IMAGES", app.user_images);
                             }
                           }
                           canvasToImg.src = uri;
-
                       }
-
+                      else {
+                        // Check if on last iteration
+                        if (i == app.imageList.length - 1) {
+                            app.imagesLoaded = true;
+                        }
+                      }
+                      
                     })
           }
         }  
@@ -195,7 +194,8 @@ export default {
           context.drawImage(imageElem, 0, 0);
           var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
           var buffer = imageData.data.buffer; // buffer is a ArrayBuffer
-                        
+          let uri = canvas.toDataURL();
+          console.log("UPLOAD URI", uri)
           userSession.putFile(img_name, buffer);
       }
       imageElem.src = img_obj.img_src;

@@ -50,7 +50,15 @@
               />
           </div>
 
-      </div>              
+      </div>       
+
+                <div class="element_btn" v-on:click="addRectangle()">
+            <font-awesome-icon icon="square-full" size="4x"/>
+            <p>Ellipse</p>
+          </div>   
+
+
+
     </ul>
 </template>
 
@@ -66,31 +74,37 @@ export default {
     console.log("canvas to json in elements", this.canvas_to_json);
     this.canvasShapes = {"line" : this.canvas_to_json.elements.lines, "circle": this.canvas_to_json.elements.circles, 
       "rectangle": this.canvas_to_json.elements.rectangles, "ellipse": this.canvas_to_json.elements.ellipses};
-  
-    if (this.selectedNode != undefined) {
-      this.colorPickerColor = this.selectedNode.fill;
-    }
-    else {
-      this.colorPickerColor = "#67F7F7"
-    }
+    
+    this.colorPickerColor = "#67F7F7"
+    
   },
   data () {
     return {
       colorPickerColor: null,
       canvasShapes: null,
-      showElementOptions: false
+      showElementOptions: false,
+      canvas_to_json_mut: this.canvas_to_json
     }
   },
   components: {
     colorPicker
   },
+  watch : {
+    canvas_to_json: function(canvas_to_json) {
+      this.canvas_to_json_mut = canvas_to_json;
+    }
+  },
   methods: {
+    addRectangle() {
+      
+    },
     addShapeElement(shape_name, fill) {
       this.showElementOptions = true;
-      console.log("canvas shapes", this.canvasShapes);
+
       var shape_list = this.canvasShapes[shape_name];
       let name = `${shape_name}${shape_list.length + 1}`;
       var shape;
+      var index_name;
 
       switch (shape_name) {
         case "line": 
@@ -102,6 +116,7 @@ export default {
             draggable: true,
             name: name
           };
+          index_name = "lines";
           break;
 
         case "rectangle":
@@ -110,9 +125,10 @@ export default {
                 y: 10,
                 width: 100,
                 height: 100,
-                name: name,
+                name: "name",
                 draggable: true
             };
+            index_name = "rectangles";
             break;
         case "circle":
            shape = {
@@ -121,7 +137,8 @@ export default {
             radius: 50, 
             name: name,
             draggable: true
-            }
+            };
+            index_name = "circles";
             break;
         
         case "ellipse": 
@@ -135,6 +152,7 @@ export default {
               draggable: true,
               name: name
             };
+            index_name = "ellipses";
             break;
       }
 
@@ -150,8 +168,10 @@ export default {
           shape.fillLinearGradientColorStops = [0, this.colorPickerColor, 1, 'yellow'];
           break;
       }
-      shape_list.push(shape);
+
       this.allShapes.push(shape);
+      this.canvas_to_json_mut.elements[index_name].push(shape);
+      this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
     },
     changeColor(color) {
       let hex = color.rgba.toHexString();

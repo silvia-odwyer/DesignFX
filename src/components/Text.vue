@@ -9,7 +9,7 @@
           <ul>
             <li v-on:click="addText(headingTextElem)"><h1>Heading</h1></li>
             <li v-on:click="addText(secondaryHeadingTextElem)"><h2>Secondary Heading</h2></li>
-            <li v-on:click="addText(paragraphTextElem)">Paragraph text</li>
+            <li v-on:click="addText(paragraphTextElem)">Paragrafph text</li>
           </ul>
 
           <div v-if="mutableIfTextOptions" class="textOptions">
@@ -110,7 +110,7 @@ export default {
 
       this.allShapes.push(simpleText);
       this.mutableIfTextOptions = true;
-      this.selectedNode = simpleText;
+      // this.selectedNode = simpleText;
     },
     changeColor(color) {
       console.log("changed color");

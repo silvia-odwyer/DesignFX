@@ -1,16 +1,16 @@
 <template>
     <div>
-
         <nav class="topnav" v-bind:style='gradientStyle'>
           <h3 class="logo">DesignVision</h3>
             <ul>
+                <li>
+                  <input v-model="filename" type="text" class="text_field" v-on:input="updateFilename">
+                </li>
                 <li>
                   <button id="download" v-on:click="exportImage">Download
                     <font-awesome-icon icon="arrow-alt-circle-down" size="s"/>
                   </button>
                 </li>
-                <!-- <li>
-                </li> -->
             </ul>
 
           <div class="user_dropdown">
@@ -45,7 +45,6 @@
               </transition>
         </nav>
       <Modal v-if="showOptionsModal">
-        <p>hi there</p>
       </Modal>
     </div>
 </template>
@@ -56,14 +55,16 @@ import { userSession } from '../userSession'
 import Modal from "@/components/Modal.vue"
 
 export default {
-  name: 'header',
+  name: 'appHeader',
   props: ['user', 'transformer', 'canvas_to_json'],
   data () {
     return {
       showDropdown: false,
       dropdownIcon: "sort-down",
+      filename: "Design1",
       showOptionsModal: false,
-      gradientStyle: "background-image: linear-gradient(90deg, darkorange, fuchsia)",
+      canvas_to_json_mut: null,
+      gradientStyle: "background-image: linear-gradient(90deg, black, navy)",
       gradients: [["blue", "fuchsia"], ["#3494E6", "#EC6EAD"], ["#67B26F", "#4ca2cd"], ["#36D1DC", "#5B86E5"], ["blue", "fuchsia"], ["#1c92d2", "#f2fcfe"], ["#000000", "#0f9b0f"], ["#CB356B", "#BD3F32"], ["#3A1C71", "#D76D77", "#FFAF7B"], ["#283c86", "#45a247", ["#159957", "#155799"], ["#000046", "#1CB5E0"]]],
       totalGradientStyle: "background: #6190E8;  /* fallback for old browsers */\nbackground: -webkit-linear-gradient(to right, #A7BFE8, #6190E8);  /* Chrome 10-25, Safari 5.1-6 */\nbackground: linear-gradient(to right, #A7BFE8, #6190E8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */"
     }
@@ -71,7 +72,19 @@ export default {
   components: {
     Modal
   },
+  mounted() {
+    this.canvas_to_json_mut = this.canvas_to_json;
+  },
+  watch: {
+    canvas_to_json: function(canvas_to_json) {
+      this.canvas_to_json_mut = canvas_to_json;
+    }
+  },
   methods: {
+    updateFilename() {
+      this.canvas_to_json_mut.filename = this.filename;
+      this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
+    },
     exportImage() {
       const transformerNode = this.transformer.getStage();
       const stage = transformerNode.getStage();
@@ -174,7 +187,6 @@ nav li {
   display: block;
   color: #f2f2f2;
   text-align: center;
-  padding: 14px 16px;
   text-decoration: none;
   font-family: "Roboto", sans-serif;
 }
@@ -182,9 +194,9 @@ nav li {
 ul li {
   text-decoration: none;
   list-style: none;
-  padding-right: 4em;
-  margin-top: 0em;
+  margin-top: 0.2em;
   margin-bottom: 0em;
+  font-size: 1em;
 }
 
 ul li:hover {
@@ -236,7 +248,10 @@ button {
   margin-top: 0em;
   margin-bottom: 0em;
   padding: 0.8em;
+  margin-right: 2em;
+  margin-top: 0.8em;
   font-family: "Roboto";
+  font-size: 1em;
   background-color: rgb(39, 86, 216);
   border: solid black 0.1vh;
   border-radius: 1vh;
@@ -247,10 +262,32 @@ button {
   background-color: rgb(22, 62, 192);
 }
 
+ul {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 .topnav {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
+}
+
+.text_field {
+  background: transparent;
+  color: black;
+  font-size: 1em;
+  border: none;
+  width: 10vh;
+  margin-top: 1.5em;
+  margin-right: 2em;
+  padding-right: 0em;
+}
+
+.text_field:hover, .text_field:active, .text_field:focus {
+  border: solid white 0.1em;
+  border-radius: 0.1em;
 }
 
 .slide-fade-enter-active {
@@ -285,7 +322,7 @@ font-awesome-icon {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin-top: 0.7em;
+  margin-top: 1em;
   margin-right: 0.1em;
 }
 
