@@ -29,20 +29,6 @@ export default {
     colorPicker
   },
   watch : {
-    selectedNode : function (value) {
-
-
-      if (value != null) {
-        if (value.name.startsWith("text")) {
-          // Update text options
-          this.textContent = value.text
-          this.textColor = value.textColor;
-          this.fontFamily = value.fontFamily;
-          this.fontSize = value.fontSize;
-
-        }
-      }
-    },
     ifTextOptions: function(ifTextOptions) {
       this.ifTextOptions = ifTextOptions;
     }
