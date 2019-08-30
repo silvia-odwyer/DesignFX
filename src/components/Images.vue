@@ -16,7 +16,7 @@
         <article class="imgs">
           <div v-for="user_img in user_images" class="img">
             <img :src="user_img.img_src" v-on:click="addImage(user_img)">
-             <a @click.prevent="deleteImage(user_img)" class="delete pull-right" href="#">x</a> 
+            <a @click.prevent="deleteImage(user_img)" class="delete pull-right" href="#">x</a> 
 
           </div>
 
@@ -114,37 +114,37 @@ export default {
           var images = JSON.parse(imageList || '[]')
           this.imageList = images;
           this.uidCount = images.length;
+          
+          // Now that we have the image names, we can fetch each individual image.
           this.fetchImages();
-        })
+          })
 
     },
     fetchImages() {
+        // No images to fetch
         if (this.imageList.length == 0) {
             this.imagesLoaded = true;
         }
         else {
           for (let i = 0; i < this.imageList.length; i++) {
-            console.log("IMAGE LIST @ LOAD", this.imageList);
-              let image_name = this.imageList[i].name;
-                                        
-                    console.log("IMAGE NAME", image_name);
-                    userSession.getFile(image_name) // decryption is enabled by default
+              let image_name = this.imageList[i].name; 
+              let app = this;
+              
+              userSession.getFile(image_name) // decryption is enabled by default
                     .then((buffer) => {
                       if (buffer != null) {
-                          let app = this;
+
                           var canvas = document.createElement("canvas");
                           var context = canvas.getContext("2d");
-                          var imageData2 = context.createImageData(canvas.width, canvas.height);
-                          imageData2.data.set(buffer);
-                          context.putImageData(imageData2, 0, 0);
-
-                          console.log("IMAGE LIST", app.imageList);
+                          var imageData = context.createImageData(canvas.width, canvas.height);
+                          imageData.data.set(buffer);
+                          context.putImageData(imageData, 0, 0);
 
                           let uri = canvas.toDataURL();
-                          console.log("DATA URL", uri);
+
                           let canvasToImg = new Image();
                           canvasToImg.onload = () => {
-                            console.log("IMAGE NAME IN ONLOAD", image_name);
+
                             let img_obj = {img_src: uri, name: image_name};
                             app.user_images.push(img_obj);
                             
@@ -167,24 +167,20 @@ export default {
         }  
     },
     addToImageList(img_obj) {
-      let id_num = this.uidCount;
-      console.log("ID NUM", id_num);
-
+      // img_obj contains the image source as base64
       let random_id = this.genRandomID();
       let name = `IMAGE_${random_id}.PNG`;
+
       this.imageList.unshift({
-        id: `${id_num}`,
+        id: random_id,
         name: name
       });
 
       img_obj.name = name;
-      this.uidCount++;
-      console.log("IMAGE", {id: id_num, name: name});
-
   
-      this.uploadImageToBlockstack(name, img_obj);
+      this.uploadImageToBlockstack(img_obj);
     },
-    uploadImageToBlockstack(img_name, img_obj) {
+    uploadImageToBlockstack(img_obj) {
       let canvas = document.createElement("canvas");
       let context = canvas.getContext("2d");
       
@@ -195,17 +191,25 @@ export default {
           var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
           var buffer = imageData.data.buffer; // buffer is a ArrayBuffer
           let uri = canvas.toDataURL();
-          console.log("UPLOAD URI", uri)
-          userSession.putFile(img_name, buffer);
+          userSession.putFile(img_obj.name, buffer)
+          .then(() => {
+                console.log("UPLOADED TO BLOCKSTACK")
+          });
       }
       imageElem.src = img_obj.img_src;
     },
     deleteImage(img) {
       // remove from image list 
       this.imageList.splice(this.imageList.indexOf(img), 1);
-      // console.log("IMAGE LIST", this.imageList);
-      
-      blockstack.deleteFile(IMAGE_LIST_FILE, {wasSigned: false});
+
+      this.user_images.splice(this.user_images.indexOf(img), 1);
+
+      console.log("DELETING", img.name);
+
+      userSession.deleteFile(img.name)
+        .then(() => {
+          console.log("DELETED IMAGE SUCCESSFULLY");
+      })
     },
     getRandomNumber(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -236,7 +240,6 @@ ul li {
   color: silver;
   font-family: "Helvetica Neue", sans-serif;
 }
-
 
 ul li {
   text-decoration: none;
@@ -270,6 +273,21 @@ input[type="file"] {
   flex-direction: row;
   flex-wrap: wrap;
   margin-top: 5vh;
+}
+
+.imgs div {
+  flex: 1 0 39%;
+  padding: 0 0.5vh;
+  cursor: pointer;
+}
+
+.img {
+  display: flex;
+}
+
+.imgs div img {
+  height: 100%;
+  width: 100%;
 }
 
 .delete {
