@@ -51,14 +51,6 @@
           </div>
 
       </div>       
-
-                <div class="element_btn" v-on:click="addRectangle()">
-            <font-awesome-icon icon="square-full" size="4x"/>
-            <p>Ellipse</p>
-          </div>   
-
-
-
     </ul>
 </template>
 
@@ -95,14 +87,11 @@ export default {
     }
   },
   methods: {
-    addRectangle() {
-      
-    },
     addShapeElement(shape_name, fill) {
       this.showElementOptions = true;
 
       var shape_list = this.canvasShapes[shape_name];
-      let name = `${shape_name}${shape_list.length + 1}`;
+      var name = `${shape_name}${shape_list.length + 1}`;
       var shape;
       var index_name;
 
@@ -125,7 +114,7 @@ export default {
                 y: 10,
                 width: 100,
                 height: 100,
-                name: "name",
+                name: name,
                 draggable: true
             };
             index_name = "rectangles";
@@ -168,6 +157,8 @@ export default {
           shape.fillLinearGradientColorStops = [0, this.colorPickerColor, 1, 'yellow'];
           break;
       }
+
+      console.log("ADDED SHAPE", shape);
 
       this.allShapes.push(shape);
       this.canvas_to_json_mut.elements[index_name].push(shape);

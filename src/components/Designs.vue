@@ -1,7 +1,5 @@
 <template>
     <article>
-
-        
       <div class="img_templates">
            <div v-for="(template, index) in designTemplates" v-bind:key="template.name" v-on:click="displayTemplate(index)">
             <img :src="require(`@/assets/${template.imageThumbnail}`)"/>
