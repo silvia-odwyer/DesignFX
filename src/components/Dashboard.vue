@@ -5,7 +5,7 @@
 
       <div class="under_header">
         <Sidebar class="sidebar" :canvas_to_json="canvas_to_json" :allShapes="allShapes" :transformer="$refs.transformer" 
-                  :image_template="image_template" :ifTextOptions="ifTextOptions" :selectedNode="selectedNode" :designTemplates="designTemplates"
+                  :ifTextOptions="ifTextOptions" :selectedNode="selectedNode" :designTemplates="designTemplates"
                   @updateCanvasToJson="updateCanvas" :changesMade="changesMade" @toggleModal="toggleModal" @editChangesMade="editChangesMade"></Sidebar>
             
             <div class="main">
@@ -14,11 +14,6 @@
                 <section class="content">
                   
                   <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown" id="stage" >
-                    
-                    <v-layer ref="layer2">
-                      <v-image :config="image_template" />
-
-                    </v-layer>
 
                     <v-layer>
                       <v-rect :config="canvas_to_json.background"/>
@@ -75,7 +70,7 @@ import layout1 from "@/assets/travel.png";
 import layout2 from "@/assets/lemonade.png";
 import layout3 from "@/assets/summer_collection.png";
 import layout4 from "@/assets/travel.png";
-import layout5 from "@/assets/lemonade.png";
+import layout5 from "@/assets/template_images/city.jpg";
 import layout6 from "@/assets/summer_collection.png";
 
 import WebFontLoader from 'webfontloader';
@@ -112,12 +107,11 @@ export default {
       selectedShapeName: '',
       selectedNode: null,
       ifTextOptions: false,
-      image_template: null,
       currentSidebarComponent: "designs",
       list: [],
       designTemplates: designTemplatesJSON["designTemplates"],
       canvas_to_json: {
-        filename: "",
+        filename: "Design1",
         elements: {
           rectangles: [],
           circles: [],
@@ -152,15 +146,6 @@ export default {
     this.initDefaultFonts();
   },
   methods: {
-    displayLayout(img) {
-      const image = new window.Image();
-      image.src = img.img_src;
-      image.onload = () => {
-        // set image only when it is loaded
-        this.image_template = {image: image, draggable: true, name: img.layout_name};
-      };
-    },
-
     initDefaultFonts() {
       if (this.textFontsLoaded) {
         return;
@@ -190,7 +175,7 @@ export default {
       this.resetAllShapes();      
 
       let backgroundColor = canvas_to_json.backgroundColor;
-      console.log("background color", backgroundColor);
+
       let backgroundRect = {
         x: 0,
         y: 0,
@@ -202,6 +187,7 @@ export default {
       canvas_to_json.background = backgroundRect;
 
       this.canvas_to_json = canvas_to_json;
+
       this.updateAllShapes();
     },
     showTextOptions() {
@@ -209,7 +195,6 @@ export default {
       this.ifTextOptions = true;
     },
     save() {
-
       localStorage.setItem('storage', JSON.stringify(this.canvas_to_json));
     },
     loadDesign() {
@@ -261,7 +246,7 @@ export default {
       const name = e.target.name();
 
       console.log("THIS.ALLSHAPES", this.allShapes);
-      
+
       const rect = this.allShapes.find(r => r.name === name);
 
       this.changeSidebarComponent(rect);
@@ -334,24 +319,6 @@ export default {
           console.log("not a rect");
         }
     },
-    drawToCanvas() {
-      var canvas = document.getElementById("canvas");
-      var context = canvas.getContext("2d");
-      
-      var imageElem = new Image();
-
-      imageElem.onload = () => {
-        context.drawImage(imageElem, 0, 0);
-        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-
-        var array = imageData.data; // array is a Uint8ClampedArray
-        var buffer = imageData.data.buffer; // buffer is a ArrayBuffer
-                    
-        userSession.putFile("image1.PNG", buffer);
-      }
-      imageElem.src = this.image;
-     
-    },
     updateAllShapes() {
       let elem_keys = Object.keys(this.canvas_to_json.elements);
 
@@ -364,14 +331,11 @@ export default {
           this.allShapes.push(shape);
         }
       };
-
-
-      console.log("imgsds", this.canvas_to_json.images);
       for (var j = 0; j < this.canvas_to_json.images.length; j++) {
         let img = this.canvas_to_json.images[j];
 
         this.allShapes.push(img);
-      //   console.log("all shapes from imgs", this.allShapes);
+
       }
 
       for (var i = 0; i < this.canvas_to_json.text.length; i++) {
@@ -386,11 +350,10 @@ export default {
     },
     resetAllShapes() {
       this.allShapes = [];
-
     },
     resetCanvasToJson() {
       this.canvas_to_json = {
-        filename: "",
+        filename: "Design1",
         elements: {
           rectangles: [],
           circles: [],
@@ -431,17 +394,6 @@ export default {
       imageElem.src = img.img_src;
      
     },
-    stageToJSON() {
-      const transformerNode = this.$refs.transformer.getStage();
-      const stage = transformerNode.getStage();
-      
-      var image = stage.toImage({
-        callback(img) {
-          console.log(img);
-        }
-      });
-    
-    },
     fetchData () {
       userSession.getFile(STORAGE_FILE) // decryption is enabled by default
         .then((todosText) => {
@@ -463,8 +415,6 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-@import url("https://fonts.googleapis.com/css?family=Source+Code+Pro:300,400,500,600,700|Oswald");
-
 @font-face {
     font-family: 'FontAwesome';
     src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/fonts/fontawesome-webfont.ttf');

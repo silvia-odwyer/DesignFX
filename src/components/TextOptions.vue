@@ -7,10 +7,10 @@
             </select> 
 
         <label>Text Content</label>
-        <TextInputField :text="selectedNode.text" @updateTextValue="changeTextContent"></TextInputField>
+        <TextInputField :text="textContent" @updateTextValue="changeTextContent"></TextInputField>
 
         <label>Font Size</label>
-        <TextInputField :text="selectedNode.fontSize" @updateTextValue="changeFontSize"></TextInputField>
+        <TextInputField :text="fontSize" @updateTextValue="changeFontSize"></TextInputField>
 
         <div>
             <colorPicker
@@ -40,7 +40,7 @@ export default {
       this.canvas_to_json_mut = canvas_to_json;
     },
     selectedNode: function(selectedNode) {
-        if (selectedNode != null) {
+        if (selectedNode != null || selectedNode != undefined) {
             if (selectedNode.name.startsWith("text")) {
                 // Update text options
                 this.textContent = selectedNode.text;
@@ -48,8 +48,8 @@ export default {
                 this.fontFamily = selectedNode.fontFamily;
                 this.fontSize = selectedNode.fontSize;
             }
+            this.textNode =  this.canvas_to_json_mut.text.find(elem => elem.name === selectedNode.name);
         }
-        this.textNode =  this.canvas_to_json_mut.text.find(elem => elem.name === selectedNode.name);
     }
   },
   data () {
@@ -69,7 +69,12 @@ export default {
     }
   },
   mounted() {
-    this.textNode =  this.canvas_to_json_mut.text.find(elem => elem.name === this.selectedNode.name);
+    console.log("selectednode.text", this.selectedNode.text);
+    if (this.selectedNode != null || this.selectedNode != undefined) {
+        this.textNode = this.canvas_to_json_mut.text.find(elem => elem.name === this.selectedNode.name);
+        this.textContent = this.textNode.text;
+        this.fontSize = this.textNode.fontSize;
+    }
   },
   methods: {
       
@@ -91,6 +96,7 @@ export default {
     changeTextContent: function(value) {
       if (this.selectedNode != undefined || this.selectedNode != null ) {
         this.textNode.text = value;
+        console.log("text val", value);
         this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
       }
     },
@@ -124,8 +130,9 @@ ul li {
 
 label {
   color: silver;
-  font-family: "Roboto", sans-serif;
+  font-family: "Lato", sans-serif;
   display: block;
+  margin-top: 2vh;
 }
 
 .textOptions {

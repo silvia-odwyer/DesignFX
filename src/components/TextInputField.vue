@@ -41,7 +41,7 @@ div {
 }
 
 input {
-  width: 6.5em;
+  width: 80%;
   color: white;
   font-size: inherit;
   font-family: "Lato", sans-serif;
@@ -51,6 +51,7 @@ input {
 }
 
 span {
+  width: 80%;
   position: absolute;
   bottom: 0;
   left: 0;

@@ -41,15 +41,6 @@
             <p>Ellipse</p>
           </div>   
 
-          <div class="elementOptions" v-if="showElementOptions">
-            <h4>Element Options</h4>
-            <h5>Fill</h5>
-              <color-picker
-                  :color="colorPickerColor"
-                  @changeColor="changeColor"
-              />
-          </div>
-
       </div>       
     </ul>
 </template>
@@ -74,7 +65,6 @@ export default {
     return {
       colorPickerColor: null,
       canvasShapes: null,
-      showElementOptions: false,
       canvas_to_json_mut: this.canvas_to_json
     }
   },
@@ -88,7 +78,6 @@ export default {
   },
   methods: {
     addShapeElement(shape_name, fill) {
-      this.showElementOptions = true;
 
       var shape_list = this.canvasShapes[shape_name];
       var name = `${shape_name}${shape_list.length + 1}`;
@@ -149,9 +138,11 @@ export default {
       switch (fill) {
         case "solid":
           shape.fill = this.colorPickerColor;
+          shape.fillType = "solid";
           break;
 
         case "gradient":
+          shape.fillType = "gradient";
           shape.fillLinearGradientStartPoint = { x: -50, y: -50 };
           shape.fillLinearGradientEndPoint = { x: 250, y: 250 };
           shape.fillLinearGradientColorStops = [0, this.colorPickerColor, 1, 'yellow'];
@@ -163,11 +154,6 @@ export default {
       this.allShapes.push(shape);
       this.canvas_to_json_mut.elements[index_name].push(shape);
       this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
-    },
-    changeColor(color) {
-      let hex = color.rgba.toHexString();
-      this.colorPickerColor = hex;
-      this.selectedNode.fill = hex;
     },
     clear() {
       for (var i = 0; i < this.canvas_to_json.elements.length; i++) {

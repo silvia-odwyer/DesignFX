@@ -202,9 +202,8 @@ export default {
       // remove from image list 
       this.imageList.splice(this.imageList.indexOf(img), 1);
 
+      // user_images contains the image sources of each image
       this.user_images.splice(this.user_images.indexOf(img), 1);
-
-      console.log("DELETING", img.name);
 
       userSession.deleteFile(img.name)
         .then(() => {

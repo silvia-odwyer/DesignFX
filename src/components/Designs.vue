@@ -17,7 +17,7 @@ import layout1 from "@/assets/travel.png";
 import layout2 from "@/assets/lemonade.png";
 import layout3 from "@/assets/summer_collection.png";
 import layout4 from "@/assets/travel.png";
-import layout5 from "@/assets/lemonade.png";
+import layout5 from "@/assets/template_images/city.jpg";
 import layout6 from "@/assets/summer_collection.png";
 import layout7 from "@/assets/stockholm.png";
 
@@ -28,7 +28,7 @@ export default {
     return {
     img: null,
     canvas_to_json_mut: this.canvas_to_json,
-    designImageLinks: {"Travel" : layout4, "Lemonade": layout2, "The Summer Collection" : layout3, "Stockholm": layout7}
+    designImageLinks: {"Travel" : layout4, "Lemonade": layout2, "The Summer Collection" : layout3, "Stockholm": layout7, "City": layout5}
     }
   },
   methods: {
