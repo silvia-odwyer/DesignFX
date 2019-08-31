@@ -7,7 +7,8 @@
                   <input v-model="filename" type="text" class="text_field" v-on:input="updateFilename">
                 </li>
                 <li>
-                  <button id="download" v-on:click="exportImage">Download
+                  <button id="download" v-on:click="exportImage">
+                    Download
                     <font-awesome-icon icon="arrow-alt-circle-down" size="s"/>
                   </button>
                 </li>
@@ -17,10 +18,10 @@
             <h1>
               <img :src="user.avatarUrl() ? user.avatarUrl() : '/avatar-placeholder.png'" class="avatar">
             </h1>
-            <h2 class="user-info" v-on:click="toggleDropdown">
-              <small>
+            <h2 class="user_dropdown" v-on:click="toggleDropdown">
+              <div class="username">
                 {{ user.username ? user.username.substring(0, user.username.length - 14) : user.identityAddress }}
-              </small>
+              </div>
               <font-awesome-icon :icon="dropdownIcon" size="s" />
 
             </h2>
@@ -61,9 +62,9 @@ export default {
     return {
       showDropdown: false,
       dropdownIcon: "sort-down",
-      filename: "Design1",
       showOptionsModal: false,
       canvas_to_json_mut: null,
+      filename: this.canvas_to_json.filename,
       gradientStyle: "background-image: linear-gradient(90deg, black, navy)",
       gradients: [["blue", "fuchsia"], ["#3494E6", "#EC6EAD"], ["#67B26F", "#4ca2cd"], ["#36D1DC", "#5B86E5"], ["blue", "fuchsia"], ["#1c92d2", "#f2fcfe"], ["#000000", "#0f9b0f"], ["#CB356B", "#BD3F32"], ["#3A1C71", "#D76D77", "#FFAF7B"], ["#283c86", "#45a247", ["#159957", "#155799"], ["#000046", "#1CB5E0"]]],
       totalGradientStyle: "background: #6190E8;  /* fallback for old browsers */\nbackground: -webkit-linear-gradient(to right, #A7BFE8, #6190E8);  /* Chrome 10-25, Safari 5.1-6 */\nbackground: linear-gradient(to right, #A7BFE8, #6190E8); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */"
@@ -94,12 +95,16 @@ export default {
       var dataURL = stage.toDataURL({
         pixelRatio: 4
       });
-      this.downloadURI(dataURL, 'new_image.png');
+
+      let filename = this.canvas_to_json_mut.filename;
+
+      console.log("filename", filename);
+      this.downloadURI(dataURL, `${filename}.PNG`);
 
     },
     exportAsJSON() {
       let exportObj = this.canvas_to_json;
-      let exportName = "Canvas2JSON";
+      let exportName = `Canvas2JSON_${this.filename}`;
 
       var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj));
       
@@ -197,6 +202,7 @@ ul li {
   margin-top: 0.2em;
   margin-bottom: 0em;
   font-size: 1em;
+  padding-right: 0em;
 }
 
 ul li:hover {
@@ -268,6 +274,16 @@ ul {
   flex-wrap: wrap;
 }
 
+input {
+  font-family: "Roboto", sans-serif;
+  font-size: 1em;
+}
+
+.username {
+  font-family: "Roboto", sans-serif;
+  font-size: 1em;
+}
+
 .topnav {
   display: flex;
   flex-direction: row;
@@ -276,7 +292,7 @@ ul {
 
 .text_field {
   background: transparent;
-  color: black;
+  color: rgb(207, 202, 202);
   font-size: 1em;
   border: none;
   width: 10vh;
@@ -324,6 +340,7 @@ font-awesome-icon {
   flex-wrap: wrap;
   margin-top: 1em;
   margin-right: 0.1em;
+  cursor: pointer;
 }
 
 ul, h1, h2 {
@@ -334,10 +351,6 @@ ul, h1, h2 {
 ul {
   padding-right: 0em;
   margin-right: 0em;
-}
-
-.user-info {
-  cursor: pointer;
 }
 
 </style>

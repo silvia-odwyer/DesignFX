@@ -1,14 +1,8 @@
 <template>
-<div class="dots">
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
+<div class="loader">
+  <div class="outer"></div>
+  <div class="middle"></div>
+  <div class="inner"></div>
 </div>
 </template>
 
@@ -18,48 +12,50 @@ export default {
 }
 </script>
 
-<style>
-.dots {
-  width: 3em;
-  height: 3em;
-  display: grid;
-  grid-template-rows: repeat(3, 1fr);
-  grid-template-columns: repeat(3, 1fr);
-  justify-items: center;
-  align-items: center;
+<style>.loader {
+  position: relative;
 }
 
-.dots > div {
-  width: 0.5em;
-  height: 0.5em;
-  background-color: #3cefff;
+.outer,
+.middle,
+.inner {
+  border: 3px solid transparent;
+  border-top-color: #3cefff;
+  border-right-color: #3cefff;
   border-radius: 50%;
-  animation: fade 1.5s alternate ease-in-out infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
 }
 
-.dots > div:nth-of-type(2),
-.dots > div:nth-of-type(4) {
-  animation-delay: 0.25s;
+.inner {
+  width: 0.8em;
+  height: 0.8em;
+  margin-left: -0.4em;
+  margin-top: -0.4em;
+  animation: spin 1.5s linear infinite;
 }
 
-.dots > div:nth-of-type(3),
-.dots > div:nth-of-type(5),
-.dots > div:nth-of-type(7) {
-  animation-delay: 0.5s;
+.outer {
+  width: 3.5em;
+  height: 3.5em;
+  margin-left: -1.75em;
+  margin-top: -1.75em;
+  animation: spin 2s linear infinite;
 }
 
-.dots > div:nth-of-type(6),
-.dots > div:nth-of-type(8) {
-  animation-delay: 0.75s;
+.middle {
+  width: 2.1em;
+  height: 2.1em;
+  margin-left: -1.05em;
+  margin-top: -1.05em;
+  animation: spin 1.75s linear reverse infinite;
 }
 
-.dots > div:nth-of-type(9) {
-  animation-delay: 1s;
-}
-
-@keyframes fade {
+@keyframes spin {
   to {
-    opacity: 0.2;
+    transform: rotate(360deg);
   }
 }
+
 </style>

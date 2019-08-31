@@ -46,8 +46,6 @@
                   </v-stage>
                 </section>
             </div>
-              <button v-on:click="save">Save</button>
-              <button v-on:click="toggleModal">Show Modal</button>
             </div>
             </div>
             <Modal v-if="showModal" @close="toggleModal"></Modal>
@@ -341,7 +339,6 @@ export default {
       for (var i = 0; i < this.canvas_to_json.text.length; i++) {
         this.allShapes.push(this.canvas_to_json.text[i]);
       }
-      console.log("updated all shapes", this.allShapes);
 
     },
     editText(text_elem) {
@@ -408,7 +405,30 @@ export default {
 
     signOut () {
       userSession.signUserOut(window.location.href)
-    }
+    },
+    animatePreloader(){
+         let app        = this, 
+             height     = this.preloader.height(),
+             properties = {
+                'margin-top': `-${height}`
+             },
+             options    = {
+                duration: 1000,
+                easing: 'swing',
+                complete(){
+                   app.removePreloader()
+                } 
+             };
+         this.preloader.delay(500).animate(properties, options)
+      },
+      removePreloader(){
+         this.preloader.remove();
+         this.body.removeAttr('style');
+         this.animateWebsite();
+      },
+      animateWebsite(){
+         console.log('lets get pretty');
+      }
   }
 }
 </script>
@@ -529,4 +549,25 @@ h4 {
   margin-left: auto;
   margin-right: auto;
 }
+
+
+.preloader{
+   width:100%;
+   height:100vh;
+   background-color: "black";
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items:center;
+   color: white;
+   font-family: 'Lato', sans-serif;
+   position: relative;
+   }
+
+.frontpage{
+   height: 100vh;
+   background: #34495e;
+}
+
+
 </style>

@@ -32,7 +32,6 @@
             <component v-bind:is="sidebarNameToComponent[currentSidebarComponent]" 
             :canvas_to_json="canvas_to_json" 
             :allShapes="allShapes"
-            :image_template="image_template"
             :ifTextOptions="mutableIfTextOptions"
             :selectedNode="selectedNode"
             :transformer="transformer"
@@ -58,14 +57,16 @@ import { userSession } from '../userSession'
 import Designs from "@/components/Designs.vue";
 import Elements from "@/components/Elements.vue";
 import Text from "@/components/Text.vue";
+import TextOptions from "@/components/TextOptions.vue";
+import ElementOptions from "@/components/ElementOptions.vue";
 import Images from "@/components/Images.vue";
 import Background from "@/components/Background.vue";
 
 export default {
   name: 'header',
-  props: ['user', 'canvas_to_json', 'designTemplates', 'allShapes', 'transformer', 'image_template', 'ifTextOptions', 'changesMade', 'selectedNode'],
+  props: ['user', 'canvas_to_json', 'designTemplates', 'allShapes', 'transformer', 'ifTextOptions', 'changesMade', 'selectedNode'],
   components: {
-      Designs, Elements, Text, Images
+      Designs, Elements, Text, Images, TextOptions, ElementOptions
   },
   watch : {
     selectedNode : function (node) {
@@ -74,18 +75,17 @@ export default {
         return;
       };
       
-      if (node.name.startsWith("circle") || node.name.startsWith("rect")) {
-        this.setSidebarItem("elements");
+      if (this.isNodeElement(node)) {
+        this.setSidebarItem("elementOptions");
       }
       else if (node.name.startsWith("text")) {
-        this.setSidebarItem("text");
-        this.mutableIfTextOptions = true;
+        this.setSidebarItem("textOptions");
       }
     }
   },
   data () {
     return {
-        sidebarNameToComponent: {"designs": Designs, "elements": Elements, "text": Text, "images": Images, "background" : Background},
+        sidebarNameToComponent: {"designs": Designs, "elements": Elements, "elementOptions": ElementOptions, "text": Text, "textOptions": TextOptions, "images": Images, "background" : Background},
         currentSidebarComponent: 'designs',
         activeBtn: "designs",
         canvas_to_json_mut: this.canvas_to_json,
@@ -106,6 +106,20 @@ export default {
     updateCanvas: function(canvas_to_json) {
       this.canvas_to_json_mut = canvas_to_json;
       this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
+    },
+    isNodeElement(node) {
+      let shape_list =  Object.keys(this.canvas_to_json_mut.elements);
+      console.log("SHAPE LIST", shape_list);
+      for (var k = 0; k < shape_list.length; k++) {
+        let shape_name = shape_list[k].substr(0, 3);
+        console.log("NODE NAME", node);
+        console.log("SHAPE NAME", shape_name);
+        if (node.name.startsWith(shape_name)) {
+          console.log("node is an element")
+          return true;
+        }
+      }
+      return false;
     },
     toggleModal: function() {
       this.$emit("toggleModal");

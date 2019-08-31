@@ -48,6 +48,7 @@ export default {
         canvas_to_json_mut: this.canvas_to_json,
         elementNode: null,
         elementColor: "black",
+        elementColor2: "red",
         xStartPoint: 250,
     }
   },

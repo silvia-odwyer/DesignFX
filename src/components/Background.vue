@@ -2,25 +2,16 @@
     <ul>
       <h3>Background</h3>
       <div class="elements">
-          <div class="element_btn" v-on:click="changeBackground('solid')">
-            <font-awesome-icon icon="square-full" size="4x"/>
-            <p>Change Solid Background</p>
-          </div>
 
           <div class="element_btn" v-on:click="changeBackground('gradient')">
             <font-awesome-icon icon="square-full" size="4x"/>
             <p>Add Gradient</p>
           </div>
-
-          <div :style="{background: colorPickerColor}">
-              <color-picker
+          <color-picker
                   :color="colorPickerColor"
                   @changeColor="changeColor"
-              />
-          </div>
-
-          <li v-on:click="save()">Save</li>
-          <li v-on:click="clear()">Clear</li>
+          />
+          
       </div>              
     </ul>
 </template>
@@ -39,17 +30,24 @@ export default {
   data () {
     return {
       colorPickerColor: this.canvas_to_json.background.fill,
+      canvas_to_json_mut: this.canvas_to_json,
+      backgroundFillType: "solid"
     }
   },
   components: {
     colorPicker
   },
+  watch : {
+    canvas_to_json: function(canvas_to_json) {
+      this.canvas_to_json_mut = canvas_to_json;
+    }
+  },
   methods: {
     changeBackground(background_type) {
-
         switch (background_type) {
             case "solid":
-                this.canvas_to_json.background.fill = this.colorPickerColor;
+                this.canvas_to_json_mut.background.fill = this.colorPickerColor;
+                this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
                 break;
 
             case "gradient":
@@ -57,13 +55,16 @@ export default {
                 break;
                 
             default: 
-                this.canvas_to_json.background.fill = this.colorPickerColor;
+                this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
+                this.canvas_to_json_mut.background.fill = this.colorPickerColor;
         }
+
     },
     addGradient() {
-        this.canvas_to_json.background["fillLinearGradientStartPoint"] = { x: -50, y: -50 }
-        this.canvas_to_json.background["fillLinearGradientEndPoint"] = { x: 250, y: 250 };
-        this.canvas_to_json.background["fillLinearGradientColorStops"] = [0, 'red', 1, 'yellow'];
+      this.backgroundFillType = "solid";
+      this.canvas_to_json_mut.background["fillLinearGradientStartPoint"] = { x: -50, y: -50 }
+      this.canvas_to_json_mut.background["fillLinearGradientEndPoint"] = { x: 250, y: 250 };
+      this.canvas_to_json_mut.background["fillLinearGradientColorStops"] = [0, 'red', 1, 'yellow'];
     },
     changeColor(color) {
       let hex = color.rgba.toHexString();
