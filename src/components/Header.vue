@@ -14,12 +14,12 @@
                 </li>
             </ul>
 
-          <div class="user_dropdown">
+          <div class="user_dropdown" v-on:click="toggleDropdown">
             <h1>
               <img :src="user.avatarUrl() ? user.avatarUrl() : '/avatar-placeholder.png'" class="avatar">
             </h1>
-            <h2 class="user_dropdown" v-on:click="toggleDropdown">
-              <div class="username">
+            <h2 class="username">
+              <div>
                 {{ user.username ? user.username.substring(0, user.username.length - 14) : user.identityAddress }}
               </div>
               <font-awesome-icon :icon="dropdownIcon" size="s" />
@@ -282,6 +282,13 @@ input {
 .username {
   font-family: "Roboto", sans-serif;
   font-size: 1em;
+  display: flex;
+  flex-direction: row;
+  margin-top: 1.2em;
+}
+
+.avatar {
+  margin-top: 0.4em;
 }
 
 .topnav {
@@ -338,7 +345,7 @@ font-awesome-icon {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin-top: 1em;
+  margin-top: 0.7em;
   margin-right: 0.1em;
   cursor: pointer;
 }

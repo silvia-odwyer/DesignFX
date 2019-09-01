@@ -33,9 +33,7 @@
 import { userSession } from '../userSession'
 import image from "@/assets/daisies_small.jpg";
 import LoadingAnimation from "@/components/LoadingAnimation.vue";
-
 var IMAGE_LIST_FILE = "image_list.json";
-
 export default {
   name: 'designs',
   props: ['user', 'allShapes', 'canvas_to_json', 'selectedNode'],
@@ -62,6 +60,7 @@ export default {
     imageList: {
       handler: function (imageList) {
         // encryption is now enabled by default
+        console.log("image list being uploaded", imageList);
         return userSession.putFile(IMAGE_LIST_FILE, JSON.stringify(imageList) );
       },
       deep: true
@@ -78,10 +77,9 @@ export default {
       imageObj.onload = function() {
         let name = img.name + app.img_num;
         let img_obj = {image: imageObj, draggable: true, name: name}
-        
+        console.log("image", img_obj);
         app.allShapes.push(img_obj);
         app.canvas_to_json_mut.images.push(img_obj);
-
         app.$emit('updateCanvasToJson', app.canvas_to_json_mut);
         app.img_num++;
       }
@@ -94,9 +92,11 @@ export default {
         reader.onloadend = function () {
             let img_src = reader.result; // Set the global image to the path of the file on the client's PC.
             let img_obj = {img_src: img_src};
+
+            console.log("img src", img_src);
             app.user_images.push(img_obj);
             app.img_num += 1;
-            app.addToImageList(img_obj);
+            app.uploadImageToBlockstack(img_obj)
         }
         if (file) {
             reader.readAsDataURL(file);
@@ -104,21 +104,20 @@ export default {
             /// Error message TODO
             console.log("Could not read file. :(")
         }
-
-
     },
     fetchImageList() {
       console.log("fetching image list");
       userSession.getFile(IMAGE_LIST_FILE)
         .then((imageList) => {
           var images = JSON.parse(imageList || '[]')
+          console.log("IMAGE LIST", images);
+
           this.imageList = images;
           this.uidCount = images.length;
           
           // Now that we have the image names, we can fetch each individual image.
           this.fetchImages();
           })
-
     },
     fetchImages() {
         // No images to fetch
@@ -128,23 +127,23 @@ export default {
         else {
           for (let i = 0; i < this.imageList.length; i++) {
               let image_name = this.imageList[i].name; 
+              let width = this.imageList[i].width;
+              let height = this.imageList[i].height;
               let app = this;
               
               userSession.getFile(image_name) // decryption is enabled by default
                     .then((buffer) => {
                       if (buffer != null) {
-
                           var canvas = document.createElement("canvas");
+                          canvas.width = width;
+                          canvas.height = height;
                           var context = canvas.getContext("2d");
                           var imageData = context.createImageData(canvas.width, canvas.height);
                           imageData.data.set(buffer);
                           context.putImageData(imageData, 0, 0);
-
                           let uri = canvas.toDataURL();
-
                           let canvasToImg = new Image();
                           canvasToImg.onload = () => {
-
                             let img_obj = {img_src: uri, name: image_name};
                             app.user_images.push(img_obj);
                             
@@ -168,46 +167,51 @@ export default {
     },
     addToImageList(img_obj) {
       // img_obj contains the image source as base64
-      let random_id = this.genRandomID();
-      let name = `IMAGE_${random_id}.PNG`;
 
-      this.imageList.unshift({
-        id: random_id,
-        name: name
-      });
-
-      img_obj.name = name;
-  
-      this.uploadImageToBlockstack(img_obj);
     },
     uploadImageToBlockstack(img_obj) {
-      let canvas = document.createElement("canvas");
-      let context = canvas.getContext("2d");
-      
+      var canvas1 = document.createElement("canvas");
       var imageElem = new Image();
       
       imageElem.onload = () => {
-          context.drawImage(imageElem, 0, 0);
-          var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-          var buffer = imageData.data.buffer; // buffer is a ArrayBuffer
-          let uri = canvas.toDataURL();
-          userSession.putFile(img_obj.name, buffer)
-          .then(() => {
-                console.log("UPLOADED TO BLOCKSTACK")
+        canvas1.width = imageElem.width || imageElem.naturalWidth;
+        canvas1.height = imageElem.height || imageElem.naturalHeight;
+        let context1 = canvas1.getContext("2d");
+          context1.drawImage(imageElem, 0, 0);
+          var imageData2 = context1.getImageData(0, 0, canvas1.width, canvas1.height);
+
+          var buffer = imageData2.data.buffer; // buffer is a ArrayBuffer
+          let uri = canvas1.toDataURL();
+          
+          let random_id = this.genRandomID();
+          let name = `IMAGE_${random_id}.PNG`;
+
+          userSession.putFile(name, buffer).then(() => {
+            console.log("UPLOADED IMAGE SUCCESSFULLY.");
+            // Add to image_list, since image has been successfully uploaded
+            this.imageList.unshift({
+              id: random_id,
+              name: name,
+              width: imageElem.width,
+              height: imageElem.height
+            });
+
           });
       }
       imageElem.src = img_obj.img_src;
     },
     deleteImage(img) {
-      // remove from image list 
-      this.imageList.splice(this.imageList.indexOf(img), 1);
+      let image_list_img = this.imageList.find(image => image.name == img.name);
 
-      // user_images contains the image sources of each image
-      this.user_images.splice(this.user_images.indexOf(img), 1);
-
+      let user_images_img = this.user_images.find(image => image.name == img.name);
       userSession.deleteFile(img.name)
         .then(() => {
           console.log("DELETED IMAGE SUCCESSFULLY");
+          // remove from image list 
+          this.imageList.splice(this.imageList.indexOf(image_list_img), 1);
+          
+          // user_images contains the image sources of each image
+          this.user_images.splice(this.user_images.indexOf(user_images_img), 1);
       })
     },
     getRandomNumber(min, max) {
@@ -222,7 +226,6 @@ export default {
         let letter = alphabet[ran_num];
         random_id += letter;
       }
-
       return random_id;
     }
   }
@@ -239,7 +242,6 @@ ul li {
   color: silver;
   font-family: "Helvetica Neue", sans-serif;
 }
-
 ul li {
   text-decoration: none;
   list-style: none;
@@ -248,47 +250,39 @@ ul li {
   color: silver;
   font-family: "Helvetica Neue", sans-serif;
 }
-
 input[type="file"] {
     display: none;
 }
-
 .custom-file-upload {
     border: 1px solid #ccc;
     display: inline-block;
     padding: 6px 12px;
     cursor: pointer;
 }
-
 .custom-file-upload {
     border: 1px solid #ccc;
     display: inline-block;
     padding: 6px 12px;
     cursor: pointer;
 }
-
 .imgs {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   margin-top: 5vh;
 }
-
 .imgs div {
   flex: 1 0 39%;
   padding: 0 0.5vh;
   cursor: pointer;
 }
-
 .img {
   display: flex;
 }
-
 .imgs div img {
   height: 100%;
   width: 100%;
 }
-
 .delete {
 		display: inline;
 		color: grey;
@@ -297,5 +291,4 @@ input[type="file"] {
 			color: red;
 		}
 	}
-
 </style>
