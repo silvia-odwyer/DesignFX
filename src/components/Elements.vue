@@ -2,46 +2,30 @@
     <ul>
       <h3>Elements</h3>
       <div class="elements">
-          <div class="element_btn" v-on:click="addShapeElement('rectangle', 'solid')">
-            <font-awesome-icon icon="square-full" size="4x" style="color: red"/>
-            <p>Rectangle</p>
+
+        <article v-for="i in elementTypes.length + 1">
+          <div class="element_btn" v-on:click="displayElementList(elementTypes[i])">
+            <font-awesome-icon icon="square-full" size="4x"/>
+            <h1>{{elementTypes[i - 1]}}</h1>  
           </div>
 
-          <div class="element_btn" v-on:click="addShapeElement('circle', 'solid')">
-            <font-awesome-icon icon="circle" size="4x" style="color: orange"/>
-            <p>Circle</p>
+          <div class="element_btn" v-on:click="displayElementList(elementTypes[i + 1])">
+            <font-awesome-icon icon="square-full" size="4x"/>
+            <h1>{{elementTypes[i + 1]}}</h1>  
           </div>
+          <component v-bind:is="elementTypeToComponent[currentElementType]"  v-if="elementTypes[i - 1] == currentElementType"
+          @updateCanvasToJson="updateCanvas"
+          :canvas_to_json="canvas_to_json"
+          ></component>
 
-          <div class="element_btn" v-on:click="addShapeElement('ellipse', 'solid')">
-            <font-awesome-icon icon="circle" size="4x"/>
-            <p>Ellipse</p>
-          </div>
+          <!-- Content -->
+          <slot />
+          
+        </article>
 
-          <div class="element_btn" v-on:click="addShapeElement('line', 'solid')">
-            <font-awesome-icon icon="chart-line" size="4x"/>
-            <p>Line</p>
-          </div>
       </div>
       
-      <h2> Gradients </h2>
-      <div class="elements">
-
-          <div class="element_btn" v-on:click="addShapeElement('rectangle', 'gradient')">
-            <font-awesome-icon icon="square-full" size="4x"/>
-            <p>Rectangle</p>
-          </div>   
-
-          <div class="element_btn" v-on:click="addShapeElement('circle', 'gradient')">
-            <font-awesome-icon icon="circle" size="4x"/>
-            <p>Circle</p>
-          </div>   
-
-          <div class="element_btn" v-on:click="addShapeElement('ellipse', 'gradient')">
-            <font-awesome-icon icon="square-full" size="4x"/>
-            <p>Ellipse</p>
-          </div>   
-
-      </div>       
+  
     </ul>
 </template>
 
@@ -49,6 +33,11 @@
 /* eslint-disable */
 import { userSession } from '../userSession'
 import colorPicker from '@caohenghu/vue-colorpicker'
+import EmojiElements from "@/components/EmojiElements.vue";
+import ShapeElements from "@/components/ShapeElements.vue";
+import IconElements from "@/components/IconElements.vue";
+import PatternElements from "@/components/PatternElements.vue";
+import GradientElements from "@/components/GradientElements.vue";
 
 export default {
   name: 'elements',
@@ -58,18 +47,30 @@ export default {
     this.canvasShapes = {"line" : this.canvas_to_json.elements.lines, "circle": this.canvas_to_json.elements.circles, 
       "rectangle": this.canvas_to_json.elements.rectangles, "ellipse": this.canvas_to_json.elements.ellipses};
     
-    this.colorPickerColor = "#67F7F7"
+    this.colorPickerColor = "#67F7F7";
+
+    this.canvas_to_json_mut = this.canvas_to_json;
+
+    console.log("ELEMENTS CANVAS", this.canvas_to_json_mut);
     
   },
   data () {
     return {
       colorPickerColor: null,
       canvasShapes: null,
-      canvas_to_json_mut: this.canvas_to_json
+      canvas_to_json_mut: null,
+      elementTypes: ["Shapes", "Icons", "Patterns", "Emoji"],
+      currentElementType: "",
+      elementTypeToComponent: {"Shapes" : ShapeElements, "Gradients": GradientElements, "Icons": IconElements, "Patterns": PatternElements, "Emoji": EmojiElements, "": EmojiElements}
     }
   },
   components: {
-    colorPicker
+    colorPicker,
+    EmojiElements, 
+    ShapeElements, 
+    IconElements, 
+    PatternElements,
+    GradientElements
   },
   watch : {
     canvas_to_json: function(canvas_to_json) {
@@ -77,83 +78,8 @@ export default {
     }
   },
   methods: {
-    addShapeElement(shape_name, fill) {
-
-      var shape_list = this.canvasShapes[shape_name];
-      var name = `${shape_name}${shape_list.length + 1}`;
-      var shape;
-      var index_name;
-
-      switch (shape_name) {
-        case "line": 
-          shape = {
-            x: 20,
-            y: 200,
-            tension: 0.5,
-            stroke: 'black',
-            draggable: true,
-            name: name
-          };
-          index_name = "lines";
-          break;
-
-        case "rectangle":
-           shape = {
-                x: 10,
-                y: 10,
-                width: 100,
-                height: 100,
-                name: name,
-                draggable: true
-            };
-            index_name = "rectangles";
-            break;
-        case "circle":
-           shape = {
-            x : 160, 
-            y: 180, 
-            radius: 50, 
-            name: name,
-            draggable: true
-            };
-            index_name = "circles";
-            break;
-        
-        case "ellipse": 
-          shape = {
-              radius : {
-                x : 50,
-                y : 70
-              },
-              x: 100, 
-              y: 100,
-              draggable: true,
-              name: name
-            };
-            index_name = "ellipses";
-            break;
-      }
-
-      // Add fill to element 
-      switch (fill) {
-        case "solid":
-          shape.fill = this.colorPickerColor;
-          shape.fillType = "solid";
-          break;
-
-        case "gradient":
-          shape.fillType = "gradient";
-          shape.fillLinearGradientStartPoint = { x: -50, y: -50 };
-          shape.fillLinearGradientEndPoint = { x: 250, y: 250 };
-          shape.fillLinearGradientColorStops = [0, this.colorPickerColor, 1, 'yellow'];
-          break;
-      }
-
-      console.log("ADDED SHAPE", shape);
-
-      this.allShapes.push(shape);
-      this.canvas_to_json_mut.elements[index_name].push(shape);
-      this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
+    displayElementList(elementType) {
+      this.currentElementType = elementType;
     },
     clear() {
       for (var i = 0; i < this.canvas_to_json.elements.length; i++) {
@@ -164,20 +90,14 @@ export default {
     //   const transformerNode = this.$refs.transformer.getStage();
     //   transformerNode.detach();
 
-      console.log("cleared");
       localStorage.setItem('storage', JSON.stringify([]));
     },
-    fetchData () {
-      userSession.getFile(STORAGE_FILE) // decryption is enabled by default
-        .then((todosText) => {
-          var notes = JSON.parse(todosText || '[]')
-          notes.forEach(function (note, index) {
-            note.id = index
-          })
-          this.uidCount = notes.length
-          this.notes = notes
-        })
-    }
+    updateCanvas: function(canvas_to_json) {
+      this.canvas_to_json_mut = canvas_to_json;
+
+      console.log("canvas now", this.canvas_to_json_mut)
+      this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
+    },
   }
 }
 </script>
@@ -191,6 +111,10 @@ ul li {
     list-style: none;
 }
 
+h1 {
+  font-family: "Lato", sans-serif;
+}
+ 
 h3 {
   color: white;
   font-size: 3vh;

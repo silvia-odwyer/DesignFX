@@ -119,7 +119,7 @@ export default {
         text: [],
         images: [],
         background: {},
-        backgroundColor: "#FFFFFF"
+        backgroundColor: "#45CCDE"
       },
       textFontsLoaded: false,
       showModal: false,
@@ -166,23 +166,11 @@ export default {
     },
     
     updateCanvas: function(canvas_to_json) {
-
+      console.log("CANVAS IN DASH", canvas_to_json);
       // Changes have been made to the canvas, therefore it must be saved
       // so that auto-saving can occur, etc.,
       this.changesMade = true;
       this.resetAllShapes();      
-
-      let backgroundColor = canvas_to_json.backgroundColor;
-
-      let backgroundRect = {
-        x: 0,
-        y: 0,
-        width: this.stageSize.width,
-        height: this.stageSize.height,
-        fill: backgroundColor,
-        name: "backgroundRect",
-      };
-      canvas_to_json.background = backgroundRect;
 
       this.canvas_to_json = canvas_to_json;
 

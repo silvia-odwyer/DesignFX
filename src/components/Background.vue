@@ -58,7 +58,7 @@ export default {
                 this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
                 this.canvas_to_json_mut.background.fill = this.colorPickerColor;
         }
-
+    console.log("background now", this.canvas_to_json_mut.background.fill);
     },
     addGradient() {
       this.backgroundFillType = "solid";
