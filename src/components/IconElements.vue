@@ -1,7 +1,9 @@
 <template>
 <article>
-  <font-awesome-icon v-for="icon in icons" :icon="icon" v-bind:key="icon" size="4x" v-on:click="addIcon"/>
+  <article class="icons">
+    <font-awesome-icon v-for="icon in Object.keys(iconToCode)" :icon="icon" v-bind:key="icon" size="4x" v-on:click="addIcon(icon)" class="icon"/>
 
+  </article>
 </article>
 </template>
 
@@ -18,7 +20,7 @@ export default {
     return {
       canvas_to_json_mut: this.canvas_to_json,
       icons: ["arrow-alt-circle-down", "shapes"],
-      iconToCode: {}
+      iconToCode: {"angle-double-up":"\uf102", "check-square": "\uf14a", "chart-bar": "\uf080", "chart-line": "\uf201", "chart-pie": "\uf200", "align-justify": "\uf039", "barcode": "\uf02a"}
     }
   },
   components: {
@@ -34,12 +36,13 @@ export default {
       this.colorPickerColor = hex;
       this.changeBackground();
     },
-    addIcon() {
+    addIcon(iconName) {
+      let iconUnicode = this.iconToCode[iconName];
       let num = this.canvas_to_json_mut.text.length;
-      var simpleText = {
+      var icon = {
         x: 20,
         y: 15,
-        text: "\uf21c",
+        text: `${iconUnicode}`,
         fontSize: 300,
         fontFamily: 'FontAwesome',
         fill: 'green',
@@ -47,47 +50,25 @@ export default {
         name: `icon_${num}`
       };
 
-      this.canvas_to_json_mut.text.push(simpleText);
+      this.canvas_to_json_mut.text.push(icon);
       this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
     }
-
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-ul li {
-    cursor: pointer;
-    color: silver;
-    font-family: "Helvetica Neue", sans-serif;
-    list-style: none;
-}
-
-h3 {
-  color: white;
-  font-size: 3vh;
-  font-family: "Helvetica Neue", sans-serif;
-}
-
-.element_btn {
-  border: solid black 0.1em;
-  border-radius: 0.3em;
-  width: 50%;
+.icons {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
-  align-items: center;
-  cursor: pointer;
 }
 
-.element_btn:hover {
-  color: silver;
-}
 
-font-awesome-icon {
-  display: block;
+.icon {
   cursor: pointer;
+  margin: 0.5em;
 }
 
 .elements {
