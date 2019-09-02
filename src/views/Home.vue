@@ -3,9 +3,6 @@
     <landing v-if="! userSession.isUserSignedIn()"></landing>
     <dashboard v-if="user" :user="user"></dashboard>
 
-    <small class="creds">
-      Source code on <a href="" target="_blank">Github</a>
-    </small>
   </div>
 </template>
 
@@ -36,8 +33,10 @@ export default {
   data () {
     return {
       userSession: null,
-      user: null
+      user: null,
     }
+  },
+  methods: {
   }
 }
 </script>
