@@ -1,32 +1,26 @@
 <template>
-    <ul>
+    <article>
       <h3>Elements</h3>
       <div class="elements">
 
-        <article v-for="i in elementTypes.length + 1">
-          <div class="element_btn" v-on:click="displayElementList(elementTypes[i])">
+        <article v-for="i in elementTypesGroup1.length">
+          <div class="element_btn" v-on:click="displayElementList(elementTypesGroup1[i - 1])">
             <font-awesome-icon icon="square-full" size="4x"/>
-            <h1>{{elementTypes[i - 1]}}</h1>  
+            <h1>{{elementTypesGroup1[i - 1]}}</h1>  
           </div>
 
-          <div class="element_btn" v-on:click="displayElementList(elementTypes[i + 1])">
-            <font-awesome-icon icon="square-full" size="4x"/>
-            <h1>{{elementTypes[i + 1]}}</h1>  
-          </div>
-          <component v-bind:is="elementTypeToComponent[currentElementType]"  v-if="elementTypes[i - 1] == currentElementType"
+        </article>
+      </div>
+        <component v-bind:is="elementTypeToComponent[currentElementType]"
+          v-bind:style="{ marginTop: '2em' }"
           @updateCanvasToJson="updateCanvas"
           :canvas_to_json="canvas_to_json"
           ></component>
 
           <!-- Content -->
-          <slot />
-          
-        </article>
-
-      </div>
-      
+        <slot />
   
-    </ul>
+    </article>
 </template>
 
 <script>
@@ -59,7 +53,8 @@ export default {
       colorPickerColor: null,
       canvasShapes: null,
       canvas_to_json_mut: null,
-      elementTypes: ["Shapes", "Icons", "Patterns", "Emoji"],
+      elementTypes: ["Emoji"],
+      elementTypesGroup1: ["Shapes", "Icons", "Patterns"],
       currentElementType: "",
       elementTypeToComponent: {"Shapes" : ShapeElements, "Gradients": GradientElements, "Icons": IconElements, "Patterns": PatternElements, "Emoji": EmojiElements, "": EmojiElements}
     }
