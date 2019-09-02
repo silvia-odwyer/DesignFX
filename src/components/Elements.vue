@@ -54,7 +54,8 @@ export default {
       canvasShapes: null,
       canvas_to_json_mut: null,
       elementTypes: ["Emoji"],
-      elementTypesGroup1: ["Shapes", "Icons", "Patterns"],
+      elementTypesGroup1: ["Shapes", "Icons", "Patterns", "Emoji"],
+      elementTypesGroup2: ["Emoji"],
       currentElementType: "",
       elementTypeToComponent: {"Shapes" : ShapeElements, "Gradients": GradientElements, "Icons": IconElements, "Patterns": PatternElements, "Emoji": EmojiElements, "": EmojiElements}
     }

@@ -59,6 +59,7 @@ import Elements from "@/components/Elements.vue";
 import Text from "@/components/Text.vue";
 import TextOptions from "@/components/TextOptions.vue";
 import ElementOptions from "@/components/ElementOptions.vue";
+import IconOptions from "@/components/IconOptions.vue";
 import Images from "@/components/Images.vue";
 import Background from "@/components/Background.vue";
 
@@ -76,16 +77,20 @@ export default {
       };
       
       if (this.isNodeElement(node)) {
+        console.log("isIcon")
         this.setSidebarItem("elementOptions");
       }
       else if (node.name.startsWith("text")) {
         this.setSidebarItem("textOptions");
       }
+      else if (node.name.startsWith("icon")) {
+        this.setSidebarItem("iconOptions");
+      }
     }
   },
   data () {
     return {
-        sidebarNameToComponent: {"designs": Designs, "elements": Elements, "elementOptions": ElementOptions, "text": Text, "textOptions": TextOptions, "images": Images, "background" : Background},
+        sidebarNameToComponent: {"designs": Designs, "elements": Elements, "iconOptions": IconOptions, "elementOptions": ElementOptions, "text": Text, "textOptions": TextOptions, "images": Images, "background" : Background},
         currentSidebarComponent: 'designs',
         activeBtn: "designs",
         canvas_to_json_mut: this.canvas_to_json,

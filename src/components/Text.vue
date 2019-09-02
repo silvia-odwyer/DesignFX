@@ -9,7 +9,8 @@
           <ul>
             <li v-on:click="addText(headingTextElem)"><h1>Heading</h1></li>
             <li v-on:click="addText(secondaryHeadingTextElem)"><h2>Secondary Heading</h2></li>
-            <li v-on:click="addText(paragraphTextElem)">Paragrafph text</li>
+            <li v-on:click="addText(paragraphTextElem)">Paragraph text</li>
+
           </ul>
 
       </div>              
@@ -31,6 +32,9 @@ export default {
   watch : {
     ifTextOptions: function(ifTextOptions) {
       this.ifTextOptions = ifTextOptions;
+    },
+    canvas_to_json: function(canvas_to_json) {
+      this.canvas_to_json_mut = canvas_to_json;
     }
   },
   data () {
@@ -38,7 +42,8 @@ export default {
       img: null,
       headingTextElem: {fontSize: 100, fontFamily: "Roboto"},
       secondaryHeadingTextElem: {fontSize: 40, fontFamily: "Roboto"},
-      paragraphTextElem: {fontSize: 20, fontFamily: "Helvetica"}
+      paragraphTextElem: {fontSize: 20, fontFamily: "Helvetica"},
+      canvas_to_json_mut: this.canvas_to_json
     }
   },
   mounted() {
@@ -47,7 +52,7 @@ export default {
   methods: {    
     addText(text_elem) {
 
-      let name = `text_node${this.canvas_to_json.text.length + 1}`
+      let name = `text_node${this.canvas_to_json_mut.text.length + 1}`
       
       let simpleText = {
         x: 50,
@@ -62,9 +67,10 @@ export default {
       simpleText.fontSize = text_elem.fontSize;
       simpleText.fontFamily = text_elem.fontFamily;
       
-      this.canvas_to_json.text.push(simpleText);
+      this.canvas_to_json_mut.text.push(simpleText);
 
       this.allShapes.push(simpleText);
+      this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
       // this.selectedNode = simpleText;
     },
 
@@ -74,7 +80,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
-
+  @font-face {
+    font-family: 'FontAwesome';
+    src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/fonts/fontawesome-webfont.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
 section{
   margin-left: 2vh;
 }

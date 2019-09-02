@@ -166,7 +166,6 @@ export default {
     },
     
     updateCanvas: function(canvas_to_json) {
-      console.log("CANVAS IN DASH", canvas_to_json);
       // Changes have been made to the canvas, therefore it must be saved
       // so that auto-saving can occur, etc.,
       this.changesMade = true;
@@ -231,13 +230,10 @@ export default {
       // find clicked rect by its name
       const name = e.target.name();
 
-      console.log("THIS.ALLSHAPES", this.allShapes);
-
       const rect = this.allShapes.find(r => r.name === name);
 
       this.changeSidebarComponent(rect);
       this.selectedNode = rect;
-      console.log("SELECTED NODE IS NOW", this.selectedNode);
 
       if (rect) {
         this.selectedShapeName = name;
@@ -302,7 +298,6 @@ export default {
           this.currentSidebarComponent = "elements";
         }
         else {
-          console.log("not a rect");
         }
     },
     updateAllShapes() {

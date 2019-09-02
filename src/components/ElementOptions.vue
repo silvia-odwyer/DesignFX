@@ -41,6 +41,7 @@ export default {
     selectedNode: function(selectedNode) {
         let shapeList = this.getShapeList();
         this.elementNode = shapeList.find(elem => elem.name === selectedNode.name);
+        console.log("elemnode in elemoptions", this.elementNode);
     }
   },
   data () {
@@ -87,12 +88,14 @@ export default {
     getShapeList() {
         let node_name = this.selectedNode.name.substr(0, 3);
         let shape_names = Object.keys(this.canvas_to_json_mut.elements)
+
         for (var j = 0; j < shape_names.length; j++) {
             let shape_name = shape_names[j];
             if (shape_name.startsWith(node_name)) {
                 return this.canvas_to_json_mut.elements[shape_name];
             }
         }
+        
     },
     updateXStartPoint: function(value) {
       if (this.selectedNode != undefined || this.selectedNode != null ) {
