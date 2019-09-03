@@ -39,9 +39,12 @@ export default {
       this.canvas_to_json_mut = canvas_to_json;
     },
     selectedNode: function(selectedNode) {
+
+      if (this.selectedNode != undefined || this.selectedNode != null) {
         let shapeList = this.getShapeList();
         this.elementNode = shapeList.find(elem => elem.name === selectedNode.name);
         console.log("elemnode in elemoptions", this.elementNode);
+    }
     }
   },
   data () {
@@ -54,9 +57,13 @@ export default {
     }
   },
   mounted() {
-    console.log("SELECTED NODE", this.selectedNode)
-    let shapeList = this.getShapeList();
-    this.elementNode = shapeList.find(elem => elem.name === this.selectedNode.name);
+    console.log("SELECTED NODE", this.selectedNode);
+
+    if (this.selectedNode != undefined || this.selectedNode != null) {
+      let shapeList = this.getShapeList();
+      this.elementNode = shapeList.find(elem => elem.name === this.selectedNode.name);
+    }
+
   },
   methods: {
     changeColor(color) {
@@ -95,7 +102,7 @@ export default {
                 return this.canvas_to_json_mut.elements[shape_name];
             }
         }
-        
+
     },
     updateXStartPoint: function(value) {
       if (this.selectedNode != undefined || this.selectedNode != null ) {

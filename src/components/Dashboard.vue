@@ -119,7 +119,7 @@ export default {
         text: [],
         images: [],
         background: {},
-        backgroundColor: "#45CCDE"
+        backgroundColor: "#FFFFFF"
       },
       textFontsLoaded: false,
       showModal: false,
@@ -159,7 +159,7 @@ export default {
               y: 0,
               width: this.stageSize.width,
               height: this.stageSize.height,
-              fill: "",
+              fill: backgroundColor,
               name: "backgroundRect",
             };
       this.canvas_to_json.background = backgroundRect;
@@ -170,9 +170,17 @@ export default {
       // so that auto-saving can occur, etc.,
       this.changesMade = true;
       this.resetAllShapes();      
-
+      let backgroundColor = canvas_to_json.backgroundColor;
+      let backgroundRect = {
+        x: 0,
+        y: 0,
+        width: this.stageSize.width,
+        height: this.stageSize.height,
+        fill: backgroundColor,
+        name: "backgroundRect",
+      };
+      canvas_to_json.background = backgroundRect;
       this.canvas_to_json = canvas_to_json;
-
       this.updateAllShapes();
     },
     showTextOptions() {

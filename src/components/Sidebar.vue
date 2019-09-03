@@ -73,19 +73,22 @@ export default {
     selectedNode : function (node) {
       // Update selected node
       if (node == null) {
-        return;
-      };
+        console.log("prev sidebar item", this.prevSidebarItem);
+        this.setSidebarItem(this.prevSidebarItem);
       
-      if (this.isNodeElement(node)) {
-        console.log("isIcon")
-        this.setSidebarItem("elementOptions");
       }
-      else if (node.name.startsWith("text")) {
-        this.setSidebarItem("textOptions");
+      
+      else if (this.isNodeElement(node)) {
+        console.log("isIcon")
+        this.setSidebarOptions("elementOptions");
+      }
+      else if (node.name.startsWith("text") && !node.name.startsWith("emoji")) {
+        this.setSidebarOptions("textOptions");
       }
       else if (node.name.startsWith("icon")) {
-        this.setSidebarItem("iconOptions");
-      }
+        this.setSidebarOptions("iconOptions");
+      };
+
     }
   },
   data () {
@@ -94,7 +97,8 @@ export default {
         currentSidebarComponent: 'designs',
         activeBtn: "designs",
         canvas_to_json_mut: this.canvas_to_json,
-        mutableIfTextOptions: false
+        mutableIfTextOptions: false,
+        prevSidebarItem: "designs",
     }
   },
   mounted() {
@@ -105,7 +109,13 @@ export default {
   methods: {
     setSidebarItem(name) {
       this.currentSidebarComponent = name;
+      this.activeBtn = name;
 
+      // Save the item so that it can be reverted to later on
+      this.prevSidebarItem = name;
+    },
+    setSidebarOptions(name) {
+      this.currentSidebarComponent = name;
       this.activeBtn = name;
     },
     updateCanvas: function(canvas_to_json) {
