@@ -17,8 +17,14 @@
                 <font-awesome-icon icon="square-full" size="4x"/>
                 <p>Ellipse</p>
             </div>   
-
         </div>     
+
+        <h1>Preset Gradients</h1>
+        <article class="elements">
+          <div class="element_btn" v-for="gradientStyle in presetGradients" v-on:click="addPresetGradientShape('rectangle', gradientStyle)">
+            <div v-bind:style="gradientStyle"></div>
+          </div>
+        </article>
     </article>
 </template>
 
@@ -37,7 +43,23 @@ export default {
       canvas_to_json_mut: this.canvas_to_json,
        canvasShapes: {"line" : this.canvas_to_json.elements.lines, "circle": this.canvas_to_json.elements.circles, 
       "rectangle": this.canvas_to_json.elements.rectangles, "ellipse": this.canvas_to_json.elements.ellipses},
-      backgroundFillType: "solid"
+      backgroundFillType: "solid",
+      rawGradientVals: [["blue", "fuchsia"], ["#3494E6", "#EC6EAD"], ["#67B26F", "#4ca2cd"], ["#36D1DC", "#5B86E5"], ["blue", "fuchsia"], ["#1c92d2", "#f2fcfe"], ["#000000", "#0f9b0f"], ["#CB356B", "#BD3F32"], ["#3A1C71", "#D76D77", "#FFAF7B"], ["#283c86", "#45a247", ["#159957", "#155799"], ["#000046", "#1CB5E0"]]]
+    }
+  },
+  computed: {
+    presetGradients() {
+      let gradientStyles = [];
+      for (var i = 0; i < this.rawGradientVals.length; i++) {
+        let color1 = this.rawGradientVals[i][0];
+        let color2 = this.rawGradientVals[i][1];
+        let linearGradient =  `linear-gradient(90deg, ${color1}, ${color2})`
+        let gradientStyle = {width: '50%', height: '10vh', backgroundImage: linearGradient};
+        gradientStyles.push(gradientStyle);
+      }
+      console.log("preset grads", gradientStyles);
+      return gradientStyles;
+
     }
   },
   components: {
@@ -60,6 +82,37 @@ export default {
       this.changeBackground();
     },
     addShapeElement(shape_name) {
+      let shape_and_indexname = this.createShapeElement(shape_name)
+      let shape = shape_and_indexname[0];
+      let index_name = shape_and_indexname[1];
+
+      shape.fillType = "gradient";
+      shape.fillLinearGradientStartPoint = { x: -50, y: -50 };
+      shape.fillLinearGradientEndPoint = { x: 250, y: 250 };
+      shape.fillLinearGradientColorStops = [0, this.colorPickerColor, 1, 'yellow'];
+
+      this.canvas_to_json_mut.elements[index_name].push(shape);
+
+      this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
+    },
+    addPresetGradientShape(shape_name, gradient) {
+      let shape_and_indexname = this.createShapeElement(shape_name)
+      let shape = shape_and_indexname[0];
+      let index_name = shape_and_indexname[1];
+
+      shape.fillType = "gradient";
+      shape.fillLinearGradientStartPoint = { x: -50, y: -50 };
+      shape.fillLinearGradientEndPoint = { x: 100, y: 100 };
+      let linearGradient = gradient.backgroundImage;
+      linearGradient = linearGradient.slice(23, linearGradient.length - 1).split(", ");
+      console.log("gradient", linearGradient);
+      shape.fillLinearGradientColorStops = [0, linearGradient[0], 1, linearGradient[1]];
+
+      this.canvas_to_json_mut.elements[index_name].push(shape);
+
+      this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
+    },
+    createShapeElement(shape_name) {
       var shape, index_name;
       var shape_list = this.canvasShapes[shape_name];
       var name = `${shape_name}${shape_list.length + 1}`;
@@ -114,14 +167,7 @@ export default {
             break;
       }
 
-      shape.fillType = "gradient";
-      shape.fillLinearGradientStartPoint = { x: -50, y: -50 };
-      shape.fillLinearGradientEndPoint = { x: 250, y: 250 };
-      shape.fillLinearGradientColorStops = [0, this.colorPickerColor, 1, 'yellow'];
-
-      this.canvas_to_json_mut.elements[index_name].push(shape);
-
-      this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
+      return [shape, index_name];
     }
 
   }
@@ -144,8 +190,6 @@ h3 {
 }
 
 .element_btn {
-  border: solid black 0.1em;
-  border-radius: 0.3em;
   width: 50%;
   display: flex;
   flex-direction: column;
