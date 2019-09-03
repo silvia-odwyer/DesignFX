@@ -1,14 +1,13 @@
 <template>
-  <div class="dashboard">
-    <div class="default">
+    <div class="dashboard">
       <Header :user="user" :transformer="$refs.transformer" :canvas_to_json="canvas_to_json" @updateCanvasToJson="updateCanvas"></Header>
 
-      <div class="under_header">
+      <section class="under_header">
         <Sidebar class="sidebar" :canvas_to_json="canvas_to_json" :allShapes="allShapes" :transformer="$refs.transformer" 
-                  :selectedNode="selectedNode" @updateCanvasToJson="updateCanvas" :changesMade="changesMade" @toggleModal="toggleModal" @editChangesMade="editChangesMade"></Sidebar>
+                  :selectedNode="selectedNode" @updateCanvasToJson="updateCanvas" :changesMade="changesMade" @toggleModal="toggleModal" @removeTransformer="removeTransformer"  @editChangesMade="editChangesMade"></Sidebar>
             
-            <div class="main">
-              <div class="main_content">
+            <section class="main">
+              <section class="main_content">
               
                 <section class="content">
                   
@@ -16,7 +15,6 @@
 
                     <v-layer>
                       <v-rect :config="canvas_to_json.background"/>
-
                     </v-layer>
 
                     <v-layer ref="layer">
@@ -44,12 +42,11 @@
 
                   </v-stage>
                 </section>
-            </div>
-            </div>
-            </div>
+            </section>
+            </section>
+            </section>
             <Modal v-if="showModal" @close="toggleModal"></Modal>
       </div>
-  </div>
 </template>
 
 <script>
@@ -58,19 +55,9 @@ import { userSession } from '../userSession'
 import Header from "@/components/Header.vue"
 import Sidebar from "@/components/Sidebar.vue";
 import Modal from "@/components/Modal.vue";
-
-var STORAGE_FILE = 'notes.json'
-var IMAGE_STORAGE_FILE = "image.PNG";
-import image from "@/assets/daisies_small.jpg";
-import layout1 from "@/assets/travel.png";
-import layout2 from "@/assets/lemonade.png";
-import layout3 from "@/assets/summer_collection.png";
-import layout4 from "@/assets/travel.png";
-import layout5 from "@/assets/template_images/city.jpg";
-import layout6 from "@/assets/summer_collection.png";
-
 import WebFontLoader from 'webfontloader';
 
+var IMAGE_STORAGE_FILE = "image.PNG";
 const width = window.innerWidth;
 const height = window.innerHeight;
 
@@ -92,8 +79,6 @@ export default {
   },
   data () {
     return {
-      notes: [],
-      note: '',
       uidCount: 0,
       stageSize: {
               width: width * 0.52,
@@ -105,49 +90,18 @@ export default {
       ifTextOptions: false,
       currentSidebarComponent: "designs",
       list: [],
-
-      canvas_to_json: {
-        filename: "Design1",
-        elements: {
-          rectangles: [],
-          circles: [],
-          lines : [],
-          ellipses: [],
-        },
-        text: [],
-        images: [],
-        background: {},
-        backgroundColor: "#FFFFFF"
-      },
+      canvas_to_json:  this.$store.getters.canvas_to_json,
       textFontsLoaded: false,
       showModal: false,
       changesMade: false
     }
   },
   watch: {
-    notes: {
-      handler: function (notes) {
-        // encryption is now enabled by default
-        return userSession.putFile(STORAGE_FILE, JSON.stringify(notes) );
-      },
-      deep: true
-    }
   },
   mounted () {
-    // this.fetchData();
-    // this.loadDesign();
-    console.log("mounted dashboard", this.canvas_to_json);
     this.initCanvas();
-
-    this.initDefaultFonts();
   },
   methods: {
-    initDefaultFonts() {
-      if (this.textFontsLoaded) {
-        return;
-      }
-    },
-
     // Initialise the canvas by creating a background rect, etc.,
     initCanvas() {
       let backgroundColor = this.canvas_to_json.backgroundColor;
@@ -179,30 +133,12 @@ export default {
       };
       canvas_to_json.background = backgroundRect;
       this.canvas_to_json = canvas_to_json;
+      this.$store.commit('updateCanvas', canvas_to_json);
+
       this.updateAllShapes();
     },
-
     save() {
       localStorage.setItem('storage', JSON.stringify(this.canvas_to_json));
-    },
-    loadDesign() {
-      var data = localStorage.getItem('storage') || '[]';
-      data = JSON.parse(data);
-
-      if (data.length != 0) {
-        if (data.rectangles != []) {
-          this.canvas_to_json.elements = data.elements;
-        }
-        if (data.text != []) {
-          this.text = data.text;
-        }
-        if (data.images != []) {
-          // this.images = data.images;
-        }
-
-        this.updateAllShapes();
-      }
-
     },
     toggleModal() {
       console.log("toggle modal")
@@ -271,18 +207,7 @@ export default {
       }
       transformerNode.getLayer().batchDraw();
     },
-  
-    addNote () {
-      if (!this.note.trim()) {
-        return
-      }
-      this.notes.unshift({
-        id: this.uidCount++,
-        text: this.note.trim(),
-        completed: false
-      })
-      this.note = ''
-    },
+
     updateNodePosition(item) {
       const transformerNode = this.$refs.transformer.getStage();
       const stage = transformerNode.getStage();
@@ -334,63 +259,15 @@ export default {
     resetAllShapes() {
       this.allShapes = [];
     },
-    resetCanvasToJson() {
-      this.canvas_to_json = {
-        filename: "Design1",
-        elements: {
-          rectangles: [],
-          circles: [],
-          lines : [],
-          ellipses: [],
-        },
-        text: [],
-        images: [],
-        backgroundColor: "#000000"
-      }
-    },
-    removeTransformer() {
+    removeTransformer: function() {
       const transformerNode = this.$refs.transformer.getStage();
-
       // remove transformer
       transformerNode.detach();
-      
+      console.log("remove transformer");
     },
     editChangesMade: function(result) {
       console.log("changes made DASH", result);
       this.changesMade = result;
-    },
-     displayTemplate(img) {
-      console.log("display template")
-      var canvas = document.getElementById("canvas");
-      var context = canvas.getContext("2d");
-      
-      var imageElem = new Image();
-
-      imageElem.onload = () => {
-        context.drawImage(imageElem, 0, 0);
-        var imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-
-        var array = imageData.data; // array is a Uint8ClampedArray
-        var buffer = imageData.data.buffer; // buffer is a ArrayBuffer
-                    
-      }
-      imageElem.src = img.img_src;
-     
-    },
-    fetchData () {
-      userSession.getFile(STORAGE_FILE) // decryption is enabled by default
-        .then((todosText) => {
-          var notes = JSON.parse(todosText || '[]')
-          notes.forEach(function (note, index) {
-            note.id = index
-          })
-          this.uidCount = notes.length
-          this.notes = notes
-        })
-    },
-
-    signOut () {
-      userSession.signUserOut(window.location.href)
     },
     animatePreloader(){
          let app        = this, 
@@ -412,9 +289,6 @@ export default {
          this.body.removeAttr('style');
          this.animateWebsite();
       },
-      animateWebsite(){
-         console.log('lets get pretty');
-      }
   }
 }
 </script>
@@ -426,33 +300,6 @@ export default {
     src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/fonts/fontawesome-webfont.ttf');
     font-weight: normal;
     font-style: normal;
-}
-
-label {
-  margin-bottom: 0;
-  // width: 100%;
-  cursor: pointer;
-  input[type="checkbox"] {
-    margin-right: 5px;
-  }
-}
-.list-group-item {
-  &.completed label {
-    text-decoration: line-through;
-  }
-
-  .delete {
-    display: none;
-  }
-
-  &:hover .delete {
-    display: inline;
-    color: grey;
-    &:hover {
-      text-decoration: none;
-      color: red;
-    }
-  }
 }
 
 .main {
@@ -471,61 +318,6 @@ label {
     .sidebar a {font-size: 18px;}
   }
 
-ul li {
-  text-decoration: none;
-  list-style: none;
-  padding-right: 4em;
-}
-
-ul li:hover {
-  color: silver;
-}
-
-.tab_nav {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin-left: 0;
-}
-
-h2, h3, h4, h5 {
-  color: white;
-  font-family: "Roboto", sans-serif;
-  font-weight: 300;
-}
-
-h4 {
-  text-transform: uppercase;
-  font-size: 0.7em;
-  letter-spacing: 4px;
-}
-
-
-
-.colour_scheme {
-  border: solid transparent 0.1em;
-  border-radius: 0.5em;
-  background-color: rgb(29, 27, 27);
-  padding: 2em;
-  padding-right:4em;
-  padding-left: 4em;
-}
-
-// .under_header {
-//   display: grid;
-//   grid-template-columns: 20% 80%;
-//   grid-template-rows: auto;
-//   grid-template-areas: "sidebar_area main_area";
-// }
-
-// .sidebar {
-//   grid-area: "sidebar_area";
-// }
-
-// .main {
-//   grid-area: "main_area";
-// }
-
 .content {
   background-color: white;
   width: 80%;
@@ -535,7 +327,6 @@ h4 {
   margin-left: auto;
   margin-right: auto;
 }
-
 
 .preloader{
    width:100%;
@@ -554,6 +345,4 @@ h4 {
    height: 100vh;
    background: #34495e;
 }
-
-
 </style>

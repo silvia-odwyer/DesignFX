@@ -23,12 +23,13 @@ import layout7 from "@/assets/stockholm.png";
 
 export default {
   name: 'designs',
-  props: ['user', 'image_template', 'designTemplates', 'canvas_to_json', 'transformer', 'changesMade'],
+  props: ['user', 'image_template', 'canvas_to_json', 'transformer', 'changesMade'],
   data () {
     return {
     img: null,
     canvas_to_json_mut: this.canvas_to_json,
-    designImageLinks: {"Travel" : layout4, "Lemonade": layout2, "The Summer Collection" : layout3, "Stockholm": layout7, "City": layout5}
+    designImageLinks: {"Travel" : layout4, "Lemonade": layout2, "The Summer Collection" : layout3, "Stockholm": layout7, "City": layout5},
+    designTemplates: this.$store.getters.designTemplates,
     }
   },
   methods: {
