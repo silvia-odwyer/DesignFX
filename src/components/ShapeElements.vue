@@ -32,14 +32,13 @@ export default {
   name: 'shapeElements',
   props: ['user', 'canvas_to_json', 'allShapes', 'selectedNode'],
   mounted() {
-    this.canvasShapes = {"line" : this.canvas_to_json.elements.lines, "circle": this.canvas_to_json.elements.circles, 
-    "rectangle": this.canvas_to_json.elements.rectangles, "ellipse": this.canvas_to_json.elements.ellipses};
   },
   data () {
     return {
       colorPickerColor: this.canvas_to_json.background.fill,
       canvas_to_json_mut: this.canvas_to_json,
-      canvasShapes: null,
+      canvasShapes: {"line" : this.canvas_to_json.elements.lines, "circle": this.canvas_to_json.elements.circles, 
+    "rectangle": this.canvas_to_json.elements.rectangles, "ellipse": this.canvas_to_json.elements.ellipses},
     }
   },
   components: {

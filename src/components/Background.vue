@@ -43,10 +43,11 @@ export default {
     }
   },
   methods: {
-    changeBackground(background_type) {
-        switch (background_type) {
+    changeBackground() {
+        switch (this.backgroundFillType) {
             case "solid":
                 this.canvas_to_json_mut.background.fill = this.colorPickerColor;
+                this.canvas_to_json_mut.backgroundColor = this.colorPickerColor;
                 this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
                 break;
 

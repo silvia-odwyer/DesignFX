@@ -37,27 +37,23 @@ export default {
   name: 'elements',
   props: ['user', 'canvas_to_json', 'allShapes', 'selectedNode'],
   mounted() {
-    console.log("canvas to json in elements", this.canvas_to_json);
-    this.canvasShapes = {"line" : this.canvas_to_json.elements.lines, "circle": this.canvas_to_json.elements.circles, 
-      "rectangle": this.canvas_to_json.elements.rectangles, "ellipse": this.canvas_to_json.elements.ellipses};
-    
     this.colorPickerColor = "#67F7F7";
 
     this.canvas_to_json_mut = this.canvas_to_json;
-
-    console.log("ELEMENTS CANVAS", this.canvas_to_json_mut);
     
   },
   data () {
     return {
       colorPickerColor: null,
-      canvasShapes: null,
+      canvasShapes: {"line" : this.canvas_to_json.elements.lines, "circle": this.canvas_to_json.elements.circles, 
+      "rectangle": this.canvas_to_json.elements.rectangles, "ellipse": this.canvas_to_json.elements.ellipses},
       canvas_to_json_mut: null,
       elementTypes: ["Emoji"],
-      elementTypesGroup1: ["Shapes", "Icons", "Patterns", "Emoji"],
+      elementTypesGroup1: ["Shapes", "Icons", "Emoji", "Gradients"],
       elementTypesGroup2: ["Emoji"],
-      currentElementType: "",
-      elementTypeToComponent: {"Shapes" : ShapeElements, "Gradients": GradientElements, "Icons": IconElements, "Patterns": PatternElements, "Emoji": EmojiElements, "": EmojiElements}
+      prevElementType: "Shapes",
+      currentElementType: "Shapes",
+      elementTypeToComponent: {"Shapes" : ShapeElements, "Gradients": GradientElements, "Icons": IconElements, "Patterns": PatternElements, "Emoji": EmojiElements, "": ShapeElements}
     }
   },
   components: {
@@ -71,11 +67,22 @@ export default {
   watch : {
     canvas_to_json: function(canvas_to_json) {
       this.canvas_to_json_mut = canvas_to_json;
+    },
+    selectedNode : function (node) {
+      // Update selected node
+      if (node == null) {
+        console.log("prev sidebar item", this.prevElementType);
+        this.displayElementList(this.prevElementType);
+      }
+
     }
+  
   },
   methods: {
     displayElementList(elementType) {
       this.currentElementType = elementType;
+      this.prevElementType = elementType;
+      console.log("prev element type SET TO", this.prevElementType);
     },
     clear() {
       for (var i = 0; i < this.canvas_to_json.elements.length; i++) {

@@ -3,17 +3,17 @@
         <h1>Gradients</h1>
 
         <div class="elements">
-            <div class="element_btn" v-on:click="addShapeElement('rectangle', 'gradient')">
+            <div class="element_btn" v-on:click="addShapeElement('rectangle')">
                 <font-awesome-icon icon="square-full" size="4x"/>
                 <p>Rectangle</p>
             </div>   
 
-            <div class="element_btn" v-on:click="addShapeElement('circle', 'gradient')">
+            <div class="element_btn" v-on:click="addShapeElement('circle')">
                 <font-awesome-icon icon="circle" size="4x"/>
                 <p>Circle</p>
             </div>   
 
-            <div class="element_btn" v-on:click="addShapeElement('ellipse', 'gradient')">
+            <div class="element_btn" v-on:click="addShapeElement('ellipse')">
                 <font-awesome-icon icon="square-full" size="4x"/>
                 <p>Ellipse</p>
             </div>   
@@ -35,6 +35,8 @@ export default {
     return {
       colorPickerColor: this.canvas_to_json.background.fill,
       canvas_to_json_mut: this.canvas_to_json,
+       canvasShapes: {"line" : this.canvas_to_json.elements.lines, "circle": this.canvas_to_json.elements.circles, 
+      "rectangle": this.canvas_to_json.elements.rectangles, "ellipse": this.canvas_to_json.elements.ellipses},
       backgroundFillType: "solid"
     }
   },
@@ -46,23 +48,6 @@ export default {
     }
   },
   methods: {
-    changeBackground(background_type) {
-        switch (background_type) {
-            case "solid":
-                this.canvas_to_json_mut.background.fill = this.colorPickerColor;
-                this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
-                break;
-
-            case "gradient":
-                this.addGradient();
-                break;
-                
-            default: 
-                this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
-                this.canvas_to_json_mut.background.fill = this.colorPickerColor;
-        }
-    console.log("background now", this.canvas_to_json_mut.background.fill);
-    },
     addGradient() {
       this.backgroundFillType = "solid";
       this.canvas_to_json_mut.background["fillLinearGradientStartPoint"] = { x: -50, y: -50 }
@@ -74,7 +59,7 @@ export default {
       this.colorPickerColor = hex;
       this.changeBackground();
     },
-    addShapeElement(shape_name, fill) {
+    addShapeElement(shape_name) {
       var shape, index_name;
       var shape_list = this.canvasShapes[shape_name];
       var name = `${shape_name}${shape_list.length + 1}`;
@@ -129,20 +114,10 @@ export default {
             break;
       }
 
-      // Add fill to element 
-      switch (fill) {
-        case "solid":
-          shape.fill = "red";
-          shape.fillType = "solid";
-          break;
-
-        case "gradient":
-          shape.fillType = "gradient";
-          shape.fillLinearGradientStartPoint = { x: -50, y: -50 };
-          shape.fillLinearGradientEndPoint = { x: 250, y: 250 };
-          shape.fillLinearGradientColorStops = [0, this.colorPickerColor, 1, 'yellow'];
-          break;
-      }
+      shape.fillType = "gradient";
+      shape.fillLinearGradientStartPoint = { x: -50, y: -50 };
+      shape.fillLinearGradientEndPoint = { x: 250, y: 250 };
+      shape.fillLinearGradientColorStops = [0, this.colorPickerColor, 1, 'yellow'];
 
       this.canvas_to_json_mut.elements[index_name].push(shape);
 
