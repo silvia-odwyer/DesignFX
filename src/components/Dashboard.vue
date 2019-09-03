@@ -5,8 +5,7 @@
 
       <div class="under_header">
         <Sidebar class="sidebar" :canvas_to_json="canvas_to_json" :allShapes="allShapes" :transformer="$refs.transformer" 
-                  :ifTextOptions="ifTextOptions" :selectedNode="selectedNode" :designTemplates="designTemplates"
-                  @updateCanvasToJson="updateCanvas" :changesMade="changesMade" @toggleModal="toggleModal" @editChangesMade="editChangesMade"></Sidebar>
+                  :selectedNode="selectedNode" @updateCanvasToJson="updateCanvas" :changesMade="changesMade" @toggleModal="toggleModal" @editChangesMade="editChangesMade"></Sidebar>
             
             <div class="main">
               <div class="main_content">
@@ -27,7 +26,7 @@
                       <div v-if="textFontsLoaded">
                         <v-text v-for="item in canvas_to_json.text" :key="item.name" :config="item" v-on:dblclick="editText(item)" 
                         v-on:dragEnd="updateNodePosition(item)"
-                        v-on:click="showTextOptions"/>
+                        />
                       </div>
 
                       <div v-if="!textFontsLoaded">
@@ -55,7 +54,6 @@
 
 <script>
 /* eslint-disable */
-import designTemplatesJSON from "@/assets/json/designTemplates.json"
 import { userSession } from '../userSession'
 import Header from "@/components/Header.vue"
 import Sidebar from "@/components/Sidebar.vue";
@@ -107,7 +105,7 @@ export default {
       ifTextOptions: false,
       currentSidebarComponent: "designs",
       list: [],
-      designTemplates: designTemplatesJSON["designTemplates"],
+
       canvas_to_json: {
         filename: "Design1",
         elements: {
@@ -183,10 +181,7 @@ export default {
       this.canvas_to_json = canvas_to_json;
       this.updateAllShapes();
     },
-    showTextOptions() {
 
-      this.ifTextOptions = true;
-    },
     save() {
       localStorage.setItem('storage', JSON.stringify(this.canvas_to_json));
     },
