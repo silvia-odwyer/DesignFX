@@ -25,14 +25,11 @@ import colorPicker from '@caohenghu/vue-colorpicker'
 
 export default {
   name: 'textOptions',
-  props: ['user', 'allShapes', 'ifTextOptions', 'selectedNode', 'canvas_to_json'],
+  props: ['user', 'allShapes', 'selectedNode', 'canvas_to_json'],
   components: {
     colorPicker
   },
   watch : {
-    ifTextOptions: function(ifTextOptions) {
-      this.ifTextOptions = ifTextOptions;
-    },
     canvas_to_json: function(canvas_to_json) {
       this.canvas_to_json_mut = canvas_to_json;
     }
@@ -47,7 +44,6 @@ export default {
     }
   },
   mounted() {
-    console.log("if text options text comp", this.ifTextOptions);
   },
   methods: {    
     addText(text_elem) {

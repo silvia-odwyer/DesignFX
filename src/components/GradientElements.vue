@@ -101,7 +101,7 @@ export default {
       let index_name = shape_and_indexname[1];
 
       shape.fillType = "gradient";
-      shape.fillLinearGradientStartPoint = { x: -50, y: -50 };
+      shape.fillLinearGradientStartPoint = { x: -120, y: -120 };
       shape.fillLinearGradientEndPoint = { x: 100, y: 100 };
       let linearGradient = gradient.backgroundImage;
       linearGradient = linearGradient.slice(23, linearGradient.length - 1).split(", ");

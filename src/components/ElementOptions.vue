@@ -29,7 +29,7 @@ import TextInputField from "@/components/TextInputField.vue"
 
 export default {
   name: 'elementOptions',
-  props: ['user', 'canvas_to_json', 'allShapes', 'transformer', 'changesMade', 'selectedNode'],
+  props: ['user', 'canvas_to_json', 'allShapes', 'changesMade', 'selectedNode'],
   components: {
     colorPicker,
     TextInputField

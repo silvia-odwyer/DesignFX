@@ -3,7 +3,7 @@
       <h3>Elements</h3>
       <div class="elements">
 
-        <article v-for="i in elementTypesGroup1.length">
+        <article v-for="i in elementTypesGroup1.length" v-bind:key="i">
           <div class="element_btn" v-on:click="displayElementList(elementTypesGroup1[i - 1])">
             <font-awesome-icon icon="square-full" size="4x"/>
             <h1>{{elementTypesGroup1[i - 1]}}</h1>  
@@ -40,6 +40,13 @@ export default {
     this.colorPickerColor = "#67F7F7";
 
     this.canvas_to_json_mut = this.canvas_to_json;
+
+    if (this.selectedNode == null) {
+        let prevElementPane = this.$store.getters.prevElementPane;
+        console.log("GET PREV ELEMENT PANE", prevElementPane)
+
+        this.displayElementList(prevElementPane);
+    }
     
   },
   data () {
@@ -51,7 +58,6 @@ export default {
       elementTypes: ["Emoji"],
       elementTypesGroup1: ["Shapes", "Icons", "Emoji", "Gradients"],
       elementTypesGroup2: ["Emoji"],
-      prevElementType: "Shapes",
       currentElementType: "Shapes",
       elementTypeToComponent: {"Shapes" : ShapeElements, "Gradients": GradientElements, "Icons": IconElements, "Patterns": PatternElements, "Emoji": EmojiElements, "": ShapeElements}
     }
@@ -70,10 +76,7 @@ export default {
     },
     selectedNode : function (node) {
       // Update selected node
-      if (node == null) {
-        console.log("prev sidebar item", this.prevElementType);
-        this.displayElementList(this.prevElementType);
-      }
+      
 
     }
   
@@ -81,17 +84,14 @@ export default {
   methods: {
     displayElementList(elementType) {
       this.currentElementType = elementType;
-      this.prevElementType = elementType;
-      console.log("prev element type SET TO", this.prevElementType);
+      this.$store.commit('change', elementType);
+      console.log("SET TO", elementType)
     },
     clear() {
       for (var i = 0; i < this.canvas_to_json.elements.length; i++) {
         let list = this.canvas_to_json.elements[i];
         list = [];
       };
-      
-    //   const transformerNode = this.$refs.transformer.getStage();
-    //   transformerNode.detach();
 
       localStorage.setItem('storage', JSON.stringify([]));
     },

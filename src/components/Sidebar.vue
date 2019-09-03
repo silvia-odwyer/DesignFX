@@ -29,15 +29,12 @@
         <div class="sidebar_right_bar"> 
 
             <!-- Current chosen component is inserted here. Options include Rich Text Editor, project board, to-do, etc., -->
-            <component v-bind:is="sidebarNameToComponent[currentSidebarComponent]" 
-            :canvas_to_json="canvas_to_json" 
-            :allShapes="allShapes"
-            :ifTextOptions="mutableIfTextOptions"
+            <component v-bind:is="sidebarNameToComponent[currentSidebarComponent]" :canvas_to_json="canvas_to_json" :allShapes="allShapes"
             :selectedNode="selectedNode"
             :transformer="transformer"
-            :designTemplates="designTemplates"
             :changesMade="changesMade"
             @updateCanvasToJson="updateCanvas"
+
             @toggleModal="toggleModal"
             @editChangesMade="editChangesMade"
             ></component>
@@ -65,7 +62,7 @@ import Background from "@/components/Background.vue";
 
 export default {
   name: 'header',
-  props: ['user', 'canvas_to_json', 'designTemplates', 'allShapes', 'transformer', 'ifTextOptions', 'changesMade', 'selectedNode'],
+  props: ['user', 'canvas_to_json', 'allShapes', 'transformer', 'changesMade', 'selectedNode'],
   components: {
       Designs, Elements, Text, Images, TextOptions, ElementOptions
   },
@@ -75,7 +72,6 @@ export default {
       if (node == null) {
         console.log("prev sidebar item", this.prevSidebarItem);
         this.setSidebarItem(this.prevSidebarItem);
-      
       }
       
       else if (this.isNodeElement(node)) {
@@ -97,20 +93,15 @@ export default {
         currentSidebarComponent: 'designs',
         activeBtn: "designs",
         canvas_to_json_mut: this.canvas_to_json,
-        mutableIfTextOptions: false,
         prevSidebarItem: "designs",
     }
   },
   mounted() {
-      console.log("canvas to json", this.canvas_to_json);
-
-      console.log("if text options", this.ifTextOptions);
   },
   methods: {
     setSidebarItem(name) {
       this.currentSidebarComponent = name;
       this.activeBtn = name;
-
       // Save the item so that it can be reverted to later on
       this.prevSidebarItem = name;
     },
@@ -124,13 +115,10 @@ export default {
     },
     isNodeElement(node) {
       let shape_list =  Object.keys(this.canvas_to_json_mut.elements);
-      console.log("SHAPE LIST", shape_list);
       for (var k = 0; k < shape_list.length; k++) {
         let shape_name = shape_list[k].substr(0, 3);
-        console.log("NODE NAME", node);
-        console.log("SHAPE NAME", shape_name);
+
         if (node.name.startsWith(shape_name)) {
-          console.log("node is an element")
           return true;
         }
       }
@@ -175,7 +163,7 @@ export default {
   top: 0;
   left: 0;
   position: fixed;
-  background-color: rgb(31, 31, 31);
+  background-color: rgb(41, 48, 57);
   overflow-x: hidden;
   padding-top: 20px;
   color: rgb(105, 105, 105);
