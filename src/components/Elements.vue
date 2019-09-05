@@ -3,10 +3,10 @@
       <h3>Elements</h3>
       <div class="elements">
 
-        <article v-for="i in elementTypesGroup1.length" v-bind:key="i">
-          <div class="element_btn" v-on:click="displayElementList(elementTypesGroup1[i - 1])">
-            <font-awesome-icon icon="square-full" size="4x"/>
-            <h1>{{elementTypesGroup1[i - 1]}}</h1>  
+        <article v-for="elementType in elementTypesGroup1">
+          <div class="element_btn" v-on:click="displayElementList(elementType[0])">
+            <font-awesome-icon :icon="elementType[1]" size="4x"/>
+            <h1>{{elementType[0]}}</h1>  
           </div>
 
         </article>
@@ -56,7 +56,7 @@ export default {
       "rectangle": this.canvas_to_json.elements.rectangles, "ellipse": this.canvas_to_json.elements.ellipses},
       canvas_to_json_mut: null,
       elementTypes: ["Emoji"],
-      elementTypesGroup1: ["Shapes", "Icons", "Emoji", "Gradients"],
+      elementTypesGroup1: [["Shapes", "shapes"], ["Icons", "icons"], ["Emoji", "laugh-beam"], ["Gradients", "shapes"]],
       elementTypesGroup2: ["Emoji"],
       currentElementType: "Shapes",
       elementTypeToComponent: {"Shapes" : ShapeElements, "Gradients": GradientElements, "Icons": IconElements, "Patterns": PatternElements, "Emoji": EmojiElements, "": ShapeElements}
@@ -115,13 +115,14 @@ ul li {
 }
 
 h1 {
-  font-family: "Lato", sans-serif;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 300;
 }
  
 h3 {
   color: white;
   font-size: 3vh;
-  font-family: "Roboto", sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 .element_btn {

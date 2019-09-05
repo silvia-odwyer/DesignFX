@@ -1,7 +1,7 @@
 <template>
     <div>
         <nav class="topnav" v-bind:style='gradientStyle'>
-          <h3 class="logo">DesignVision</h3>
+          <h3 class="logo">DesignFX</h3>
             <ul>
                 <li>
                   <input v-model="filename" type="text" class="text_field" v-on:input="updateFilename">
@@ -218,8 +218,9 @@ ul li:hover {
 
 .logo {
   color: white;
-  font-size: 1em;
-  font-family: "Helvetica";
+  font-size: 1.2em;
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
   margin-left: 1em;
   padding: 14px 16px;
   flex-grow: 1;

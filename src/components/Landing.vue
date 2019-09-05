@@ -1,10 +1,10 @@
 <template>
-  <div class="hello">
+<div class="hello">
   <main>
     <div class="landing">
       <div class="content">
       <header class="container">
-        <h4 class="logo">Kristal</h4>
+        <h4 class="logo">DesignFX</h4>
         
         <nav class="contright">
           <ul>
@@ -24,7 +24,7 @@
           </p>
           
           <div class="buttons">
-            <button class="btn btn-default btn_fill pulse" @click.prevent="signIn">Sign In With Blockstack</button>
+            <router-link to="/designs"><button class="btn btn-default btn_fill pulse">Get Started</button></router-link>
             <button class=" slide" id="demo"><a href="https://silvia-odwyer.github.io/photon/docs/photon/index.html">Demo</a></button>
           </div>
         </article>
@@ -78,7 +78,6 @@
             </section>
             <div class="tiles">
                 <div class="tile">
-                    <img src="images/cargo.png" id="cargo_logo">
                     <p>Photon's core library is a Rust crate, available from Cargo.</p>
                 </div>
                 
@@ -98,27 +97,10 @@
                   </div> -->
   
                 <div class="tile">
-                    <img src="images/js_logo.png" id="js_logo"/>
                     <p>Write code in JS without a single line of Rust.</p>
                 </div>
-                
-                <!-- <div id="arrowAnim" class="tile">
-                    <div class="arrowSliding">
-                      <div class="arrow"></div>
-                    </div>
-                    <div class="arrowSliding delay1">
-                      <div class="arrow"></div>
-                    </div>
-                    <div class="arrowSliding delay2">
-                      <div class="arrow"></div>
-                    </div>
-                    <div class="arrowSliding delay3">
-                      <div class="arrow"></div>
-                    </div>
-                  </div> -->
-  
+
                 <div class="tile">
-                    <img src="images/wasm_logo.png"/>    
                     <p>JS code gets exported to WebAssembly.</p>          
                 </div>
 
@@ -145,7 +127,6 @@
 
             <section class="guide_pane">
               <div>
-                  <img src="images/futuristic.jpg">
   
               </div>
               <article class="rhs_container">
@@ -169,14 +150,12 @@
                   </p>
                 </section>
                 <div>
-                    <img src="images/daisies.jpg" id="img2"/>
                     <canvas id="correction_canvas"></canvas>
                 </div>
               </section>
 
               <section class="guide_pane">
                   <div>
-                      <img src="images/fuji.jpg" id="img3"/>
                       <canvas id="effects_canvas"></canvas>
                   </div>
 
@@ -209,18 +188,15 @@
             </section>
             <div class="tiles">
                 <div class="tile">
-                    <img src="images/cargo.png" id="cargo_logo">
                     <p>Photon's core library is a Rust crate, available from Cargo.</p>
                 </div>
               
   
                 <div class="tile">
-                    <img src="images/js_logo.png" id="js_logo"/>
                     <p>Write code in JS without a single line of Rust.</p>
                 </div>
               
                 <div class="tile">
-                    <img src="images/wasm_logo.png"/>    
                     <p>JS code gets exported to WebAssembly.</p>          
                 </div>
 
@@ -249,37 +225,35 @@
      </div>
   </main>
   </div>
+
 </template>
 
 <script>
+import Landing from '@/components/Landing.vue'
+import Dashboard from '@/components/Dashboard.vue'
 import { userSession } from '../userSession'
 
 export default {
-  name: 'landing',
+  name: 'LandingPage',
+  components: {},
+  created () {
+  },
+  mounted () {
+  },
+  data () {
+    return {
+    }
+  },
   methods: {
-    signIn () {
-      userSession.redirectToSignIn()
+    signIn()  {
+      userSession.redirectToSignIn();
     }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="scss" scoped>
 
-.hello {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap');
-@import url('https://rsms.me/inter/inter.css');
-html { font-family: 'Inter', sans-serif; }
-@supports (font-variation-settings: normal) {
-  html { font-family: 'Inter var', sans-serif; }
-}
 
 html, body {
   margin: 0;
@@ -409,6 +383,7 @@ img, canvas {
   align-items: flex-start;
   font-size: 1.2em;
   padding: 0.7em;
+  color: black;
 }
 
 

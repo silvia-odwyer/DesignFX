@@ -1,6 +1,6 @@
 <template>
     <div class="dashboard">
-      <Header :user="user" :transformer="$refs.transformer" :canvas_to_json="canvas_to_json" @updateCanvasToJson="updateCanvas"></Header>
+      <Header :transformer="$refs.transformer" :canvas_to_json="canvas_to_json" @updateCanvasToJson="updateCanvas"></Header>
 
       <section class="under_header">
         <Sidebar class="sidebar" :canvas_to_json="canvas_to_json" :allShapes="allShapes" :transformer="$refs.transformer" 
@@ -63,7 +63,7 @@ const height = window.innerHeight;
 
 export default {
   name: 'dashboard',
-  props: ['user'],
+  props: [],
   components: {
     Header,
     Sidebar,
@@ -72,7 +72,7 @@ export default {
   created() {
     WebFontLoader.load({
       google: {
-        families: ['Oswald', 'Droid Serif', 'Montserrat', 'Lato']
+        families: ['Oswald', 'Droid Serif', 'Montserrat', 'Lato', 'Open Sans']
       },
       active: this.setFontLoaded,
     });
@@ -300,6 +300,12 @@ export default {
     src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/fonts/fontawesome-webfont.ttf');
     font-weight: normal;
     font-style: normal;
+}
+
+@import url('https://rsms.me/inter/inter.css');
+html { font-family: 'Inter', sans-serif; }
+@supports (font-variation-settings: normal) {
+  html { font-family: 'Inter var', sans-serif; }
 }
 
 .main {

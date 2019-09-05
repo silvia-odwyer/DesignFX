@@ -59,9 +59,13 @@ export default {
   mounted() {
     console.log("SELECTED NODE", this.selectedNode);
 
-    if (this.selectedNode != undefined || this.selectedNode != null) {
+    if (this.selectedNode != undefined && this.selectedNode != null) {
       let shapeList = this.getShapeList();
+
+      console.log("!!LOOKING FOR NAME", this.selectedNode.name);
+      console.log("!!SHAPE LIST NOW", shapeList);
       this.elementNode = shapeList.find(elem => elem.name === this.selectedNode.name);
+      console.log("ELEMENT NODE NOW", this.elementNode);
     }
 
   },
