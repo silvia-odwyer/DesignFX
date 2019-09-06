@@ -21,7 +21,8 @@ export const store = new Vuex.Store({
             images: [],
             background: {},
             backgroundColor: "#FFFFFF"
-        }
+        },
+        user: null
     },
     mutations: {
         change(state, prevElementPane) {
@@ -32,12 +33,16 @@ export const store = new Vuex.Store({
         },
         updateCanvas(state, canvas_to_json) {
             state.canvas_to_json = canvas_to_json
+        },
+        updateUser(state, user) {
+            state.user = user
         }
     },
     getters: {
         prevElementPane: state => state.prevElementPane,
         designTemplates: state => state.designTemplates,
         transformer: state => state.transformer,
+        user: state => state.user,
         canvas_to_json: state => state.canvas_to_json
     }
 })

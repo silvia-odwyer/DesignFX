@@ -3,14 +3,14 @@ import App from './App.vue'
 import router from './router'
 import VueKonva from 'vue-konva'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUserSecret, faVectorSquare, faImage, faImages, faAlignJustify, faAdjust, faShapes, faLayerGroup, faSquare, faSquareFull, faCircle, faChartLine, faEllipsisH, faArrowAltCircleDown, faSortDown, faSortUp, faClone, faAngleDoubleUp, faBarcode, faCheckSquare, faChartPie, faChartBar } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faVectorSquare, faImage, faImages, faAlignJustify, faAdjust, faShapes, faIcons, faLayerGroup, faSquare, faSquareFull, faCircle, faChartLine, faEllipsisH, faArrowAltCircleDown, faSortDown, faSortUp, faClone, faAngleDoubleUp, faBarcode, faCheckSquare, faChartPie, faChartBar, faLaughBeam } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { store } from './store/store'
 
 window.blockstack = require('blockstack')
 window.axios = require('axios')
 
-library.add(faVectorSquare, faImage, faImages, faAlignJustify, faShapes, faAngleDoubleUp, faBarcode, faCheckSquare, faChartPie, faChartBar, faLayerGroup, faSquareFull, faCircle, faChartLine, faEllipsisH, 
+library.add(faVectorSquare, faImage, faImages, faAlignJustify, faShapes, faAngleDoubleUp, faBarcode, faLaughBeam, faCheckSquare, faIcons, faChartPie, faChartBar, faLayerGroup, faSquareFull, faCircle, faChartLine, faEllipsisH, 
             faArrowAltCircleDown, faSortDown, faSortUp, faClone)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

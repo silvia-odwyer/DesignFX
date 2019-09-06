@@ -14,7 +14,7 @@ export default new Router({
     {
       path: '/',
       name: 'landingPage',
-      component: Landing
+      component: Home
     },
     {
       path:'/designs', 
