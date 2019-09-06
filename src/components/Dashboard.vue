@@ -1,14 +1,13 @@
 <template>
     <div class="dashboard">
-      <Header :transformer="$refs.transformer" :canvas_to_json="canvas_to_json" @updateCanvasToJson="updateCanvas"></Header>
+      <Header :user="user" :transformer="$refs.transformer" :canvas_to_json="canvas_to_json" @updateCanvasToJson="updateCanvas"></Header>
 
       <section class="under_header">
-        <Sidebar class="sidebar" :canvas_to_json="canvas_to_json" :allShapes="allShapes" :transformer="$refs.transformer" 
+        <Sidebar :user="user" class="sidebar" :canvas_to_json="canvas_to_json" :allShapes="allShapes" :transformer="$refs.transformer" 
                   :selectedNode="selectedNode" @updateCanvasToJson="updateCanvas" :changesMade="changesMade" @toggleModal="toggleModal" @removeTransformer="removeTransformer"  @editChangesMade="editChangesMade"></Sidebar>
             
             <section class="main">
               <section class="main_content">
-              
                 <section class="content">
                   
                   <v-stage ref="stage" :config="stageSize" @mousedown="handleStageMouseDown" id="stage" >
@@ -44,6 +43,7 @@
                 </section>
             </section>
             </section>
+
             </section>
             <Modal v-if="showModal" @close="toggleModal"></Modal>
       </div>
@@ -56,6 +56,7 @@ import Header from "@/components/Header.vue"
 import Sidebar from "@/components/Sidebar.vue";
 import Modal from "@/components/Modal.vue";
 import WebFontLoader from 'webfontloader';
+import { Person } from 'blockstack'
 
 var IMAGE_STORAGE_FILE = "image.PNG";
 const width = window.innerWidth;
@@ -93,12 +94,25 @@ export default {
       canvas_to_json:  this.$store.getters.canvas_to_json,
       textFontsLoaded: false,
       showModal: false,
-      changesMade: false
+      changesMade: false,
+      userSession: null,
+      user: this.$store.getters.user
     }
   },
   watch: {
   },
   mounted () {
+    if (userSession.isUserSignedIn()) {
+      this.userData = userSession.loadUserData()
+      this.user = new Person(this.userData.profile)
+      this.user.username = this.userData.username
+      this.$store.commit('updateUser', this.user);
+    } else if (userSession.isSignInPending()) {
+      userSession.handlePendingSignIn()
+        .then((userData) => {
+          window.location = window.location.origin + "/app";
+        })
+    }
     this.initCanvas();
   },
   methods: {
@@ -139,6 +153,21 @@ export default {
     },
     save() {
       localStorage.setItem('storage', JSON.stringify(this.canvas_to_json));
+    },
+    signIn() {
+      userSession.redirectToSignIn();
+    },
+    initBlockstack() {
+      if (userSession.isUserSignedIn()) {
+        this.userData = userSession.loadUserData();
+        this.user = new Person(this.userData.profile);
+        this.user.username = this.userData.username;
+      } else if (userSession.isSignInPending()) {
+        userSession.handlePendingSignIn()
+          .then((userData) => {
+            window.location = window.location.origin;
+          })
+      }
     },
     toggleModal() {
       console.log("toggle modal")
@@ -306,6 +335,11 @@ export default {
 html { font-family: 'Inter', sans-serif; }
 @supports (font-variation-settings: normal) {
   html { font-family: 'Inter var', sans-serif; }
+}
+
+.dashboard {
+  background-color: rgb(211, 211, 211);
+  height: 100%;
 }
 
 .main {

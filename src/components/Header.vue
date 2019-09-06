@@ -16,11 +16,11 @@
 
           <div class="user_dropdown" v-on:click="toggleDropdown">
             <h1>
-              <img :src="user.avatarUrl() ? user.avatarUrl() : '/avatar-placeholder.png'" class="avatar">
+              <img :src="avatarURL" class="avatar">
             </h1>
             <h2 class="username">
               <div>
-                {{ user.username ? user.username.substring(0, user.username.length - 14) : user.identityAddress }}
+                {{username}}
               </div>
               <font-awesome-icon :icon="dropdownIcon" size="s" />
 
@@ -38,8 +38,11 @@
                       <li v-on:click="changeNavGradient">
                         Change Gradient
                       </li>
-                     <li class="list">
+                     <li class="list" v-if="user">
                         <a href="#" @click.prevent="signOut">Sign Out</a>
+                      </li>
+                      <li class="list" v-if="!user">
+                        <a href="#" @click.prevent="signIn">Sign In</a>
                       </li>
                     </ul>
                 </div>
@@ -72,6 +75,22 @@ export default {
   },
   components: {
     Modal
+  },
+  computed: {
+    avatarURL() {
+      // if (this.user != null && this.user != undefined) {
+      //   return this.user.avatarUrl();
+      // }
+      return "/avatar-placeholder.png"
+    },
+    username() {
+       if (this.user != null && this.user != undefined) {
+         console.log("user")
+         return this.user.username.substring(0, this.user.username.length - 14);
+       }
+         return "Not Signed In"
+       
+    }
   },
   mounted() {
     this.canvas_to_json_mut = this.canvas_to_json;
@@ -150,17 +169,6 @@ export default {
       substr += gradient_cols + ")";
       this.gradientStyle = substr;
     },
-    fetchData () {
-      userSession.getFile(STORAGE_FILE) // decryption is enabled by default
-        .then((todosText) => {
-          var notes = JSON.parse(todosText || '[]')
-          notes.forEach(function (note, index) {
-            note.id = index
-          })
-          this.uidCount = notes.length
-          this.notes = notes
-        })
-    },
     showOptions() {
       console.log("show options");
       this.showOptionsModal = true;
@@ -170,6 +178,9 @@ export default {
     },
     getRandomNumber(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+    signIn() {
+      userSession.redirectToSignIn();
     }
   }
 }

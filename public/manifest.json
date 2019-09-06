@@ -1,7 +1,7 @@
 {
-  "name": "Graphic Design App",
+  "name": "DesignFX",
   "start_url": "",
-  "description": "A graphic design app build on Blockstack",
+  "description": "A graphic design app built on Blockstack",
   "icons": [{
     "src": "http://blockstack-todos.appartisan.com/logo.png",
     "sizes": "400x400",
