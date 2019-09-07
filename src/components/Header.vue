@@ -1,7 +1,7 @@
 <template>
     <div>
         <nav class="topnav" v-bind:style='gradientStyle'>
-          <h3 class="logo">DesignFX</h3>
+          <h3 class="logo"><router-link to="/">DesignFX</router-link></h3>
             <ul>
                 <li>
                   <input v-model="filename" type="text" class="text_field" v-on:input="updateFilename">
@@ -32,11 +32,14 @@
                       <li>
                         <button v-on:click="exportAsJSON">Export As JSON</button>
                       </li>
-                      <li v-on:click="showOptions">
+                      <!-- <li v-on:click="showOptions">
                         Options
-                      </li>
+                      </li> -->
                       <li v-on:click="changeNavGradient">
                         Change Gradient
+                      </li>
+                      <li v-on:click="saveDesign">
+                        Save
                       </li>
                      <li class="list" v-if="user">
                         <a href="#" @click.prevent="signOut">Sign Out</a>
@@ -57,6 +60,7 @@
 /* eslint-disable */
 import { userSession } from '../userSession'
 import Modal from "@/components/Modal.vue"
+const STORAGE_FILE = "designs.json"
 
 export default {
   name: 'appHeader',
@@ -67,6 +71,7 @@ export default {
       dropdownIcon: "sort-down",
       showOptionsModal: false,
       canvas_to_json_mut: null,
+      designs: this.$store.getters.designs,
       filename: this.canvas_to_json.filename,
       gradientStyle: "background-image: linear-gradient(90deg, black, navy)",
       gradients: [["blue", "fuchsia"], ["#3494E6", "#EC6EAD"], ["#67B26F", "#4ca2cd"], ["#36D1DC", "#5B86E5"], ["blue", "fuchsia"], ["#1c92d2", "#f2fcfe"], ["#000000", "#0f9b0f"], ["#CB356B", "#BD3F32"], ["#3A1C71", "#D76D77", "#FFAF7B"], ["#283c86", "#45a247", ["#159957", "#155799"], ["#000046", "#1CB5E0"]]],
@@ -92,13 +97,22 @@ export default {
        
     }
   },
-  mounted() {
-    this.canvas_to_json_mut = this.canvas_to_json;
-  },
   watch: {
     canvas_to_json: function(canvas_to_json) {
       this.canvas_to_json_mut = canvas_to_json;
+    },
+    designs: {
+			handler: function (designs) {
+				console.log("uploading to blockstack");
+        this.$store.commit('updateCanvas', designs);
+				// encryption is now enabled by default
+				return userSession.putFile(STORAGE_FILE, JSON.stringify(designs))
+			},
+			deep: true
     }
+  },
+  mounted() {
+    this.canvas_to_json_mut = this.canvas_to_json;
   },
   methods: {
     updateFilename() {
@@ -163,21 +177,44 @@ export default {
     },
     changeNavGradient() {
       let substr = this.gradientStyle.substring(0, 41);
-      console.log(substr);
       let ran_num = this.getRandomNumber(0, this.gradients.length - 1);
       let gradient_cols = this.gradients[ran_num].join(", ");
       substr += gradient_cols + ")";
       this.gradientStyle = substr;
     },
     showOptions() {
-      console.log("show options");
       this.showOptionsModal = true;
     },
     signOut () {
-      userSession.signUserOut(window.location.href)
+      userSession.signUserOut(window.location.href.substr(0, window.location.href.length - 4));
     },
     getRandomNumber(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
+    },
+    saveDesign() {
+      // see if design already exists 
+      if (this.canvas_to_json_mut.id == null || this.canvas_to_json_mut.id == undefined) {
+          let id = this.genRandomID();
+          this.canvas_to_json_mut.id = id;
+     			this.designs.unshift(this.canvas_to_json_mut);
+      }
+      else {
+        // retrieve file of interest from designs
+        var design = this.designs.find(design => design.id == this.canvas_to_json_mut.id);
+        design = this.canvas_to_json_mut;
+      }
+      console.log("DESIGNS", this.designs);
+    },
+    genRandomID() {
+      let random_id = "";
+      let ID_LENGTH = 10;
+      let alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"];
+      for (var j = 0; j < ID_LENGTH; j++) {
+        let ran_num = this.getRandomNumber(0, alphabet.length - 1);
+        let letter = alphabet[ran_num];
+        random_id += letter;
+      }
+      return random_id;
     },
     signIn() {
       userSession.redirectToSignIn();
@@ -255,7 +292,7 @@ a {
 }
 
 a:hover {
-  color: black;
+  color: rgb(4, 210, 224);
 }
 
 li:hover{

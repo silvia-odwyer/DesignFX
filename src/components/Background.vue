@@ -3,10 +3,10 @@
       <h3>Background</h3>
       <div class="elements">
 
-          <div class="element_btn" v-on:click="changeBackground('gradient')">
+          <!-- <div class="element_btn" v-on:click="changeBackground('gradient')">
             <font-awesome-icon icon="square-full" size="4x"/>
             <p>Add Gradient</p>
-          </div>
+          </div> -->
           <color-picker
                   :color="colorPickerColor"
                   @changeColor="changeColor"

@@ -12,17 +12,32 @@ export const store = new Vuex.Store({
         canvas_to_json: {
             filename: "Design1",
             elements: {
-            rectangles: [],
-            circles: [],
-            lines : [],
-            ellipses: [],
+                rectangles: [],
+                circles: [],
+                lines : [],
+                ellipses: [],
             },
             text: [],
             images: [],
             background: {},
             backgroundColor: "#FFFFFF"
         },
-        user: null
+        new_canvas_to_json: {
+            filename: "Design1",
+            elements: {
+                rectangles: [],
+                circles: [],
+                lines : [],
+                ellipses: [],
+            },
+            text: [],
+            images: [],
+            background: {},
+            backgroundColor: "#FFFFFF"
+        },
+        user: null,
+        userData: null,
+        designs: []
     },
     mutations: {
         change(state, prevElementPane) {
@@ -36,6 +51,12 @@ export const store = new Vuex.Store({
         },
         updateUser(state, user) {
             state.user = user
+        },
+        updateDesigns(state, designs) {
+            state.designs = designs
+        },
+        updateUserData(state, userData) {
+            state.userData = userData
         }
     },
     getters: {
@@ -43,6 +64,9 @@ export const store = new Vuex.Store({
         designTemplates: state => state.designTemplates,
         transformer: state => state.transformer,
         user: state => state.user,
-        canvas_to_json: state => state.canvas_to_json
+        canvas_to_json: state => state.canvas_to_json,
+        designs: state => state.designs,
+        userData: state => state.userData,
+        new_canvas_to_json: state => state.new_canvas_to_json,
     }
 })

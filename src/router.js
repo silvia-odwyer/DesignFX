@@ -25,6 +25,11 @@ export default new Router({
       path: '/app', 
       name: "Designer",
       component: Dashboard
+    },
+    {
+      path: '/app/:id', 
+      name: "app",
+      component: Dashboard
     }
   ]
 })
