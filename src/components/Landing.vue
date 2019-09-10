@@ -363,7 +363,7 @@ button:hover {
   position: relative;
   font-size: inherit;
   font-family: inherit;
-  color: white;
+  color: black;
   padding: 0.5em 1em;
   outline: none;
   border: solid rgb(0, 0, 175) 0.1em;
