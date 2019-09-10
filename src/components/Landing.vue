@@ -20,12 +20,11 @@
       <article class="landing_hero">
         <article class="landing_text">
           <h1>Supercharge Your Graphic Design</h1>
-          <p>Design should be intuitive. Create bold, striking designs in seconds. Will always be free.
-          </p>
+          <p>Create bold, striking designs in seconds with DesignFX.</p>
           
           <div class="buttons">
             <router-link to="/designs"><button class="btn btn-default btn_fill pulse">Get Started</button></router-link>
-            <button class=" slide" id="demo"><a href="https://silvia-odwyer.github.io/photon/docs/photon/index.html">Demo</a></button>
+            <router-link to="/designs"><button class=" slide">Demo</button></router-link>            
           </div>
         </article>
   
@@ -135,7 +134,6 @@
           <ul>
             <li>Home</li>
             <li> <a href="https://github.com/silvia-odwyer">GitHub</a></li>
-            <li><a href="https://silvia-odwyer.github.io/photon/docs">Docs</a></li>
           </ul>
         </div>
       </footer>
