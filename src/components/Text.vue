@@ -7,10 +7,9 @@
 
           <h3>Text Elements </h3>
           <ul>
-            <li v-on:click="addText(headingTextElem)"><h1>Heading</h1></li>
-            <li v-on:click="addText(secondaryHeadingTextElem)"><h2>Secondary Heading</h2></li>
-            <li v-on:click="addText(paragraphTextElem)">Paragraph text</li>
-
+            <li v-for="elem in textElements" v-on:click="addText(elem)">
+              <h1>{{elem.text}}</h1>
+            </li>
           </ul>
 
       </div>              
@@ -37,9 +36,10 @@ export default {
   data () {
     return {
       img: null,
-      headingTextElem: {fontSize: 100, fontFamily: "Roboto"},
-      secondaryHeadingTextElem: {fontSize: 40, fontFamily: "Roboto"},
-      paragraphTextElem: {fontSize: 20, fontFamily: "Helvetica"},
+      textElements: [{text: "Heading" , fontSize: 100, fontFamily: "Roboto", fillType: "solid"},
+      {text: "Secondary Heading", fontSize: 40, fontFamily: "Roboto", fillType: "solid"},
+      {text: "paragraph text", fontSize: 20, fontFamily: "Helvetica", fillType: "solid"},
+      {text: "gradient text", fontSize: 20, fontFamily: "Roboto", fillType: "gradient"}],
       canvas_to_json_mut: this.canvas_to_json
     }
   },
@@ -47,13 +47,12 @@ export default {
   },
   methods: {    
     addText(text_elem) {
-
       let name = `text_node${this.canvas_to_json_mut.text.length + 1}`
       
       let simpleText = {
         x: 50,
         y: 50,
-        text: 'Sample Text',
+        text: text_elem.text,
         fill: this.textColor,
         draggable: 'true',
         name: name,
@@ -62,9 +61,15 @@ export default {
 
       simpleText.fontSize = text_elem.fontSize;
       simpleText.fontFamily = text_elem.fontFamily;
+
+      if (text_elem.fillType == "gradient") {
+        simpleText.fillType = "gradient";
+        simpleText.fillLinearGradientStartPoint = { x: -10, y: -10 };
+        simpleText.fillLinearGradientEndPoint = { x: 20, y: 30 };
+        simpleText.fillLinearGradientColorStops = [0, "red", 1, 'yellow'];
+      };
       
       this.canvas_to_json_mut.text.push(simpleText);
-
       this.allShapes.push(simpleText);
       this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
       // this.selectedNode = simpleText;
@@ -82,9 +87,10 @@ export default {
     font-weight: normal;
     font-style: normal;
 }
-section{
+section {
   margin-left: 2vh;
 }
+
 
 ul li {
   text-decoration: none;
@@ -117,6 +123,8 @@ button {
 
 h2 {
   font-size: 2.5vh;
+  font-size: 72px;
+
 }
 
 button:hover{

@@ -4,23 +4,23 @@
             <div class="sidebar_left_bar">
                 <div>
                     <li @click="setSidebarItem('designs')" id="currentComponentBtn" :class="{ active : activeBtn == 'designs' }">
-                          <font-awesome-icon icon="layer-group" size="2x"/>
+                          <font-awesome-icon icon="layer-group" size="2x"/> 
                         Designs
                     </li>
                     <li @click="setSidebarItem('elements')" :class="{ active : activeBtn == 'elements' }">
-                          <font-awesome-icon icon="shapes" size="2x"/>
+                          <font-awesome-icon icon="shapes" size="2x"/> 
                           Elements 
                     </li>
                     <li @click="setSidebarItem('images')" :class="{ active : activeBtn == 'images' }">
-                          <font-awesome-icon icon="images" size="2x"/>
+                          <font-awesome-icon icon="images" size="2x"/> 
                         Images 
                     </li>
                     <li @click="setSidebarItem('text')" :class="{ active : activeBtn == 'text' }">
-                          <font-awesome-icon icon="align-justify" size="2x"/>
+                          <font-awesome-icon icon="align-justify" size="2x"/> 
                         Text 
                     </li>
                     <li @click="setSidebarItem('background')" :class="{ active : activeBtn == 'background' }">
-                        <font-awesome-icon icon="clone" size="2x"/>
+                        <font-awesome-icon icon="clone" size="2x"/> 
                         Background 
                     </li>
                 </div>
@@ -187,6 +187,7 @@ export default {
   height: 100vh;
   background-color: rgb(41, 48, 57);
 }
+
 
 a {
   text-decoration: none;

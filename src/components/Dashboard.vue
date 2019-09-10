@@ -59,6 +59,7 @@ import WebFontLoader from 'webfontloader';
 import { Person } from 'blockstack'
 
 var IMAGE_STORAGE_FILE = "image.PNG";
+var DESIGNS_STORAGE_FILE = "designs.json";
 const width = window.innerWidth;
 const height = window.innerHeight;
 
@@ -91,29 +92,34 @@ export default {
       ifTextOptions: false,
       currentSidebarComponent: "designs",
       list: [],
-      canvas_to_json:  this.$store.getters.canvas_to_json,
+      canvas_to_json: this.$store.getters.new_canvas_to_json,
       textFontsLoaded: false,
       showModal: false,
       changesMade: false,
       userSession: null,
-      user: this.$store.getters.user
+      user: this.$store.getters.user,
+      designs: this.$store.getters.designs,
     }
   },
   watch: {
   },
   mounted () {
+    // If user is signed in.
+    
     if (userSession.isUserSignedIn()) {
-      this.userData = userSession.loadUserData()
-      this.user = new Person(this.userData.profile)
-      this.user.username = this.userData.username
-      this.$store.commit('updateUser', this.user);
+        this.userData = userSession.loadUserData()
+        this.user = new Person(this.userData.profile)
+        this.user.username = this.userData.username
+        this.$store.commit('updateUser', this.user);
+        this.$store.commit('updateUserData', this.userData);
+        this.fetchDesigns();
     } else if (userSession.isSignInPending()) {
-      userSession.handlePendingSignIn()
-        .then((userData) => {
-          window.location = window.location.origin + "/app";
-        })
+        userSession.handlePendingSignIn()
+          .then((userData) => {
+            window.location = window.location.origin + "/app";
+          })
     }
-    this.initCanvas();
+    
   },
   methods: {
     // Initialise the canvas by creating a background rect, etc.,
@@ -151,24 +157,39 @@ export default {
 
       this.updateAllShapes();
     },
+    fetchDesigns() {
+      let app = this;
+      userSession.getFile(DESIGNS_STORAGE_FILE) // decryption is enabled by default
+          .then((designsText) => {
+                let design_id = app.$route.params.id;
+                var designs = JSON.parse(designsText || '[]');
+                console.log("designs", designs);
+                app.designs = designs;
+                app.$store.commit('updateDesigns', app.designs);
+                
+                // Check if a design ID was supplied in the route's path.
+                console.log("DESIGN ID", design_id);
+                if (design_id != null && design_id != undefined) {
+                  let design = app.designs.find(design => design.id == design_id);
+                  console.log("design", design);
+                  app.canvas_to_json = design;
+                  app.updateAllShapes();
+                  app.initCanvas()
+                }
+                // New design
+                else {
+                  let new_canvas_to_json = app.$store.getters.new_canvas_to_json;
+                  app.canvas_to_json = new_canvas_to_json;
+                }
+      });
+    },
     save() {
       localStorage.setItem('storage', JSON.stringify(this.canvas_to_json));
     },
     signIn() {
       userSession.redirectToSignIn();
     },
-    initBlockstack() {
-      if (userSession.isUserSignedIn()) {
-        this.userData = userSession.loadUserData();
-        this.user = new Person(this.userData.profile);
-        this.user.username = this.userData.username;
-      } else if (userSession.isSignInPending()) {
-        userSession.handlePendingSignIn()
-          .then((userData) => {
-            window.location = window.location.origin;
-          })
-      }
-    },
+
     toggleModal() {
       console.log("toggle modal")
       this.showModal = !this.showModal;
