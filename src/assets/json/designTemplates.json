@@ -3,7 +3,7 @@
         {
             "name": "Lemonade",
             "filename": "Design1",
-            "imageThumbnail": "lemonade.png",
+            "imageThumbnail": "https://i.imgur.com/Lh6Api1.png",
             "elements": {
             "rectangles": [] ,
             "circles": [],
@@ -37,34 +37,12 @@
             "featureImage" : {"name": ""}
         },
         {
-            "name": "Travel",
+            "name": "The Summer Collection",
             "filename": "Design1",
-            "imageThumbnail": "travel.png",
+            "imageThumbnail": "https://i.imgur.com/PRmD95Yb.png",
             "elements": {
             "rectangles": [] ,
             "circles": [],
-            "lines" : [],
-            "ellipses": []
-            },
-            "text": [],
-            "images": [],
-            "backgroundColor": "aliceblue",
-            "background": {},
-            "featureImage" : {"name" : "travel.png"}
-        },
-        {
-            "name": "The Summer Collection",
-            "filename": "Design1",
-            "imageThumbnail": "summer_collection.png",
-            "elements": {
-            "rectangles": [] ,
-            "circles": [{"x" : 160, 
-                "y": 180, 
-                "radius": 50, 
-                "fill": "red", 
-                "name": "circle1",
-                "draggable": true
-            }],
             "lines" : [],
             "ellipses": []
             },
@@ -81,13 +59,13 @@
             "images": [],
             "backgroundColor": "white",
             "background": {},
-            "featureImage" : {"name" : "summer_collection.png"}
+            "featureImage" : {"name" : "https://i.imgur.com/PRmD95Yb.png"}
 
         },
         {
             "name": "Stockholm",
             "filename": "Design1",
-            "imageThumbnail": "stockholm.png",
+            "imageThumbnail": "https://i.imgur.com/6nUDrJ3.png",
             "elements": {
             "rectangles": [] ,
             "circles": [],
@@ -95,21 +73,149 @@
             "ellipses": []
             },
             "text": [        
-                {"x": 30,
+                {"x": 130,
                 "y": 250,
-                "text": "VISIT STOCKHOLM",
+                "text": "VISIT",
                 "fontSize": 100,
                 "fontFamily": "Oswald, sans-serif",
                 "fill": "white",
                 "draggable": "true",
                 "name": "text1",
+                "isVisible": true},
+                {"x": 130,
+                    "y": 350,
+                    "text": "STOCKHOLM",
+                    "fontSize": 100,
+                    "fontFamily": "Oswald, sans-serif",
+                    "fill": "white",
+                    "draggable": "true",
+                    "name": "text2",
+                    "isVisible": true}],
+            "images": [],
+            "backgroundColor": "beige",
+            "background": {},
+            "featureImage" : {"name" : "https://i.imgur.com/8zDxGBns.jpg"}
+        },
+        {
+            "name": "CityNight",
+            "filename": "Design1",
+            "imageThumbnail": "https://i.imgur.com/qTFbUiRh.png",
+            "elements": {
+            "rectangles": [] ,
+            "circles": [],
+            "lines" : [],
+            "ellipses": []
+            },
+            "text": [        
+                {"x": 330,
+                "y": 390,
+                "text": "NEW YORK",
+                "fontSize": 100,
+                "fontFamily": "Oswald, sans-serif",
+                "fill": "white",
+                "draggable": "true",
+                "name": "text1",
+                "isVisible": true},
+                {"x": 330,
+                    "y": 470,
+                    "text": "@ NIGHT",
+                    "fontSize": 100,
+                    "fontFamily": "Oswald, sans-serif",
+                    "fill": "white",
+                    "draggable": "true",
+                    "name": "text2",
+                    "isVisible": true}],
+            "images": [],
+            "backgroundColor": "black",
+            "background": {},
+            "featureImage" : {"name" : "https://i.imgur.com/2TAdW2ph.jpg"}
+        },
+        {
+            "name": "Robotika",
+            "filename": "Design1",
+            "imageThumbnail": "https://i.imgur.com/YSeSrqah.png",
+            "elements": {
+            "rectangles": [] ,
+            "circles": [],
+            "lines" : [],
+            "ellipses": []
+            },
+            "text": [        
+                {"x": 400,
+                "y": 540,
+                "text": "ROBOTIKA",
+                "fontSize": 60,
+                "fontFamily": "Roboto, sans-serif",
+                "fill": "white",
+                "draggable": "true",
+                "name": "text1",
                 "isVisible": true}],
             "images": [],
-            "backgroundColor": "white",
+            "backgroundColor": "black",
             "background": {},
-            "featureImage" : {"name" : "stockholm.png"}
+            "featureImage" : {"name" : "https://i.imgur.com/8zDxGBns.jpg"}
         },
-        {"name": "City", "imageThumbnail": "stockholm.png", "filename":"Robotika","elements":{"rectangles":[{"x":127,"y":135.9499969482422,"width":100,"height":100,"name":"rectangle1","draggable":true,"fill":"#000000","isRootInsert":false,"elm":{}},{"x":479.73333740234375,"y":249.9499969482422,"width":100,"height":100,"name":"rectangle2","draggable":true,"fill":"#000000","isRootInsert":false,"elm":{}}],"circles":[],"lines":[],"ellipses":[]},"text":[{"x":160.9108268604205,"y":137.65528920360236,"text":"ROBOTIKA","fill":"#FFFFFF","draggable":"true","name":"text_node1","isVisible":true,"fontSize":100,"fontFamily":"Roboto","isRootInsert":false,"elm":{}},{"x":491.9189617950483,"y":252.29102942690724,"text":"robotika.net","fill":"#FF00AC","draggable":"true","name":"text_node2","isVisible":true,"fontSize":30,"fontFamily":"Arial","isRootInsert":false,"elm":{}}],"images":[],"background":{"x":0,"y":0,"width":798.72,"height":615,"fill":"#FFFFFF","name":"backgroundRect","elm":{}},"backgroundColor":"#FFFFFF"}
+        {
+            "name": "Travel",
+            "filename": "Travel",
+            "imageThumbnail": "https://i.imgur.com/tY6Mbt2h.png",
+            "elements": {
+            "rectangles": [] ,
+            "circles": [],
+            "lines" : [],
+            "ellipses": []
+            },
+            "text": [  
+                {"x": 330,
+                "y": 100,
+                "text": "TRAVEL",
+                "fontSize": 60,
+                "fontFamily": "Roboto, sans-serif",
+                "fill": "red",
+                "draggable": "true",
+                "name": "text1",
+                "isVisible": true}],
+            "images": [],
+            "backgroundColor": "aliceblue",
+            "background": {},
+            "featureImage" : {"name" : "https://i.imgur.com/Mch1vmc.jpg"}
+        },
+        {
+            "name": "PlainRobotika",
+            "filename": "Design1",
+            "imageThumbnail": "https://i.imgur.com/0C0SxWrh.png",
+            "elements": {
+            "rectangles": [] ,
+            "circles": [],
+            "lines" : [],
+            "ellipses": []
+            },
+            "text": [        
+                {"x": 160,
+                "y": 140,
+                "text": "ROBOTIKA",
+                "fontSize": 100,
+                "fontFamily": "Roboto, sans-serif",
+                "fill": "white",
+                "draggable": "true",
+                "name": "text1",
+                "isVisible": true},
+                {"x": 360,
+                    "y": 250,
+                    "text": "robotika.net",
+                    "fontSize": 50,
+                    "fontFamily": "Roboto, sans-serif",
+                    "fill": "magenta",
+                    "draggable": "true",
+                    "name": "text2",
+                    "isVisible": true}
+            ],
+            "images": [],
+            "backgroundColor": "black",
+            "background": {},
+            "featureImage" : {"name" : "https://i.imgur.com/0C0SxWrh.png"}
+        }
+        
     ]
 
 }      

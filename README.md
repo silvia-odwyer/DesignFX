@@ -8,9 +8,9 @@ for social media and beyond.
 ![DesignFX In Action](https://i.imgur.com/DCfRs7e.gif "DesignFX in action")
 
 Features:
-- **Import images from Unsplash**
-- **Save/export** final graphics, and design layouts as JSON
-- **Resize** graphics for social media
+- **Elements**: Select from a number of elements and customize them to your liking.
+- **Save/export** final graphics, and design layouts as JSON and with Blockstack.
+- **Pre-built templates** allows for faster designing
 
 Dev Notes:
 - Built with Vue, Vuex, and Vue Router. 
