@@ -2,7 +2,7 @@
     <article>
       <div class="img_templates">
            <div v-for="(template, index) in designTemplates" v-bind:key="template.name" v-on:click="displayTemplate(index)">
-            <img :src="require(`@/assets/${template.imageThumbnail}`)"/>
+            <img :src="template.imageThumbnail"/>
           </div>
       </div>              
     </article>
@@ -13,13 +13,7 @@
 import {cloneDeepWith} from "lodash-es";
 import { userSession } from '../userSession'
 import image from "@/assets/daisies_small.jpg";
-import layout1 from "@/assets/travel.png";
-import layout2 from "@/assets/lemonade.png";
-import layout3 from "@/assets/summer_collection.png";
-import layout4 from "@/assets/travel.png";
-import layout5 from "@/assets/template_images/city.jpg";
-import layout6 from "@/assets/summer_collection.png";
-import layout7 from "@/assets/stockholm.png";
+
 
 export default {
   name: 'designs',
@@ -28,7 +22,15 @@ export default {
     return {
     img: null,
     canvas_to_json_mut: this.canvas_to_json,
-    designImageLinks: {"Travel" : layout4, "Lemonade": layout2, "The Summer Collection" : layout3, "Stockholm": layout7, "City": layout5},
+    designImageLinks: {"Travel" : "https://i.imgur.com/DBMyOx1h.jpg", 
+    "Lemonade": "https://imgur.com/Lh6Api1",
+     "The Summer Collection" : "https://i.imgur.com/HOhOueq.png", 
+     "Stockholm": "https://i.imgur.com/8zDxGBnh.jpg", 
+     "City": "https://i.imgur.com/6nUDrJ3.png",
+     "CityNight": "https://i.imgur.com/IJPhhzFh.jpg",  
+     "Robotika": "https://i.imgur.com/NbCvjQNh.jpg",
+     "PlainRobotika": "",
+    },
     designTemplates: this.$store.getters.designTemplates,
     }
   },

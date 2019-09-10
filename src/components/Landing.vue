@@ -29,11 +29,39 @@
           </div>
         </article>
   
-        <article class="landing_image">
+        <article class="landing_image">              
+              <div class="tiler">
+                <img src="https://i.imgur.com/2An7BAu.png" />
+              </div>
+              
+              
+              <div class="tiler">
+                <img src="https://i.imgur.com/0C0SxWr.png" />
+              </div>
+              
+              
+              <div class="tiler">
+                <img src="https://i.imgur.com/InHwyoC.png" />
+              </div>
+              
+              
+              <div class="tiler">
+                <img src="https://i.imgur.com/oZxfiEI.png" />
+              </div>
+              
+              
+              <div class="tiler">
+                <img src="https://i.imgur.com/kXjCcK9.png" />
+              </div>
+              
+              
+              <div class="tiler">
+                <img src="https://i.imgur.com/eePyZ42.png" />
+              </div>
         </article>
       </article>
   
-      <article class="guide">
+      <!-- <article class="guide">
           <h2 class="center">How it works</h2>
     <article class="features">
         <h2>Features</h2>
@@ -81,20 +109,6 @@
                     <p>Photon's core library is a Rust crate, available from Cargo.</p>
                 </div>
                 
-                <!-- <div id="arrowAnim" class="tile">
-                    <div class="arrowSliding">
-                      <div class="arrow"></div>
-                    </div>
-                    <div class="arrowSliding delay1">
-                      <div class="arrow"></div>
-                    </div>
-                    <div class="arrowSliding delay2">
-                      <div class="arrow"></div>
-                    </div>
-                    <div class="arrowSliding delay3">
-                      <div class="arrow"></div>
-                    </div>
-                  </div> -->
   
                 <div class="tile">
                     <p>Write code in JS without a single line of Rust.</p>
@@ -106,108 +120,12 @@
 
             </div>
           </section>
-            
-          <section class="feature_pane">
-              <section class="lhs_container">
-                <h2>Channel/Colour Manipulation</h2>
-                <p>     
-                Photon provides low-level access to pixel and channel manipulation, as well as high-level functions for image correction, filtering, watermarking, and convolutions.     
-                </p>
-              </section>
-              <div class="container">
-                <div class="w">
-                    <div class="p a"></div>
-                    <div class="p b"></div>
-                    <div class="p c"></div>
-                    <div class="p d"></div>
-                </div>
-  
-              </div>
-            </section>
-
-            <section class="guide_pane">
-              <div>
-  
-              </div>
-              <article class="rhs_container">
-                  <h2>Image Resizing</h2>
-                  <p>     
-                    Resize images at lightning-speeds.
-                  </p>
-                  <p>Photon also includes all popular image sizes built-in such as Facebook posts, Instagram posts, etc.,
-                    so that you can focus on the code and just resize to whatever popular format you'd like.
-                  </p>
-                </article>
-            </section>
-
-            <section class="guide_pane">
-                <section>
-                  <h2>Image Correction</h2>
-                  <p>  
-                    Adjust images by correcting brightness, saturation, hues, and more, all within various colour spaces. 
-                    This gives full flexibility to work in many colour spaces, leading to improved results tailored to your image.   
-                     
-                  </p>
-                </section>
-                <div>
-                    <canvas id="correction_canvas"></canvas>
-                </div>
-              </section>
-
-              <section class="guide_pane">
-                  <div>
-                      <canvas id="effects_canvas"></canvas>
-                  </div>
-
-                  <section class="rhs_container">
-                      <h2>Enhance with Effects </h2>
-                      <p>Photon comes with a variety of built-in effects, including:</p>
-                      <ul>
-                          <li><b>Convolutions</b>: Sobel filters, blurs, Laplace effects, edge detection, etc., </li>
-                          <li><b>Monochrome effects</b>: Duotoning, greyscaling of various forms, thresholding, sepia, averaging RGB values</li>
-                          <li><b>Filters</b>: Over 30 pre-set filters available, incorporating various effects and transformations. </li>
-                        
-                      </ul>
-                      
-                    </section>
-                </section>
-
-          <section class="guide_pane">
-            <section>
-              <h2>50+ Templates</h2>
-              <p>Create a multitude of designs from our range of pre-set templates.</p>
-              <p>You can create: </p>
-              <ul>
-                <li></li>
-                <li></li>
-                <li></li>
-              </ul>
-              <p>Photon compiles to WebAssembly, which allows the execution of native-speed code in the browser and on Node.JS. 
-                This means incredible performance and since Photon's core library is written in Rust, it promises security and safety.
-              </p>
-            </section>
-            <div class="tiles">
-                <div class="tile">
-                    <p>Photon's core library is a Rust crate, available from Cargo.</p>
-                </div>
-              
-  
-                <div class="tile">
-                    <p>Write code in JS without a single line of Rust.</p>
-                </div>
-              
-                <div class="tile">
-                    <p>JS code gets exported to WebAssembly.</p>          
-                </div>
-
-            </div>
-          </section>
-
-      </article>
+          
+      </article> -->
   
       <footer>
         <div class="footer_lhs">
-          <h1>DesignVision</h1>
+          <h1>DesignFX</h1>
           <p>Graphic design software.</p>
           <p>&copy; Copyright 2019, Silvia O'Dwyer. All Rights Reserved. Software open-sourced under Apache License 2.0.</p>
   
@@ -569,5 +487,49 @@ footer ul li {
 
 .features_list {
   margin-top: 5vh;
+}
+
+
+.tiles {
+  display: flex;
+  flex-direction: row;
+}
+
+.tiles .tile {
+  display: flex;
+  flex-direction: column;
+  flex: 1 0 33%; /* explanation below */
+}
+
+.tiles img {
+  width: 50%;
+}
+
+.tiler {
+  display: inline-block;
+  cursor: pointer;
+  visibility: hidden;
+  width: 33.3%;
+  margin: auto;
+}
+
+.tiler img { 
+  display: block;  
+  margin: auto; 
+  max-width: 100%;
+  visibility: visible;
+}
+
+.tiler .cell-grid {
+  background-position: center center;
+  margin: auto;
+  position: fixed;
+  top: 1em;
+  bottom: 1em;
+  left: 1em;
+  right: 1em;
+  z-index: 10;
+  perspective: 30px;
+
 }
 </style>

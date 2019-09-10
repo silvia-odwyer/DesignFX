@@ -1,6 +1,7 @@
 <template>
-  <div>      
+  <div class="images">      
     <article class="not_signed_in" v-if="!user">
+      <h2>Not Logged In</h2>
       <p>If you would like to upload images and save designs, you can login to 
         Blockstack.
       </p>
@@ -56,6 +57,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+* {
+  font-family: "Lato", sans-serif;
+}
+
+.images {
+  margin-left: 4vh;
+}
+
 button {
   padding: 1em;
   border: solid transparent 0.1em;

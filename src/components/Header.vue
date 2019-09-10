@@ -9,7 +9,7 @@
                 <li>
                   <button id="download" v-on:click="exportImage">
                     Download
-                    <font-awesome-icon icon="arrow-alt-circle-down" size="s"/>
+                    <font-awesome-icon icon="arrow-alt-circle-down" size="1x"/>
                   </button>
                 </li>
             </ul>
@@ -22,7 +22,7 @@
               <div>
                 {{username}}
               </div>
-              <font-awesome-icon :icon="dropdownIcon" size="s" />
+              <font-awesome-icon :icon="dropdownIcon" size="1x" />
 
             </h2>
           </div> 
@@ -38,7 +38,7 @@
                       <li v-on:click="changeNavGradient">
                         Change Gradient
                       </li>
-                      <li v-on:click="saveDesign">
+                      <li v-on:click="saveDesign" v-if="user">
                         Save
                       </li>
                      <li class="list" v-if="user">
@@ -60,7 +60,7 @@
 /* eslint-disable */
 import { userSession } from '../userSession'
 import Modal from "@/components/Modal.vue"
-const STORAGE_FILE = "designs.json"
+const DESIGNS_STORAGE_FILE = "designs.json"
 
 export default {
   name: 'appHeader',
@@ -101,15 +101,6 @@ export default {
     canvas_to_json: function(canvas_to_json) {
       this.canvas_to_json_mut = canvas_to_json;
     },
-    designs: {
-			handler: function (designs) {
-				console.log("uploading to blockstack");
-        this.$store.commit('updateCanvas', designs);
-				// encryption is now enabled by default
-				return userSession.putFile(STORAGE_FILE, JSON.stringify(designs))
-			},
-			deep: true
-    }
   },
   mounted() {
     this.canvas_to_json_mut = this.canvas_to_json;
@@ -194,16 +185,62 @@ export default {
     saveDesign() {
       // see if design already exists 
       if (this.canvas_to_json_mut.id == null || this.canvas_to_json_mut.id == undefined) {
-          let id = this.genRandomID();
+          var id = this.genRandomID();
           this.canvas_to_json_mut.id = id;
-     			this.designs.unshift(this.canvas_to_json_mut);
+          this.designs.unshift(this.canvas_to_json_mut);
+          this.$store.commit('updateDesigns', this.designs);
+      
+          // encryption is now enabled by default
+			    userSession.putFile(DESIGNS_STORAGE_FILE, JSON.stringify(this.designs))
       }
       else {
         // retrieve file of interest from designs
         var design = this.designs.find(design => design.id == this.canvas_to_json_mut.id);
+        let index = this.designs.indexOf(design);
         design = this.canvas_to_json_mut;
+        this.designs[index] = this.canvas_to_json_mut;
+
+        this.$store.commit('updateDesigns', this.designs);
+      
+        // encryption is now enabled by default
+			  userSession.putFile(DESIGNS_STORAGE_FILE, JSON.stringify(this.designs))
+
       }
-      console.log("DESIGNS", this.designs);
+      console.log("THIS.CANVAS.JSON", this.canvas_to_json_mut);
+      console.log("SAVED DESIGNS", this.designs)
+
+    },
+    uploadImage() {
+      var id = this.genRandomID();
+      const transformerNode = this.transformer.getStage();
+      const stage = transformerNode.getStage();
+      // upload canvas thumbnail
+      var dataURL = stage.toDataURL({
+        pixelRatio: 4
+      });
+
+      var canvas1 = document.createElement("canvas");
+      var imageElem = new Image();
+      
+      imageElem.onload = () => {
+        canvas1.width=100;
+        canvas1.height=200;
+        let context1 = canvas1.getContext("2d");
+        context1.drawImage(imageElem, 0, 0, 100, 200);
+
+        var imageData2 = context1.getImageData(0, 0, 40, 30);
+
+        var buffer = imageData2.data.buffer; // buffer is a ArrayBuffer
+          
+        let name = `${id}_thumbnail.PNG`;
+        let app = this;
+        userSession.putFile(name, buffer).then(() => {
+
+          console.log("IMAGE UPLOADED SUCCESSFULLY")
+
+        });
+      }
+      imageElem.src = dataURL;
     },
     genRandomID() {
       let random_id = "";
@@ -225,6 +262,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+* {
+  margin: 0em;
+  padding: 0em;
+}
+
 nav {
   overflow: hidden;
   background-color: rgb(29, 29, 29);
@@ -271,6 +313,7 @@ ul li:hover {
   font-weight: 600;
   margin-left: 1em;
   padding: 14px 16px;
+  margin: 0.8em;
   flex-grow: 1;
 }
 
