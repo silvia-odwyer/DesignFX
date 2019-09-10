@@ -5,22 +5,20 @@ A graphic design app, with decentralized storage, and pre-built templates.
 This app allows you to create graphics, complete with elements, text, and imagery, and resize these graphics 
 for social media and beyond. 
 
+![DesignFX In Action](https://i.imgur.com/DCfRs7e.gif "DesignFX in action")
+
 Features:
 - **Import images from Unsplash**
 - **Save/export** final graphics, and design layouts as JSON
 - **Resize** graphics for social media
 
 Dev Notes:
-- **No UI library**, allows for more flexible styling, and a more lightweight codebase
-- **Decentralized storage.** Your designs are private and always yours.
-- **Powered by Vue.**
+- Built with Vue, Vuex, and Vue Router. 
+- Decentralized storage uses Blockstack for the saving of images.
 
-Images will be generated using the gdl WebAssembly library, which allows for faster conversion of the canvas to an image. 
-
-## Known Bugs
-- Offline loading of fonts. Text does not display until the fonts have loaded, however if the user does not have an Internet
-connection, they will be unable to view the text.
-- Clicking on the Text pane without clicking on text leads to no text options popup.
+### Work-in-Progress
+This app is still a work-in-progress, therefore there will still be bugs until they are smoothed out and fixed.
+There are a limited number of templates, but a whole range are coming soon.
 
 ## Build Setup
 ``` bash
