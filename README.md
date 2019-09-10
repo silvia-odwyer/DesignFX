@@ -20,24 +20,5 @@ Dev Notes:
 This app is still a work-in-progress, therefore there will still be bugs until they are smoothed out and fixed.
 There are a limited number of templates, but a whole range are coming soon.
 
-## Build Setup
-``` bash
-# install dependencies
-# previously we used yarn install. This is no longer supported.
-npm install
-
-# Compiles and hot-reloads for development
-npm run serve
-
-# Compiles and minifies for production
-npm run build
-```
-## Linting & Unit test
-
-``` bash
-# Lints and fixes files
-npm run lint
-
-# Run your unit tests
-npm run test:unit
-```
+### Available At
+You can try it out [here](https://designfx.netlify.com/app).
