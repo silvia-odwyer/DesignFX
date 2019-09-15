@@ -40,10 +40,10 @@ export default {
     },
     selectedNode: function(selectedNode) {
 
-      if (this.selectedNode != undefined || this.selectedNode != null) {
+      if (this.selectedNode != undefined && this.selectedNode != null) {
         let shapeList = this.getShapeList();
+
         this.elementNode = shapeList.find(elem => elem.name === selectedNode.name);
-        console.log("elemnode in elemoptions", this.elementNode);
     }
     }
   },
@@ -57,15 +57,10 @@ export default {
     }
   },
   mounted() {
-    console.log("SELECTED NODE", this.selectedNode);
-
     if (this.selectedNode != undefined && this.selectedNode != null) {
       let shapeList = this.getShapeList();
-
-      console.log("!!LOOKING FOR NAME", this.selectedNode.name);
-      console.log("!!SHAPE LIST NOW", shapeList);
+      console.log("shape list", shapeList);
       this.elementNode = shapeList.find(elem => elem.name === this.selectedNode.name);
-      console.log("ELEMENT NODE NOW", this.elementNode);
     }
 
   },

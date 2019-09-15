@@ -2,11 +2,11 @@
     <article>
         <article class="shapes">
             <div class="element_btn" v-on:click="addShapeElement('rectangle', 'solid')">
-                <font-awesome-icon icon="square-full" size="6x" style="color: red"/>
+                <font-awesome-icon icon="square-full" size="6x"/>
             </div>
 
             <div class="element_btn" v-on:click="addShapeElement('circle', 'solid')">
-                <font-awesome-icon icon="circle" size="6x" style="color: orange"/>
+                <font-awesome-icon icon="circle" size="6x"/>
             </div>
 
             <div class="element_btn" v-on:click="addShapeElement('ellipse', 'solid')">
@@ -15,6 +15,14 @@
 
             <div class="element_btn" v-on:click="addShapeElement('line', 'solid')">
                 <font-awesome-icon icon="chart-line" size="6x"/>
+            </div>
+
+            <div class="element_btn" v-on:click="addShapeElement('star', 'solid')">
+                <font-awesome-icon icon="star" size="6x"/>
+            </div>
+
+            <div class="element_btn" v-on:click="addShapeElement('pentagon', 'solid')">
+                <font-awesome-icon icon="certificate" size="6x"/>
             </div>
         </article>
     </article>
@@ -34,7 +42,8 @@ export default {
       colorPickerColor: this.canvas_to_json.background.fill,
       canvas_to_json_mut: this.canvas_to_json,
       canvasShapes: {"line" : this.canvas_to_json.elements.lines, "circle": this.canvas_to_json.elements.circles, 
-    "rectangle": this.canvas_to_json.elements.rectangles, "ellipse": this.canvas_to_json.elements.ellipses},
+    "rectangle": this.canvas_to_json.elements.rectangles, "ellipse": this.canvas_to_json.elements.ellipses, "star": this.canvas_to_json.elements.stars,
+    "pentagon": this.canvas_to_json.elements.stars},
     }
   },
   components: {
@@ -89,14 +98,45 @@ export default {
       switch (shape_name) {
         case "line": 
           shape = {
-            x: 20,
+          x: 100,
+          y: 50,
+          points: [73, 70, 340, 23, 450, 20],
+          stroke: 'red',
+          tension: 1,
+          draggable: true,
+          name: name
+          };
+          index_name = "lines";
+          break;
+
+        case "pentagon": 
+          shape = {
+            x: 100,
             y: 200,
-            tension: 0.5,
+            numPoints: 5,
+            innerRadius: 70,
+            outerRadius: 70,
             stroke: 'black',
+            strokeWidth: 4,
+            draggable: true,
+            name: `star${shape_list.length + 1}`
+          };
+          index_name = "stars";
+          break;
+
+        case "star": 
+          shape = {
+            x: 100,
+            y: 200,
+            numPoints: 7,
+            innerRadius: 40,
+            outerRadius: 70,
+            stroke: 'black',
+            strokeWidth: 4,
             draggable: true,
             name: name
           };
-          index_name = "lines";
+          index_name = "stars";
           break;
 
         case "rectangle":
