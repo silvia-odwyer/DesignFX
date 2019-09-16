@@ -21,4 +21,4 @@ This app is still a work-in-progress, therefore there will still be bugs until t
 There are a limited number of templates, but a whole range are coming soon.
 
 ### Available At
-You can try it out [here](https://designfx.netlify.com/app).
+You can try it out [here](https://designfx.netlify.com).
