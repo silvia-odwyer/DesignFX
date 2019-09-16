@@ -1,30 +1,29 @@
 <template>
   <div>      
     <h3>Images</h3>
-    <ul>
-        <li>
-            <label class="custom-file-upload file-input" name="upload-image">
-                <input type="file" id="img_uploader" v-on:change="uploadImage()"/>
-                Upload Image
-                <span class="file-cta">
-                    <span class="file-icon">
-                      <i class="fas fa-upload"></i>
-                    </span>
-                  </span>
-            </label>
-        </li>
-        <article class="imgs">
-          <div v-for="user_img in user_images" class="img">
+    
+    <label class="custom-file-upload file-input" name="upload-image">
+      <input type="file" id="img_uploader" v-on:change="uploadImage()"/>
+        Upload Image
+      <span class="file-cta">
+        <span class="file-icon">
+            <i class="fas fa-upload"></i>
+        </span>
+      </span>
+    </label>
+
+    <article class="imgs">
+        <div v-for="user_img in user_images" class="img">
             <img :src="user_img.img_src" v-on:click="addImage(user_img)">
             <a @click.prevent="deleteImage(user_img)" class="delete pull-right" href="#">x</a> 
 
-          </div>
+        </div>
 
-        </article>
+    </article>
 
         <!-- <LoadingAnimation v-if="!imagesLoaded"></LoadingAnimation> -->
 
-    </ul>              
+           
     </div>
 </template>
 
@@ -120,6 +119,7 @@ export default {
           this.uidCount = images.length;
           
           // Now that we have the image names, we can fetch each individual image.
+          this.fetchImages();
           })
     },
     fetchImages() {
@@ -253,21 +253,23 @@ ul li {
   color: silver;
   font-family: "Helvetica Neue", sans-serif;
 }
+
 input[type="file"] {
     display: none;
 }
+
 .custom-file-upload {
-    border: 1px solid #ccc;
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
+  border: 1px solid blue;
+  background-color: rgb(0, 80, 228);
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
 }
-.custom-file-upload {
-    border: 1px solid #ccc;
-    display: inline-block;
-    padding: 6px 12px;
-    cursor: pointer;
+
+.custom-file-upload:hover {
+  background-color: rgb(41, 107, 230);
 }
+
 .imgs {
   display: flex;
   flex-direction: row;

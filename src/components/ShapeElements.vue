@@ -21,7 +21,7 @@
                 <font-awesome-icon icon="star" size="6x"/>
             </div>
 
-            <div class="element_btn" v-on:click="addShapeElement('pentagon', 'solid')">
+            <div class="element_btn" v-on:click="addShapeElement('decagon', 'solid')">
                 <font-awesome-icon icon="certificate" size="6x"/>
             </div>
         </article>
@@ -43,7 +43,7 @@ export default {
       canvas_to_json_mut: this.canvas_to_json,
       canvasShapes: {"line" : this.canvas_to_json.elements.lines, "circle": this.canvas_to_json.elements.circles, 
     "rectangle": this.canvas_to_json.elements.rectangles, "ellipse": this.canvas_to_json.elements.ellipses, "star": this.canvas_to_json.elements.stars,
-    "pentagon": this.canvas_to_json.elements.stars},
+    "decagon": this.canvas_to_json.elements.stars},
     }
   },
   components: {
@@ -109,7 +109,7 @@ export default {
           index_name = "lines";
           break;
 
-        case "pentagon": 
+        case "decagon": 
           shape = {
             x: 100,
             y: 200,

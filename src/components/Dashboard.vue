@@ -36,6 +36,9 @@
                       
                       <v-ellipse v-for="item in canvas_to_json.elements.ellipses" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)"></v-ellipse>
 
+                      <v-star v-for="item in canvas_to_json.elements.stars" :key="item.id" :config="item" v-on:dragEnd="updateNodePosition(item)">
+                      </v-star>
+
                       <v-transformer ref="transformer" />
                     </v-layer>
 

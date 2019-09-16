@@ -69,7 +69,6 @@ export default {
     }
   },
   mounted() {
-    console.log("selectednode.text", this.selectedNode.text);
     if (this.selectedNode != null || this.selectedNode != undefined) {
         this.textNode = this.canvas_to_json_mut.text.find(elem => elem.name === this.selectedNode.name);
         this.textContent = this.textNode.text;
@@ -96,7 +95,6 @@ export default {
     changeTextContent: function(value) {
       if (this.selectedNode != undefined || this.selectedNode != null ) {
         this.textNode.text = value;
-        console.log("text val", value);
         this.$emit('updateCanvasToJson', this.canvas_to_json_mut);
       }
     },
