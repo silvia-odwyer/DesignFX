@@ -12,8 +12,6 @@
 /* eslint-disable */
 import {cloneDeepWith} from "lodash-es";
 import { userSession } from '../userSession'
-import image from "@/assets/daisies_small.jpg";
-
 
 export default {
   name: 'designs',

@@ -174,10 +174,7 @@ export default {
                 console.log("DESIGN ID", design_id);
                 if (design_id != null && design_id != undefined) {
                   let design = app.designs.find(design => design.id == design_id);
-                  console.log("design", design);
-                  app.canvas_to_json = design;
-                  app.updateAllShapes();
-                  app.initCanvas()
+
                 }
                 // New design
                 else {

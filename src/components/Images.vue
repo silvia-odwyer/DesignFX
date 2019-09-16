@@ -14,7 +14,7 @@
 <script>
 /* eslint-disable */
 import { userSession } from '../userSession'
-import image from "@/assets/daisies_small.jpg";
+
 import LoadingAnimation from "@/components/LoadingAnimation.vue";
 import BlockstackImages from "@/components/BlockstackImages.vue";
 var IMAGE_LIST_FILE = "image_list.json";

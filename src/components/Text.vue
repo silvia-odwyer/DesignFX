@@ -19,7 +19,6 @@
 <script>
 /* eslint-disable */
 import { userSession } from '../userSession'
-import image from "@/assets/daisies_small.jpg";
 import colorPicker from '@caohenghu/vue-colorpicker'
 
 export default {
